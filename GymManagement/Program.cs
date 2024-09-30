@@ -1,5 +1,6 @@
 using GymManagement.Data;
 using GymManagement.Data.Entities;
+using GymManagement.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,6 +27,11 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 })
 .AddEntityFrameworkStores<DataContext>();
 
+builder.Services.AddScoped<IUserHelper, UserHelper>();
+
+// Add Seed service
+builder.Services.AddTransient<SeedDb>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -46,5 +52,16 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+// Aplica migrações e Seed Data
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var seed = services.GetRequiredService<SeedDb>();
+
+    // Chama o método de seed
+    await seed.InitializeAsync();
+}
 
 app.Run();
