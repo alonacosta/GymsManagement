@@ -85,7 +85,7 @@
                 return 0;
             }
 
-            _context.Countries.Remove(country);
+            _context.Cities.Remove(city);
             await _context.SaveChangesAsync();
 
             return country.Id;
