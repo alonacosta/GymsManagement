@@ -1,13 +1,13 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace GymManagement.Data.Entities
+﻿namespace GymManagement.Data.Entities
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
     public class Session : IEntity
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
         
         //public Client Client { get; set; }
 
@@ -19,13 +19,17 @@ namespace GymManagement.Data.Entities
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm tt}", ApplyFormatInEditMode = false)]
         public DateTime EndSession { get; set; }
 
-        public int Capacity { get; set; }   
+        public int Capacity { get; set; }
 
-        public bool isOnline { get; set; }
-        public bool isGroup { get; set; }
-        public Gym Gym { get; set; }
+        [Display(Name ="Is Online")]
+        public bool IsOnline { get; set; }
 
-        public IEnumerable<Appointment> Appointments { get; set; }       
+        [Display(Name ="Is Group")]
+        public bool IsGroup { get; set; }
+
+        public Gym? Gym { get; set; }
+
+        public IEnumerable<Appointment>? Appointments { get; set; }       
 
         public int RemainingCapacity => Appointments == null ? 100 : Capacity - Appointments.Count();
 

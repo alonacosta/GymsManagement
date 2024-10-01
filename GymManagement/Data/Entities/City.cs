@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace GymManagement.Data.Entities
+﻿namespace GymManagement.Data.Entities
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class City : IEntity
     {
         public int Id { get; set; }
@@ -10,6 +10,7 @@ namespace GymManagement.Data.Entities
         [Display(Name = "City")]
         [MaxLength(50, ErrorMessage = "The field {0} can contain {1} characters.")]
         public string? Name { get; set; }
+
         public ICollection<Gym>? Gyms { get; set; }
 
         [Display(Name = "Number of gyms")]

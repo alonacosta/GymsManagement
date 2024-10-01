@@ -10,6 +10,7 @@ namespace GymManagement.Data
     {
         private readonly DataContext _context;
         private readonly IUserHelper _userHelper;
+
         public SeedDb(DataContext context,
             IUserHelper userHelper)
         {
@@ -35,15 +36,16 @@ namespace GymManagement.Data
                 };
 
                 var result = await _userHelper.AddUserAsync(user, "123456");
+
                 if (result != IdentityResult.Success)
                 {
-                    throw new InvalidOperationException("Could not create the user in seeder");
+                    throw new InvalidOperationException("Could not create user in seeder");
                 }                
             }
+
             var gymsL = new List<Gym>();
             var gymsP = new List<Gym>();
            
-
             if (!_context.Countries.Any())
             {
 
@@ -53,9 +55,10 @@ namespace GymManagement.Data
                gymsP.Add(new Gym { Name = "Stong and Healthy", Address = "Avenida dos Aliados", CityId = 2 });
                gymsP.Add(new Gym { Name = "Stong and Healthy", Address = "Rua so Estádio", CityId = 2 });
 
-                var cities = new List<City>();
-                cities.Add(new City { Name = "Lisbon", Gyms = gymsL });
-                cities.Add(new City { Name = "Porto", Gyms = gymsP });
+               var cities = new List<City>();
+
+               cities.Add(new City { Name = "Lisbon", Gyms = gymsL });
+               cities.Add(new City { Name = "Porto", Gyms = gymsP });
 
                 _context.Countries.Add(new Country
                 {

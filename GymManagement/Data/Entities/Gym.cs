@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace GymManagement.Data.Entities
+﻿namespace GymManagement.Data.Entities
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class Gym : IEntity
     {
         public int Id { get; set; }
@@ -20,8 +20,8 @@ namespace GymManagement.Data.Entities
 
         public City? City { get; set; }
 
-        public ICollection<Client> Clients { get; set; } = new List<Client>();
-        public ICollection<Employee> Employees { get; set; } = new List<Employee>();    
+        public ICollection<Client>? Clients { get; set; } = new List<Client>();
+        public ICollection<Employee>? Employees { get; set; } = new List<Employee>();    
 
         public string ImageFullPath => ImageId == Guid.Empty
             ? "https://gymmanagement.blob.core.windows.net/default/no-image.jpeg" : $"https://gymmanagement.blob.core.windows.net/gyms/{ImageId}";
