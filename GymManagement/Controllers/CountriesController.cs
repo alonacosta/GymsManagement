@@ -136,9 +136,10 @@
         [HttpPost]
         public async Task<IActionResult> AddCity(CityViewModel model) 
         {
-            if (!ModelState.IsValid) 
+            if (ModelState.IsValid) 
             { 
                 await _countryRepository.AddCityAsync(model);
+
                 return RedirectToAction("Index");
             }
 
