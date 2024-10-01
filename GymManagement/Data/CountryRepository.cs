@@ -21,7 +21,7 @@
                 .OrderBy(c => c.Name);
         }
 
-        public async Task<Country> GetCountriesWithCitiesAsync(int id)
+        public async Task<Country> GetCountryWithCitiesAsync(int id)
         {
             return await _context.Countries
                 .Include(c => c.Cities)
@@ -57,7 +57,7 @@
 
         public async Task AddCityAsync(CityViewModel model)
         {
-            var country = await this.GetCountriesWithCitiesAsync(model.CountryId);
+            var country = await this.GetCountryWithCitiesAsync(model.CountryId);
 
             if (country == null) 
             {
@@ -122,7 +122,7 @@
 
             if (country != null) 
             { 
-                list = _context.Countries.Select(c => new SelectListItem
+                list = _context.Cities.Select(c => new SelectListItem
                 {
                     Text = c.Name,
                     Value = c.Id.ToString(),

@@ -13,7 +13,7 @@ namespace GymManagement.Helpers
                 Name = model.Name,
                 Address = model.Address,
                 CityId = model.CityId, 
-                City = model.City,
+                City = model.City,                
                 ImageId = imageId,
             };
         }
@@ -26,8 +26,8 @@ namespace GymManagement.Helpers
                 Name = gym.Name,
                 Address = gym.Address,
                 CityId = gym.CityId,   
-                City = gym.City,
-                ImageId = gym.ImageId,
+                City = gym.City,                 
+                ImageId = gym.ImageId,               
 
             };
         }

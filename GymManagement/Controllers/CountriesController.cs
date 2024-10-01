@@ -53,7 +53,7 @@
                 return NotFound();
             }
 
-            var country = await _countryRepository.GetCountriesWithCitiesAsync(id.Value);
+            var country = await _countryRepository.GetCountryWithCitiesAsync(id.Value);
 
             if (country == null) 
             { 

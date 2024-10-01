@@ -1,10 +1,12 @@
-﻿namespace GymManagement.Helpers { 
+﻿ 
     using GymManagement.Data;
     using GymManagement.Data.Entities;
     using GymManagement.Models;
     using Microsoft.AspNetCore.Identity;
 
-        public class UserHelper : IUserHelper
+namespace GymManagement.Helpers
+{
+    public class UserHelper : IUserHelper
         {
             private readonly DataContext _context;
             private readonly UserManager<User> _userManager;

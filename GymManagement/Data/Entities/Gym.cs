@@ -21,7 +21,9 @@
         public City? City { get; set; }
 
         public ICollection<Client>? Clients { get; set; } = new List<Client>();
-        public ICollection<Employee>? Employees { get; set; } = new List<Employee>();    
+        public ICollection<Employee>? Employees { get; set; } = new List<Employee>();
+
+        //public string? CityName => City.Name.ToString();
 
         public string ImageFullPath => ImageId == Guid.Empty
             ? "https://gymmanagement.blob.core.windows.net/default/no-image.jpeg" 

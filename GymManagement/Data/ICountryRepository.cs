@@ -8,7 +8,7 @@
     {
         IQueryable GetCountriesWithCities();
 
-        Task<Country> GetCountriesWithCitiesAsync(int id);
+        Task<Country> GetCountryWithCitiesAsync(int id);
 
         Task<Country> GetCountryAsync(City city);
 
