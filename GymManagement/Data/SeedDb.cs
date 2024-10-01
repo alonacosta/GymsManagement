@@ -21,6 +21,8 @@ namespace GymManagement.Data
         internal async Task InitializeAsync()
         {
             await _context.Database.MigrateAsync();
+
+            await _userHelper.CheckRoleAsync("Admin");
           
             var user = await _userHelper.GetUserByEmailAsync("cet87.adm@gmail.com");
 
@@ -41,6 +43,13 @@ namespace GymManagement.Data
                 {
                     throw new InvalidOperationException("Could not create user in seeder");
                 }                
+            }
+
+            var isInRole = await _userHelper.IsUserInRoleAsync(user, "Admin");
+
+            if (!isInRole)
+            {
+                await _userHelper.AddUsertoRole(user, "Admin");
             }
 
             var gymsL = new List<Gym>();
