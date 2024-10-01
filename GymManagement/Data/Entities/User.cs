@@ -1,20 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
-
-
-namespace GymManagement.Data.Entities
+﻿namespace GymManagement.Data.Entities
 {
+    using System.ComponentModel.DataAnnotations;
+    using Microsoft.AspNetCore.Identity;
+
     public class User : IdentityUser
     {
         [Required]
-        [MaxLength(50, ErrorMessage = "The field {0} only can contain {1} caraters.")]
+        [Display(Name ="First Name")]
+        [MaxLength(50, ErrorMessage = "The field {0} can only contain {1} caracters.")]
         public string? FirstName { get; set; }
 
         [Required]
-        [MaxLength(50, ErrorMessage = "The field {0} only can contain {1} caraters.")]
+        [Display(Name ="Last Name")]
+        [MaxLength(50, ErrorMessage = "The field {0} can only contain {1} caracters.")]
         public string? LastName { get; set; }
 
-        [Display(Name = "Full Name")]
+        [Display(Name ="Full Name")]
         public string FullName => $"{FirstName} {LastName}";
     }
 }

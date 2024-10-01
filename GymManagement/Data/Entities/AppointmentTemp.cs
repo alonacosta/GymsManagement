@@ -1,14 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace GymManagement.Data.Entities
+﻿namespace GymManagement.Data.Entities
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class AppointmentTemp : IEntity
     {
-        public int Id { get; set; }      
-        public Client Client { get; set; }
+        public int Id { get; set; } 
+        
+        public Client? Client { get; set; }
 
         [Display(Name = "Session Name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Display(Name = "Start Session")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm tt}", ApplyFormatInEditMode = false)]

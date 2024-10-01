@@ -1,8 +1,8 @@
-﻿using GymManagement.Data.Entities;
-using Microsoft.AspNetCore.Identity;
-
-namespace GymManagement.Helpers
+﻿namespace GymManagement.Helpers
 {
+    using GymManagement.Data.Entities;
+    using Microsoft.AspNetCore.Identity;
+
     public class UserHelper : IUserHelper
     {
         private readonly UserManager<User> _userManager;
@@ -10,8 +10,8 @@ namespace GymManagement.Helpers
         public UserHelper(UserManager<User> userManager)
         {
             _userManager = userManager;
-
         }
+
         public async Task<IdentityResult> AddUserAsync(User user, string password)
         {
             return await _userManager.CreateAsync(user, password);

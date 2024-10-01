@@ -29,6 +29,8 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 
 builder.Services.AddScoped<IUserHelper, UserHelper>();
 
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+
 // Add Seed service
 builder.Services.AddTransient<SeedDb>();
 
