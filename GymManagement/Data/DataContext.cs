@@ -1,6 +1,7 @@
 ﻿using GymManagement.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using GymManagement.Models;
 
 namespace GymManagement.Data
 {
@@ -34,5 +35,6 @@ namespace GymManagement.Data
 
             base.OnModelCreating(modelBuilder);
         }
+        public DbSet<GymManagement.Models.UserViewModel> UserViewModel { get; set; } = default!;
     }
 }
