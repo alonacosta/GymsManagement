@@ -28,6 +28,9 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 .AddEntityFrameworkStores<DataContext>();
 
 builder.Services.AddScoped<IUserHelper, UserHelper>();
+builder.Services.AddScoped<IBlobHelper, BlobHelper>();
+builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
+builder.Services.AddScoped<IGymRepository, GymRepository>();
 
 // Add Seed service
 builder.Services.AddTransient<SeedDb>();

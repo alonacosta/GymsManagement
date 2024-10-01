@@ -47,11 +47,11 @@ namespace GymManagement.Data
             if (!_context.Countries.Any())
             {
 
-               gymsL.Add( new Gym { Name = "Stong and Healthy", Address= "Rua Marques de Pombal" });
-               gymsL.Add(new Gym { Name = "Stong and Healthy", Address = "Rua de Ouro" });
+               gymsL.Add( new Gym { Name = "Stong and Healthy", Address= "Rua Marques de Pombal", CityId = 1 });
+               gymsL.Add(new Gym { Name = "Stong and Healthy", Address = "Rua de Ouro", CityId = 1 });
 
-               gymsP.Add(new Gym { Name = "Stong and Healthy", Address = "Avenida dos Aliados" });
-               gymsP.Add(new Gym { Name = "Stong and Healthy", Address = "Rua so Estádio" });
+               gymsP.Add(new Gym { Name = "Stong and Healthy", Address = "Avenida dos Aliados", CityId = 2 });
+               gymsP.Add(new Gym { Name = "Stong and Healthy", Address = "Rua so Estádio", CityId = 2 });
 
                 var cities = new List<City>();
                 cities.Add(new City { Name = "Lisbon", Gyms = gymsL });
