@@ -1,4 +1,5 @@
-﻿using GymManagement.Data.Entities;
+﻿using GymManagement.Data;
+using GymManagement.Data.Entities;
 using GymManagement.Helpers;
 using GymManagement.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -59,9 +60,12 @@ namespace GymManagement.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult Register()
+        public IActionResult Register(string roleName)
         {
-            var model = new RegisterUserViewModel();
+            var model = new RegisterUserViewModel
+            {
+                RoleName = roleName
+            };
             return View(model);
         }
 
@@ -80,9 +84,6 @@ namespace GymManagement.Controllers
                     PhoneNumber = model.PhoneNumber
                 };
 
-                
-
-                
             }
             var result = await _userHelper.AddUserAsync(user, model.Password);
 
@@ -91,6 +92,89 @@ namespace GymManagement.Controllers
                 ModelState.AddModelError(string.Empty, "The user could not be registered.");
                 return View(model);
             }
+
+            await _userHelper.CreateUserEntity(user, model.RoleName);
+
+            await _userHelper.AddUsertoRole(user, model.RoleName);
+
+
+            ViewBag.Message = "The user has been created succesfully.";
+
+            return View(model);
+        }
+
+        /*[Authorize(Roles = "Admin")]
+        public IActionResult RegisterClient()
+        {
+            var model = new RegisterUserViewModel();
+            return View(model);
+        }*/
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterClient(RegisterUserViewModel model)
+        {
+            var user = await _userHelper.GetUserByEmailAsync(model.Username);
+            if (user == null)
+            {
+                user = new User
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    UserName = model.Username,
+                    Email = model.Username,
+                    PhoneNumber = model.PhoneNumber
+                };
+            }
+            var result = await _userHelper.AddUserAsync(user, model.Password);
+
+            if (result != IdentityResult.Success)
+            {
+                ModelState.AddModelError(string.Empty, "The user could not be registered.");
+                return View(model);
+            }
+
+            await _userHelper.CreateUserEntity(user, "Client");
+
+            await _userHelper.AddUsertoRole(user, "Client");
+
+            ViewBag.Message = "The user has been created succesfully.";
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult RegisterEmployee()
+        {
+            var model = new RegisterUserViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterEmployee(RegisterUserViewModel model)
+        {
+            var user = await _userHelper.GetUserByEmailAsync(model.Username);
+            if (user == null)
+            {
+                user = new User
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    UserName = model.Username,
+                    Email = model.Username,
+                    PhoneNumber = model.PhoneNumber
+                };
+            }
+            var result = await _userHelper.AddUserAsync(user, model.Password);
+
+            if (result != IdentityResult.Success)
+            {
+                ModelState.AddModelError(string.Empty, "The user could not be registered.");
+                return View(model);
+            }
+
+            await _userHelper.CreateUserEntity(user, "Employee");
+
+            await _userHelper.AddUsertoRole(user, "Employee");
 
             ViewBag.Message = "The user has been created succesfully.";
 

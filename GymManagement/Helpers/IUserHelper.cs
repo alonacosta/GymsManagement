@@ -10,6 +10,8 @@ namespace GymManagement.Helpers
 
         Task<IdentityResult> AddUserAsync(User user, string password);
 
+        Task CreateUserEntity(User user, string roleName);
+
         Task<SignInResult> LoginAsync(LoginViewModel model);
 
         Task<User> GetUserById (string id);

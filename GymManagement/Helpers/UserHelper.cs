@@ -96,5 +96,29 @@ namespace GymManagement.Helpers {
         {
             return await _userManager.UpdateAsync(user);
         }
+
+        public async Task CreateUserEntity(User user, string roleName)
+        {
+            if (roleName == "Client")
+            {
+                await _context.Set<Client>().AddAsync(new Client
+                {
+                    User = user
+                });
+            }
+            if (roleName == "Employee")
+            {
+                await _context.Set<Employee>().AddAsync(new Employee
+                {
+                    User = user
+                });
+            }
+            await SaveAllAsync();
+        }
+
+        private async Task<bool> SaveAllAsync()
+        {
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }

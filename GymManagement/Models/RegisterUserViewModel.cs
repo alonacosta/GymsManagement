@@ -27,5 +27,7 @@ namespace GymManagement.Models
         [Required]
         [Compare("Password")]
         public string Confirm { get; set; }
+
+        public string RoleName { get; set; }
     }
 }
