@@ -10,7 +10,7 @@ namespace GymManagement.Helpers
 
         Task<IdentityResult> AddUserAsync(User user, string password);
 
-        Task CreateUserEntity(User user, string roleName);
+        Task CreateUserEntity(User user, string roleName, int gymId);
 
         Task<SignInResult> LoginAsync(LoginViewModel model);
 
@@ -29,5 +29,9 @@ namespace GymManagement.Helpers
         string GetUserRole(User user);
 
         Task<IdentityResult> UpdateUserAsync(User user);
+
+        Task AddClientToGymAsync(int gymId, Client client);
+
+        Task AddEmployeeToGymAsync(int gymId, Employee employee);
     }
 }

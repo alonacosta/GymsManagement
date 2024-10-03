@@ -11,10 +11,16 @@ namespace GymManagement.Controllers
     public class AccountController : Controller
     {
         private readonly IUserHelper _userHelper;
+        private readonly ICountryRepository _countryRepository;
+        private readonly IGymRepository _gymRepository;
 
-        public AccountController(IUserHelper userHelper)
+        public AccountController(IUserHelper userHelper,
+            ICountryRepository countryRepository,
+            IGymRepository gymRepository)
         {
             _userHelper = userHelper;
+            _countryRepository = countryRepository;
+            _gymRepository = gymRepository;
         }
 
         public IActionResult Login()
@@ -64,7 +70,10 @@ namespace GymManagement.Controllers
         {
             var model = new RegisterUserViewModel
             {
-                RoleName = roleName
+                RoleName = roleName,
+                Countries = _countryRepository.GetComboCountries(),
+                Cities = _countryRepository.GetComboCities(0),
+                Gyms = _gymRepository.GetComboGyms(0)
             };
             return View(model);
         }
@@ -93,7 +102,7 @@ namespace GymManagement.Controllers
                 return View(model);
             }
 
-            await _userHelper.CreateUserEntity(user, model.RoleName);
+            await _userHelper.CreateUserEntity(user, model.RoleName, model.GymId);
 
             await _userHelper.AddUsertoRole(user, model.RoleName);
 
@@ -103,14 +112,7 @@ namespace GymManagement.Controllers
             return View(model);
         }
 
-        /*[Authorize(Roles = "Admin")]
-        public IActionResult RegisterClient()
-        {
-            var model = new RegisterUserViewModel();
-            return View(model);
-        }*/
-
-        [HttpPost]
+        /*[HttpPost]
         public async Task<IActionResult> RegisterClient(RegisterUserViewModel model)
         {
             var user = await _userHelper.GetUserByEmailAsync(model.Username);
@@ -179,7 +181,7 @@ namespace GymManagement.Controllers
             ViewBag.Message = "The user has been created succesfully.";
 
             return View(model);
-        }
+        }*/
 
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(string id)
@@ -268,6 +270,22 @@ namespace GymManagement.Controllers
                 }
             }
             return View(model);
+        }
+
+        [HttpPost]
+        [Route("Account/GetCitiesAsync")]
+        public async Task<IActionResult> GetCitiesAsync(int countryId)
+        {
+            var country = await _countryRepository.GetCountriesWithCitiesAsync(countryId);
+            return Json(country.Cities.OrderBy(c => c.Name));
+        }
+
+        [HttpPost]
+        [Route("Account/GetGymsAsync")]
+        public async Task<IActionResult> GetGymsAsync(int cityId)
+        {
+            var gyms = await _gymRepository.GetGymsByCityId(cityId);
+            return Json(gyms.OrderBy(g => g.Name));
         }
     }
 }

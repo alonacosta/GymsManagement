@@ -2,6 +2,7 @@
 using GymManagement.Data.Entities;
 using GymManagement.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymManagement.Helpers { 
     public class UserHelper : IUserHelper
@@ -97,21 +98,25 @@ namespace GymManagement.Helpers {
             return await _userManager.UpdateAsync(user);
         }
 
-        public async Task CreateUserEntity(User user, string roleName)
+        public async Task CreateUserEntity(User user, string roleName, int gymId)
         {
             if (roleName == "Client")
             {
-                await _context.Set<Client>().AddAsync(new Client
+                Client newClient = new Client 
                 {
-                    User = user
-                });
+                    User = user,
+                };
+                await _context.Set<Client>().AddAsync(newClient);
+                await AddClientToGymAsync(gymId, newClient);
             }
             if (roleName == "Employee")
             {
-                await _context.Set<Employee>().AddAsync(new Employee
+                Employee newEmployee = new Employee
                 {
-                    User = user
-                });
+                    User = user,
+                };
+                await _context.Set<Employee>().AddAsync(newEmployee);
+                await AddEmployeeToGymAsync(gymId, newEmployee);
             }
             await SaveAllAsync();
         }
@@ -119,6 +124,34 @@ namespace GymManagement.Helpers {
         private async Task<bool> SaveAllAsync()
         {
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task AddClientToGymAsync(int gymId, Client client)
+        {
+            var gym = await _context.Gyms
+                .Include(g => g.Clients)
+                .FirstOrDefaultAsync(g => g.Id == gymId);
+
+            if (gym != null)
+            {
+                gym.Clients.Add(client);
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task AddEmployeeToGymAsync(int gymId, Employee employee)
+        {
+            var gym = await _context.Gyms
+                .Include(g => g.Employees)
+                .FirstOrDefaultAsync(g => g.Id == gymId);
+
+            if (gym != null)
+            {
+                gym.Employees.Add(employee);
+
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

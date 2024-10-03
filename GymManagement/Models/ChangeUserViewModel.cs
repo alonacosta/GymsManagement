@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace GymManagement.Models
 {
@@ -19,3 +20,4 @@ namespace GymManagement.Models
         public string PhoneNumber { get; set; }
     }
 }
+
