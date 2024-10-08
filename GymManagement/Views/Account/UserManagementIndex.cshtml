@@ -8,7 +8,8 @@
 
 <p>
     <!--TODO : Make admin able to create different types of users: Employees and customers-->
-    <a class="btn btn-primary" asp-action="Register">Register New User</a>
+    <a class="btn btn-primary" asp-action="Register" asp-route-roleName="Client">Register New Client</a>
+    <a class="btn btn-success" asp-action="Register" asp-route-roleName="Employee">Register New Employee</a>
 </p>
 <table class="table">
     <thead>

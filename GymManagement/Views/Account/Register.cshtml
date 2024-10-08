@@ -13,6 +13,7 @@
     <div class="col-md-4">
         <form asp-action="Register">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="RoleName" />
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label">First Name</label>
                 <input asp-for="FirstName" class="form-control" />
@@ -32,6 +33,21 @@
                 <label asp-for="PhoneNumber" class="control-label">Phone number</label>
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CountryId" class="control-label">Country</label>
+                <select asp-for="CountryId" asp-items="Model.Countries" class="form-control"></select>
+                <span asp-validation-for="CountryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CityId" class="control-label">City</label>
+                <select asp-for="CityId" asp-items="Model.Cities" class="form-control"></select>
+                <span asp-validation-for="CityId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GymId" class="control-label">Gym</label>
+                <select asp-for="GymId" asp-items="Model.Gyms" class="form-control"></select>
+                <span asp-validation-for="GymId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Password">Password</label>
@@ -56,3 +72,59 @@
 <div>
     <a asp-action="UserManagementIndex">Back to the User Manager Index</a>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $("#CountryId").change(function () {
+                        $("#CityId").empty();
+                        $.ajax({
+                            url: '@Url.Action("GetCitiesAsync", "Account")',
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {countryId:$("#CountryId").val()},
+                            success: function (cities) {
+                                debugger;
+                                $("#CityId").append('<option value="0">(Select a city...)</option>');
+                                $.each(cities, function (i, city) {
+                                    $("#CityId").append('<option value="'
+                                        + city.id + '">'
+                                        + city.name + '</option>');
+                                });
+                            },
+                            error: function (ex) {
+                                debugger;
+                                alert('Failed to retrieve cities.' + ex);
+                            }
+                        });
+                        return false;
+                    })
+                    $("#CityId").change(function () {
+                        $("#GymId").empty();
+                        $.ajax({
+                            url: '@Url.Action("GetGymsAsync", "Account")',
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {cityId:$("#CityId").val()},
+                            success: function (gyms) {
+                                debugger;
+                                $("#GymId").append('<option value="0">(Select a gym...)</option>');
+                                $.each(gyms, function (i, gym) {
+                                    $("#GymId").append('<option value="'
+                                        + gym.id + '">'
+                                        + gym.name + '</option>');
+                                });
+                            },
+                            error: function (ex) {
+                                debugger;
+                                alert('Failed to retrieve items.' + ex);
+                            }
+                        });
+                        return false;
+                    });
+                });
+            </script>
+    }
+}

@@ -23,7 +23,12 @@ namespace GymManagement.Data
             await _context.Database.MigrateAsync();
 
             await _userHelper.CheckRoleAsync("Admin");
-          
+            // We're also going to create 'Clients' and 'Employees' not
+            // only as seperate entities but also as ASP.NET roles in
+            // order to easily limit access using ASP.NET's authorization
+            await _userHelper.CheckRoleAsync("Employee");
+            await _userHelper.CheckRoleAsync("Client");
+
             var user = await _userHelper.GetUserByEmailAsync("cet87.adm@gmail.com");
 
             if (user == null)
