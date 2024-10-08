@@ -27,15 +27,16 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 })
 .AddEntityFrameworkStores<DataContext>();
 
+// Add Seed service
+builder.Services.AddTransient<SeedDb>();
+
 builder.Services.AddScoped<IUserHelper, UserHelper>();
 builder.Services.AddScoped<IBlobHelper, BlobHelper>();
 builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
+
+builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 builder.Services.AddScoped<IGymRepository, GymRepository>();
-
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
-
-// Add Seed service
-builder.Services.AddTransient<SeedDb>();
 
 var app = builder.Build();
 
