@@ -1,0 +1,58 @@
+﻿@model GymManagement.Data.Entities.Session
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <hr />
+    <div class="row">
+        <div class="col-md-8">
+           
+            <dl class="row">
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.StartSession)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.StartSession)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.EndSession)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.EndSession)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Capacity)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Capacity)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.IsOnline)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.IsOnline)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.IsGroup)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.IsGroup)
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-success">Back to List</a>
+</div>
