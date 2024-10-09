@@ -276,7 +276,7 @@ namespace GymManagement.Controllers
         [Route("Account/GetCitiesAsync")]
         public async Task<IActionResult> GetCitiesAsync(int countryId)
         {
-            var country = await _countryRepository.GetCountriesWithCitiesAsync(countryId);
+            var country = await _countryRepository.GetCountryWithCitiesAsync(countryId);
             return Json(country.Cities.OrderBy(c => c.Name));
         }
 
@@ -286,6 +286,11 @@ namespace GymManagement.Controllers
         {
             var gyms = await _gymRepository.GetGymsByCityId(cityId);
             return Json(gyms.OrderBy(g => g.Name));
+        }
+
+        public IActionResult NotAuthorized()
+        {
+            return View();
         }
     }
 }

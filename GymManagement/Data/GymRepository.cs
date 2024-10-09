@@ -43,7 +43,7 @@ namespace GymManagement.Data
 
 
             return gyms;
-            _context = context;
+            //_context = context;
         }
 
         public IQueryable GetGymsWithCities()

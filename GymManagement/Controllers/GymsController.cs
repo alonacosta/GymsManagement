@@ -9,6 +9,7 @@ using GymManagement.Data;
 using GymManagement.Data.Entities;
 using GymManagement.Models;
 using GymManagement.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GymManagement.Controllers
 {
@@ -38,6 +39,7 @@ namespace GymManagement.Controllers
         }
 
         // GET: Gyms/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -56,7 +58,8 @@ namespace GymManagement.Controllers
             return View(gym);
         }
 
-        // GET: Gyms/Create
+        // GET: Gyms/
+        //[Authorize]
         public IActionResult Create()
         {
             var model = new GymViewModel
@@ -208,6 +211,11 @@ namespace GymManagement.Controllers
         {
             var country = await _countryRepository.GetCountryWithCitiesAsync(countryId);
             return Json(country.Cities.OrderBy(c => c.Name));
+        }
+
+        public IActionResult GymNotFound()
+        {
+            return View();
         }
     }
 }
