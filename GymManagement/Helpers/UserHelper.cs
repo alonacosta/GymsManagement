@@ -12,17 +12,20 @@ namespace GymManagement.Helpers
             private readonly UserManager<User> _userManager;
             private readonly SignInManager<User> _signInManager;
             private readonly RoleManager<IdentityRole> _roleManager;
+            private readonly IGymRepository _gymRepository;
 
         public UserHelper(
             DataContext context,
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IGymRepository gymRepository)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _gymRepository = gymRepository;
         }
         public async Task<IdentityResult> AddUserAsync(User user, string password)
         {
@@ -154,5 +157,23 @@ namespace GymManagement.Helpers
                 await _context.SaveChangesAsync();
             }
         }
+
+        /*This method might not be needed anymore
+         * public async Task<Gym> GetUserGymAsync(User user)
+        {
+            if (await IsUserInRoleAsync(user, "Client") || await IsUserInRoleAsync(user, "Employee"))
+            {
+                if (await IsUserInRoleAsync(user, "Client"))
+                {
+                    var gymId = await _context.Clients
+                        .Where(c => c.User.Id == user.Id)
+                        .Select(c => c.Gym.Id)
+                        .FirstOrDefaultAsync();
+
+                    return await _gymRepository.GetByIdAsync(gymId);
+                }
+            }
+            return null;
+        }*/
     }
 }

@@ -33,5 +33,7 @@ namespace GymManagement.Helpers
         Task AddClientToGymAsync(int gymId, Client client);
 
         Task AddEmployeeToGymAsync(int gymId, Employee employee);
+
+        //Task<Gym> GetUserGymAsync(User user);
     }
 }

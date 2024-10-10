@@ -7,7 +7,7 @@ namespace GymManagement.Data
 {
     public class DataContext : IdentityDbContext<User>
     {
-        public DbSet<Post> Posts { get; set; }
+        public DbSet<Discussion> Discussions { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<AppointmentTemp> AppointmentsTemp { get; set; }
         public DbSet<Session> Sessions { get; set; }
@@ -16,6 +16,8 @@ namespace GymManagement.Data
         public DbSet<Gym> Gyms { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        
+        public DbSet<Post> Posts { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -35,6 +37,5 @@ namespace GymManagement.Data
 
             base.OnModelCreating(modelBuilder);
         }
-        public DbSet<GymManagement.Models.UserViewModel> UserViewModel { get; set; } = default!;
     }
 }

@@ -9,6 +9,7 @@
         [Required]
         public User? User { get; set; }
 
+        public Gym Gym { get; set; }
         public IEnumerable<Appointment>? Appointments { get; set; }
     }
 }
