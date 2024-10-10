@@ -8,5 +8,7 @@
 
         [Required]
         public User? User { get; set; }
+
+        public Gym Gym { get; set; }
     }
 }

@@ -14,8 +14,5 @@
         [Required]
         public User? User { get; set; }
 
-        [Required]
-        public Gym? Gym { get; set; }
-
     }
 }

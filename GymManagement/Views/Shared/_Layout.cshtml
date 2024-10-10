@@ -41,6 +41,12 @@
                                 </ul>
                             </li>
                         }
+                        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item ">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="Index">Forum</a>
+                            </li>
+                        }
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         @if (this.User.Identity.IsAuthenticated)

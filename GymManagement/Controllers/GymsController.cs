@@ -1,32 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using GymManagement.Data;
-using GymManagement.Data.Entities;
-using GymManagement.Models;
+﻿using GymManagement.Data;
 using GymManagement.Helpers;
+using GymManagement.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using GymManagement.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 
 namespace GymManagement.Controllers
 {
     public class GymsController : Controller
     {
-      
         private readonly IGymRepository _gymRepository;
         private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
         private readonly ICountryRepository _countryRepository;
 
-        public GymsController(IGymRepository gymRepository, 
+        public GymsController(IGymRepository gymRepository,
             IBlobHelper blobHelper,
             IConverterHelper converterHelper,
             ICountryRepository countryRepository)
-        {           
-           _gymRepository = gymRepository;
+        {
+            _gymRepository = gymRepository;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
             _countryRepository = countryRepository;
@@ -34,7 +28,7 @@ namespace GymManagement.Controllers
 
         // GET: Gyms
         public IActionResult Index()
-        {                        
+        {
             return View(_gymRepository.GetGymsWithCities());
         }
 
@@ -79,19 +73,19 @@ namespace GymManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-                Guid imageId = Guid.Empty;              
+                Guid imageId = Guid.Empty;
 
-                if(model.ImageFile !=null && model.ImageFile.Length > 0)
+                if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
                     imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "gyms");
-                }   
-   
+                }
+
                 var gym = _converterHelper.ToGym(model, imageId, true);
 
                 //TODO: adicionar city
 
                 await _gymRepository.CreateAsync(gym);
-                
+
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
@@ -103,14 +97,14 @@ namespace GymManagement.Controllers
             if (id == null)
             {
                 return NotFound();
-            }          
+            }
 
             var gym = await _gymRepository.GetByIdAsync(id.Value);
             if (gym == null)
             {
                 return NotFound();
             }
-           
+
             var model = new GymViewModel
             {
                 Id = gym.Id,
@@ -119,21 +113,21 @@ namespace GymManagement.Controllers
                 CityId = gym.CityId,
                 ImageId = gym.ImageId,
             };
-            
+
             var city = await _countryRepository.GetCityAsync(gym.CityId);
-            if (city != null) 
+            if (city != null)
             {
                 var country = await _countryRepository.GetCountryAsync(city);
 
-                if (country != null) 
+                if (country != null)
                 {
                     model.CountryId = country.Id;
-                    model.Cities = _countryRepository.GetComboCities(country.Id);                   
+                    model.Cities = _countryRepository.GetComboCities(country.Id);
                 }
             }
             model.Countries = _countryRepository.GetComboCountries();
             model.Cities = model.Cities ?? _countryRepository.GetComboCities(model.CountryId ?? 0);
-         
+
             return View(model);
         }
 
@@ -149,13 +143,13 @@ namespace GymManagement.Controllers
                 try
                 {
                     Guid imageId = model.ImageId;
-                    if (model.ImageFile != null && model.ImageFile.Length > 0) 
+                    if (model.ImageFile != null && model.ImageFile.Length > 0)
                     {
-                        imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "gyms");                    
+                        imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "gyms");
                     }
 
                     var gym = _converterHelper.ToGym(model, imageId, false);
-                    
+
                     await _gymRepository.UpdateAsync(gym);
                 }
                 catch (DbUpdateConcurrencyException)
@@ -199,9 +193,9 @@ namespace GymManagement.Controllers
             var gym = await _gymRepository.GetByIdAsync(id);
             if (gym != null)
             {
-               await _gymRepository.DeleteAsync(gym);
+                await _gymRepository.DeleteAsync(gym);
             }
-         
+
             return RedirectToAction(nameof(Index));
         }
 

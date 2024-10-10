@@ -1,0 +1,40 @@
+﻿@model IEnumerable<GymManagement.Data.Entities.Discussion>
+
+@{
+    ViewData["Title"] = "Forum";
+}
+
+<h1>Forum</h1>
+
+<p>
+    <a asp-action="CreateDiscussion">Create New</a>
+</p>
+@if (!Model.Any())
+{
+    <p>No discussion threads have been created yet!</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Post title</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <h4>
+                            <a asp-action="Discussion" asp-route-id="@item.Id">@item.OriginalPost.Title</a>
+                        </h4>
+                        <!--<a asp-action="CreateDiscussion" asp-route-id="@item.Id">Edit</a-->
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}

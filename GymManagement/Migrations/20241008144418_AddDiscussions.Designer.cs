@@ -4,6 +4,7 @@ using GymManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GymManagement.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241008144418_AddDiscussions")]
+    partial class AddDiscussions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,7 +109,7 @@ namespace GymManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("GymId")
+                    b.Property<int?>("GymId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -155,7 +158,7 @@ namespace GymManagement.Migrations
 
                     b.HasIndex("OriginalPostId");
 
-                    b.ToTable("Discussions");
+                    b.ToTable("Discussion");
                 });
 
             modelBuilder.Entity("GymManagement.Data.Entities.Employee", b =>
@@ -166,7 +169,7 @@ namespace GymManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("GymId")
+                    b.Property<int?>("GymId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -222,6 +225,9 @@ namespace GymManagement.Migrations
                     b.Property<int?>("DiscussionId")
                         .HasColumnType("int");
 
+                    b.Property<int>("GymId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -237,9 +243,11 @@ namespace GymManagement.Migrations
 
                     b.HasIndex("DiscussionId");
 
+                    b.HasIndex("GymId");
+
                     b.HasIndex("UserId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Post");
                 });
 
             modelBuilder.Entity("GymManagement.Data.Entities.Session", b =>
@@ -351,6 +359,32 @@ namespace GymManagement.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("GymManagement.Models.UserViewModel", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserViewModel");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -519,19 +553,15 @@ namespace GymManagement.Migrations
 
             modelBuilder.Entity("GymManagement.Data.Entities.Client", b =>
                 {
-                    b.HasOne("GymManagement.Data.Entities.Gym", "Gym")
+                    b.HasOne("GymManagement.Data.Entities.Gym", null)
                         .WithMany("Clients")
-                        .HasForeignKey("GymId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("GymId");
 
                     b.HasOne("GymManagement.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.Navigation("Gym");
 
                     b.Navigation("User");
                 });
@@ -549,19 +579,15 @@ namespace GymManagement.Migrations
 
             modelBuilder.Entity("GymManagement.Data.Entities.Employee", b =>
                 {
-                    b.HasOne("GymManagement.Data.Entities.Gym", "Gym")
+                    b.HasOne("GymManagement.Data.Entities.Gym", null)
                         .WithMany("Employees")
-                        .HasForeignKey("GymId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("GymId");
 
                     b.HasOne("GymManagement.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.Navigation("Gym");
 
                     b.Navigation("User");
                 });
@@ -583,11 +609,19 @@ namespace GymManagement.Migrations
                         .WithMany("Replies")
                         .HasForeignKey("DiscussionId");
 
+                    b.HasOne("GymManagement.Data.Entities.Gym", "Gym")
+                        .WithMany()
+                        .HasForeignKey("GymId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("GymManagement.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Gym");
 
                     b.Navigation("User");
                 });

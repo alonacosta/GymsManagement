@@ -1,0 +1,63 @@
+﻿@model GymManagement.Data.Entities.Discussion
+
+@{
+    ViewData["Title"] = "Discussion";
+}
+    <div class="text-danger">
+        <p>
+            @ViewBag.Error
+        </p>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col border">
+                <h1>@Model.OriginalPost.Title</h1>
+                <p class="fs-5">
+                    @Model.OriginalPost.Message
+                </p>
+                <p>
+                    Discussion created by @Model.OriginalPost.User.FullName
+                    @if (this.User.Identity.Name == Model.OriginalPost.User.Email)
+                    {
+                        <a class="btn btn-warning" asp-action="UpdatePost" asp-route-id="@Model.OriginalPost.Id">Update post</a>
+                    }
+                    @if (this.User.Identity.Name == Model.OriginalPost.User.Email || this.User.IsInRole("Admin"))
+                    {
+                        <a class="btn btn-danger" asp-action="DeleteDiscussion" asp-route-id="@Model.Id">Delete discussion thread</a>
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+<div class="container border">
+    @if (!Model.Replies.Any())
+    {
+        <p>This discussion thread has no replies!</p>
+    }
+    else
+    {
+        foreach (var item in Model.Replies)
+        {
+            <div class="row">
+                <div class="col border">
+                    <p class="fs-5">
+                        @item.Message
+                    </p>
+                    <p>
+                        Reply by @item.User.FullName
+                        @if (this.User.Identity.Name == item.User.Email)
+                        {
+                            <a class="btn btn-warning" asp-action="UpdatePost" asp-route-id="@item.Id">Update post</a>
+                            <a class="btn btn-danger" asp-action="DeleteReply" asp-route-id="@item.Id">Delete reply</a>
+                        }
+                    </p>
+                </div>
+            </div>
+        }
+    }
+</div>
+@if (this.User.Identity.IsAuthenticated)
+{
+    <a asp-action="CreateReply" asp-route-id="@Model.Id" class="btn btn-primary">Create Reply</a>
+  
+}
