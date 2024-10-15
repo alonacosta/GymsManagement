@@ -1,17 +1,23 @@
 ﻿namespace GymManagement.Controllers
 {
     using GymManagement.Data;
-    using GymManagement.Data.Entities;
+    using GymManagement.Helpers;
+    using GymManagement.Models;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
     public class SessionsController : Controller
     {
         private readonly ISessionRepository _sessionRepository;
+        private readonly IConverterHelper _converterHelper;
+        private readonly IBlobHelper _blobHelper;
 
-        public SessionsController(ISessionRepository sessionRepository)
+        public SessionsController(ISessionRepository sessionRepository, IConverterHelper converterHelper, 
+            IBlobHelper blobHelper)
         {
             _sessionRepository = sessionRepository;
+            _converterHelper = converterHelper;
+            _blobHelper = blobHelper;
         }
 
         public IActionResult Index()
@@ -42,17 +48,25 @@
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Session session)
+        public async Task<IActionResult> Create(SessionViewModel model)
         {
             if (ModelState.IsValid)
             {
+                Guid imageId = Guid.Empty;
+
+                if (model.ImageFile != null && model.ImageFile.Length > 0) 
+                { 
+                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "sessions");
+                }
+
+                var session = _converterHelper.ToSession(model, imageId, true);
+
                 await _sessionRepository.CreateAsync(session);
                 
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(session);
+            return View(model);
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -64,32 +78,37 @@
 
             var session = await _sessionRepository.GetByIdAsync(id.Value);
 
+            var model = _converterHelper.ToSessionViewModel(session);
+
             if (session == null)
             {
                 return NotFound();
             }
 
-            return View(session);
+            return View(model);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Session session)
+        public async Task<IActionResult> Edit(SessionViewModel model)
         {
-            if (id != session.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
+                Guid imageId = model.ImageId;
+
                 try
                 {
+                    if (model.ImageFile != null && model.ImageFile.Length > 0) 
+                    {
+                        imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "sessions");
+                    }
+
+                    var session = _converterHelper.ToSession(model, imageId, false);
+
                     await _sessionRepository.UpdateAsync(session);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await _sessionRepository.ExistAsync(session.Id))
+                    if (!await _sessionRepository.ExistAsync(model.Id))
                     {
                         return NotFound();
                     }
@@ -101,7 +120,8 @@
 
                 return RedirectToAction(nameof(Index));
             }
-            return View(session);
+
+            return View(model);
         }
 
         public async Task<IActionResult> Delete(int? id)

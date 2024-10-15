@@ -29,6 +29,7 @@
 
         public Gym? Gym { get; set; }
 
+        [Display(Name ="Image")]
         public Guid ImageId { get; set; }
 
         public IEnumerable<Appointment>? Appointments { get; set; }       
