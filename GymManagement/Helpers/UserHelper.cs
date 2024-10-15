@@ -158,6 +158,11 @@ namespace GymManagement.Helpers
             }
         }
 
+        public Task<SignInResult> ValidatePasswordAsync(User user, string password)
+        {
+            return _signInManager.CheckPasswordSignInAsync(user, password, false);
+        }
+
         /*This method might not be needed anymore
          * public async Task<Gym> GetUserGymAsync(User user)
         {

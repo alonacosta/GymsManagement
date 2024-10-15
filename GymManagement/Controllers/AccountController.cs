@@ -5,20 +5,28 @@ using GymManagement.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.AccessControl;
+using System.Security.Claims;
+using System.Text;
 
 namespace GymManagement.Controllers
 {
     public class AccountController : Controller
     {
         private readonly IUserHelper _userHelper;
+        private readonly IConfiguration _configuration;
         private readonly ICountryRepository _countryRepository;
         private readonly IGymRepository _gymRepository;
 
         public AccountController(IUserHelper userHelper,
+            IConfiguration configuration,
             ICountryRepository countryRepository,
             IGymRepository gymRepository)
         {
             _userHelper = userHelper;
+            _configuration = configuration;
             _countryRepository = countryRepository;
             _gymRepository = gymRepository;
         }
@@ -291,6 +299,45 @@ namespace GymManagement.Controllers
         public IActionResult NotAuthorized()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateToken([FromBody] LoginViewModel model)
+        {
+            if (ModelState.IsValid) 
+            {
+                var user = await _userHelper.GetUserByEmailAsync(model.Username);
+                if (user != null)
+                {
+                    var result = await _userHelper.ValidatePasswordAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        var claims = new[]
+                        {
+                            new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                        };
+
+                        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"]));
+                        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                        var token = new JwtSecurityToken(_configuration["Token:Issuer"],
+                            _configuration["Token:Audience"],
+                            claims,
+                            expires: DateTime.UtcNow.AddDays(15),
+                            signingCredentials: credentials);
+                        var results = new
+                        {
+                            token = new JwtSecurityTokenHandler().WriteToken(token),
+                            expiration = token.ValidTo
+                        };
+
+                        return this.Created(string.Empty, results);
+                    }
+                }
+            }
+
+            return BadRequest();
+            
         }
     }
 }

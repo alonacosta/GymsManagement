@@ -57,6 +57,8 @@ namespace GymManagement.Data
                 await _userHelper.AddUsertoRole(user, "Admin");
             }
 
+
+
             var gymsL = new List<Gym>();
             var gymsP = new List<Gym>();
            
