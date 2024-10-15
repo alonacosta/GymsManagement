@@ -29,6 +29,8 @@
 
         public Gym? Gym { get; set; }
 
+        public Guid ImageId { get; set; }
+
         public IEnumerable<Appointment>? Appointments { get; set; }       
 
         public int RemainingCapacity => Appointments == null ? 100 : Capacity - Appointments.Count();
@@ -40,5 +42,9 @@
         [Display(Name = "End Session")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm tt}", ApplyFormatInEditMode = false)]
         public DateTime? EndSessionLocal => this.EndSession == null ? null : this.EndSession.ToLocalTime();
+
+        public string ImageFullPath => ImageId == Guid.Empty
+          ? "https://gymmanagement.blob.core.windows.net/default/no-image.jpeg"
+          : $"https://gymmanagement.blob.core.windows.net/sessions/{ImageId}";
     }
 }
