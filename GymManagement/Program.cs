@@ -19,7 +19,9 @@ builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("name=LocalConnec
 // Configures Identity
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
-    
+    // Authentication Configurations
+    options.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+    options.SignIn.RequireConfirmedEmail = true;
     // User Configurations
     options.User.RequireUniqueEmail = true;
     // Password Configurations 
@@ -30,6 +32,7 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 6;
 })
+.AddDefaultTokenProviders()
 .AddEntityFrameworkStores<DataContext>();
 
 // Configures token
@@ -53,6 +56,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddScoped<IUserHelper, UserHelper>();
 builder.Services.AddScoped<IBlobHelper, BlobHelper>();
+builder.Services.AddScoped<IMailHelper, MailHelper>();
 builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
 
 builder.Services.AddScoped<ISessionRepository, SessionRepository>();

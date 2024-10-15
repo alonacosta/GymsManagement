@@ -10,6 +10,8 @@ namespace GymManagement.Helpers
 
         Task<IdentityResult> AddUserAsync(User user, string password);
 
+        Task<IdentityResult> AddUserAsync(User user);
+
         Task CreateUserEntity(User user, string roleName, int gymId);
 
         Task<SignInResult> LoginAsync(LoginViewModel model);
@@ -35,6 +37,16 @@ namespace GymManagement.Helpers
         Task AddEmployeeToGymAsync(int gymId, Employee employee);
 
         Task<SignInResult> ValidatePasswordAsync(User user, string password);
+
+        Task<string> GenerateEmailConfirmationTokenAsync(User user);
+        
+        Task<IdentityResult> ConfirmEmailAsync(User user, string token);
+        
+        Task<IdentityResult> ResetPasswordAsync(User user, string token, string password);
+
+        Task<string> GeneratePasswordResetTokenAsync(User user);
+
+        Task<IdentityResult> AddPasswordAsync(User user, string password);
 
         //Task<Gym> GetUserGymAsync(User user);
     }

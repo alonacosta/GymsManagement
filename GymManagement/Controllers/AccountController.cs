@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Bcpg.Sig;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.AccessControl;
 using System.Security.Claims;
@@ -16,16 +17,19 @@ namespace GymManagement.Controllers
     public class AccountController : Controller
     {
         private readonly IUserHelper _userHelper;
+        private readonly IMailHelper _mailHelper;
         private readonly IConfiguration _configuration;
         private readonly ICountryRepository _countryRepository;
         private readonly IGymRepository _gymRepository;
 
         public AccountController(IUserHelper userHelper,
+            IMailHelper mailHelper,
             IConfiguration configuration,
             ICountryRepository countryRepository,
             IGymRepository gymRepository)
         {
             _userHelper = userHelper;
+            _mailHelper = mailHelper;
             _configuration = configuration;
             _countryRepository = countryRepository;
             _gymRepository = gymRepository;
@@ -74,9 +78,9 @@ namespace GymManagement.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult Register(string roleName)
+        public IActionResult Add(string roleName)
         {
-            var model = new RegisterUserViewModel
+            var model = new AddUserViewModel
             {
                 RoleName = roleName,
                 Countries = _countryRepository.GetComboCountries(),
@@ -87,7 +91,7 @@ namespace GymManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterUserViewModel model)
+        public async Task<IActionResult> Add(AddUserViewModel model)
         {
             var user = await _userHelper.GetUserByEmailAsync(model.Username);
             if (user == null)
@@ -102,7 +106,7 @@ namespace GymManagement.Controllers
                 };
 
             }
-            var result = await _userHelper.AddUserAsync(user, model.Password);
+            var result = await _userHelper.AddUserAsync(user);
 
             if (result != IdentityResult.Success)
             {
@@ -114,8 +118,26 @@ namespace GymManagement.Controllers
 
             await _userHelper.AddUsertoRole(user, model.RoleName);
 
+            string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+            string tokenLink = Url.Action("AddedConfirmEmail", "Account", new
+            {
+                userid = user.Id,
+                token = myToken
+            }, protocol: HttpContext.Request.Scheme);
 
-            ViewBag.Message = "The user has been created succesfully.";
+            Response response = _mailHelper.SendEmail(model.Username,
+                "Email confirmation",
+                "To finish your registration, please click on the following link." +
+                "</br>" +
+                $"<a href=\"{tokenLink}\">Confirm Email</a>");
+
+            if (response.IsSuccess)
+            {
+                ViewBag.Message = "The instructions have been sent to the user.";
+                return View(model);
+            }
+
+            ModelState.AddModelError(string.Empty, "The user couldn't be registered.");
 
             return View(model);
         }
@@ -339,5 +361,57 @@ namespace GymManagement.Controllers
             return BadRequest();
             
         }
+
+        public async Task<IActionResult> AddedConfirmEmail(string userId, string token)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+            {
+                return NotFound();
+            }
+
+            var user = await _userHelper.GetUserById(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _userHelper.ConfirmEmailAsync(user, token);
+
+            var model = new ConfirmEmailViewModel
+            {
+                token = token,
+            };
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddedConfirmEmail(ConfirmEmailViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userHelper.GetUserById(model.userId);
+
+                var response = await _userHelper.ConfirmEmailAsync(user, model.token);
+
+                if (response.Succeeded)
+                {
+                    await _userHelper.AddPasswordAsync(user, model.Password);
+
+                    ViewBag.Message = "Your password has been set. You may log in now.";
+                } else
+                {
+                    ModelState.AddModelError(string.Empty, response.Errors.FirstOrDefault().Description);
+                }
+
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Error");
+            }
+            return View(model);
+        }
     }
+
+
 }
