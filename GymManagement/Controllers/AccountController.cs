@@ -71,7 +71,7 @@ namespace GymManagement.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult UserManagementIndex() 
+        public IActionResult UserManagementIndex()
         {
             var model = _userHelper.GetAllUsers();
             return View(model);
@@ -228,7 +228,7 @@ namespace GymManagement.Controllers
             return View(model);
         }
 
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(string id)
         {
             var user = await _userHelper.GetUserById(id);
@@ -258,14 +258,14 @@ namespace GymManagement.Controllers
                 {
                     ViewBag.Message = "User updated!";
                 }
-                else 
+                else
                 {
                     ModelState.AddModelError(string.Empty, response.Errors.FirstOrDefault().Description);
                 }
             }
             return View(model);
         }
-        
+
         public async Task<IActionResult> ChangeUser()
         {
             var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
@@ -290,7 +290,7 @@ namespace GymManagement.Controllers
                 user.LastName = model.LastName;
                 user.PhoneNumber = model.PhoneNumber;
                 var response = await _userHelper.UpdateUserAsync(user);
-                if (response.Succeeded) 
+                if (response.Succeeded)
                 {
                     ViewBag.Message = "User updated!";
                 }
@@ -326,7 +326,7 @@ namespace GymManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateToken([FromBody] LoginViewModel model)
         {
-            if (ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
                 var user = await _userHelper.GetUserByEmailAsync(model.Username);
                 if (user != null)
@@ -359,7 +359,7 @@ namespace GymManagement.Controllers
             }
 
             return BadRequest();
-            
+
         }
 
         public async Task<IActionResult> AddedConfirmEmail(string userId, string token)
@@ -399,7 +399,8 @@ namespace GymManagement.Controllers
                     await _userHelper.AddPasswordAsync(user, model.Password);
 
                     ViewBag.Message = "Your password has been set. You may log in now.";
-                } else
+                }
+                else
                 {
                     ModelState.AddModelError(string.Empty, response.Errors.FirstOrDefault().Description);
                 }
@@ -411,7 +412,67 @@ namespace GymManagement.Controllers
             }
             return View(model);
         }
-    }
 
+        public IActionResult RecoverPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RecoverPassword(RecoverPasswordViewModel model)
+        {
+            if (ModelState.IsValid) 
+            {
+                var user = await _userHelper.GetUserByEmailAsync(model.Email);
+
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Couldn't find a user the email that was provided.");
+                    return View(model);
+                }
+                
+                var myToken = await _userHelper.GeneratePasswordResetTokenAsync(user);
+
+                var link = this.Url.Action("ResetPassword", "Account", new { token = myToken }, protocol: HttpContext.Request.Scheme);
+
+                Response response = _mailHelper.SendEmail(model.Email, "Gym Management Password Reset",
+                    $"<h1>Gym Management Password Rese</h1>" +
+                    $"To reset your password plesse click on this link: </br>" +
+                    $"<a href= \"{link}\">Reset password</a>");
+
+                if (response.IsSuccess)
+                {
+                    this.ViewBag.Message = "The instructions to reset your password have been sent to your email.";
+                }
+                return View();
+            }
+            return View(model);
+        }
+
+        public IActionResult ResetPassword(string token)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            var user = await _userHelper.GetUserByEmailAsync(model.UserName);
+            if (user != null)
+            {
+                var result = await _userHelper.ResetPasswordAsync(user, model.Token, model.Password);
+                if (result.Succeeded)
+                {
+                    this.ViewBag.Message = "Password reset succesful.";
+                    return View();
+                }
+                this.ViewBag.Message = "An error occurred while resetting the password.";
+                return View(model);
+            }
+            ViewBag.Message = "User not found.";
+            return View(model);
+        }
+       
+    }
 
 }
