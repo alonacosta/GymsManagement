@@ -4,11 +4,11 @@
 }
 
 <hr />
-<div class="text-success">
+@* <div class="text-success">
     <p>
         @ViewBag.Message
     </p>
-</div>
+</div> *@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Add">
@@ -48,8 +48,7 @@
                 <label asp-for="GymId" class="control-label">Gym</label>
                 <select asp-for="GymId" asp-items="Model.Gyms" class="form-control"></select>
                 <span asp-validation-for="GymId" class="text-danger"></span>
-            </div>
-            
+            </div>            
 
             <div class="form-group">
                 <input type="submit" value="Register" class="btn btn-primary" />
@@ -105,7 +104,7 @@
                                 $.each(gyms, function (i, gym) {
                                     $("#GymId").append('<option value="'
                                         + gym.id + '">'
-                                        + gym.name + '</option>');
+                                        + gym.name + ' - ' + gym.address + '</option>');
                                 });
                             },
                             error: function (ex) {

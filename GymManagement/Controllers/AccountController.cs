@@ -11,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.AccessControl;
 using System.Security.Claims;
 using System.Text;
+using Vereyon.Web;
 
 namespace GymManagement.Controllers
 {
@@ -21,18 +22,21 @@ namespace GymManagement.Controllers
         private readonly IConfiguration _configuration;
         private readonly ICountryRepository _countryRepository;
         private readonly IGymRepository _gymRepository;
+        private readonly IFlashMessage _flashMessage;
 
         public AccountController(IUserHelper userHelper,
             IMailHelper mailHelper,
             IConfiguration configuration,
             ICountryRepository countryRepository,
-            IGymRepository gymRepository)
+            IGymRepository gymRepository,
+            IFlashMessage flashMessage)
         {
             _userHelper = userHelper;
             _mailHelper = mailHelper;
             _configuration = configuration;
             _countryRepository = countryRepository;
             _gymRepository = gymRepository;
+            _flashMessage = flashMessage;
         }
 
         public IActionResult Login()
@@ -133,8 +137,10 @@ namespace GymManagement.Controllers
 
             if (response.IsSuccess)
             {
-                ViewBag.Message = "The instructions have been sent to the user.";
-                return View(model);
+                _flashMessage.Info("The instructions have been sent to the user");
+                return RedirectToAction("UserManagementIndex", "Account");
+                //ViewBag.Message = "The instructions have been sent to the user.";
+                //return View(model);
             }
 
             ModelState.AddModelError(string.Empty, "The user couldn't be registered.");
