@@ -2,7 +2,12 @@ using GymManagement.Data;
 using GymManagement.Data.Entities;
 using GymManagement.Helpers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Configuration;
+using System.Text;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Vereyon.Web;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,9 +20,11 @@ builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("name=LocalConnec
 // Configures Identity
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
+    // Authentication Configurations
+    options.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+    options.SignIn.RequireConfirmedEmail = true;
     // User Configurations
     options.User.RequireUniqueEmail = true;
-
     // Password Configurations 
     options.Password.RequireDigit = false;
     options.Password.RequiredUniqueChars = 0;
@@ -26,7 +33,21 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 6;
 })
+.AddDefaultTokenProviders()
 .AddEntityFrameworkStores<DataContext>();
+
+// Configures token
+builder.Services.AddAuthentication()
+    .AddCookie()
+    .AddJwtBearer(cfg =>
+    {
+        cfg.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidIssuer = builder.Configuration["Token:Issuer"],
+            ValidAudience = builder.Configuration["Token:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:Key"]))
+        };
+    });
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -38,6 +59,7 @@ builder.Services.AddFlashMessage();
 
 builder.Services.AddScoped<IUserHelper, UserHelper>();
 builder.Services.AddScoped<IBlobHelper, BlobHelper>();
+builder.Services.AddScoped<IMailHelper, MailHelper>();
 builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
 
 builder.Services.AddScoped<ISessionRepository, SessionRepository>();

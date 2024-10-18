@@ -158,6 +158,41 @@ namespace GymManagement.Helpers
             }
         }
 
+        public Task<SignInResult> ValidatePasswordAsync(User user, string password)
+        {
+            return _signInManager.CheckPasswordSignInAsync(user, password, false);
+        }
+
+        public async Task<IdentityResult> ConfirmEmailAsync(User user, string token)
+        {
+            return await _userManager.ConfirmEmailAsync(user, token);       
+        }
+
+        public async Task<IdentityResult> ResetPasswordAsync(User user, string token, string password)
+        {
+            return await _userManager.ResetPasswordAsync(user, token, password);
+        }
+
+        public async Task<string> GeneratePasswordResetTokenAsync(User user)
+        {
+            return await _userManager.GeneratePasswordResetTokenAsync(user);
+        }
+
+        public async Task<string> GenerateEmailConfirmationTokenAsync(User user)
+        {
+            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        }
+
+        public async Task<IdentityResult> AddUserAsync(User user)
+        {
+            return await _userManager.CreateAsync(user);
+        }
+
+        public async Task<IdentityResult> AddPasswordAsync(User user, string password)
+        {
+            return await _userManager.AddPasswordAsync(user, password);
+        }
+
         /*This method might not be needed anymore
          * public async Task<Gym> GetUserGymAsync(User user)
         {

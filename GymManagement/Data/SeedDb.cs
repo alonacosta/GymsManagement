@@ -57,6 +57,10 @@ namespace GymManagement.Data
                 await _userHelper.AddUsertoRole(user, "Admin");
             }
 
+            // Automally confirm Admin
+            var token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+            await _userHelper.ConfirmEmailAsync(user, token);
+
             var gymsL = new List<Gym>();
             var gymsP = new List<Gym>();
            

@@ -1,6 +1,6 @@
-﻿@model GymManagement.Models.RegisterUserViewModel
+﻿@model GymManagement.Models.AddUserViewModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Add";
 }
 
 <hr />
@@ -11,7 +11,7 @@
 </div>
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Register">
+        <form asp-action="Add">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="RoleName" />
             <div class="form-group">
@@ -49,16 +49,7 @@
                 <select asp-for="GymId" asp-items="Model.Gyms" class="form-control"></select>
                 <span asp-validation-for="GymId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Password">Password</label>
-                <input asp-for="Password" type="password" class="form-control" />
-                <span asp-validation-for="Password" class="text-warning"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Confirm"> Confirm</label>
-                <input asp-for="Confirm" type="password" class="form-control" />
-                <span asp-validation-for="Confirm" class="text-warning"></span>
-            </div>
+            
 
             <div class="form-group">
                 <input type="submit" value="Register" class="btn btn-primary" />

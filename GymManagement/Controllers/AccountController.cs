@@ -5,20 +5,32 @@ using GymManagement.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Bcpg.Sig;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.AccessControl;
+using System.Security.Claims;
+using System.Text;
 
 namespace GymManagement.Controllers
 {
     public class AccountController : Controller
     {
         private readonly IUserHelper _userHelper;
+        private readonly IMailHelper _mailHelper;
+        private readonly IConfiguration _configuration;
         private readonly ICountryRepository _countryRepository;
         private readonly IGymRepository _gymRepository;
 
         public AccountController(IUserHelper userHelper,
+            IMailHelper mailHelper,
+            IConfiguration configuration,
             ICountryRepository countryRepository,
             IGymRepository gymRepository)
         {
             _userHelper = userHelper;
+            _mailHelper = mailHelper;
+            _configuration = configuration;
             _countryRepository = countryRepository;
             _gymRepository = gymRepository;
         }
@@ -59,16 +71,16 @@ namespace GymManagement.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult UserManagementIndex() 
+        public IActionResult UserManagementIndex()
         {
             var model = _userHelper.GetAllUsers();
             return View(model);
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult Register(string roleName)
+        public IActionResult Add(string roleName)
         {
-            var model = new RegisterUserViewModel
+            var model = new AddUserViewModel
             {
                 RoleName = roleName,
                 Countries = _countryRepository.GetComboCountries(),
@@ -79,7 +91,7 @@ namespace GymManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterUserViewModel model)
+        public async Task<IActionResult> Add(AddUserViewModel model)
         {
             var user = await _userHelper.GetUserByEmailAsync(model.Username);
             if (user == null)
@@ -94,7 +106,7 @@ namespace GymManagement.Controllers
                 };
 
             }
-            var result = await _userHelper.AddUserAsync(user, model.Password);
+            var result = await _userHelper.AddUserAsync(user);
 
             if (result != IdentityResult.Success)
             {
@@ -106,8 +118,26 @@ namespace GymManagement.Controllers
 
             await _userHelper.AddUsertoRole(user, model.RoleName);
 
+            string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+            string tokenLink = Url.Action("AddedConfirmEmail", "Account", new
+            {
+                userid = user.Id,
+                token = myToken
+            }, protocol: HttpContext.Request.Scheme);
 
-            ViewBag.Message = "The user has been created succesfully.";
+            Response response = _mailHelper.SendEmail(model.Username,
+                "Email confirmation",
+                "To finish your registration, please click on the following link." +
+                "</br>" +
+                $"<a href=\"{tokenLink}\">Confirm Email</a>");
+
+            if (response.IsSuccess)
+            {
+                ViewBag.Message = "The instructions have been sent to the user.";
+                return View(model);
+            }
+
+            ModelState.AddModelError(string.Empty, "The user couldn't be registered.");
 
             return View(model);
         }
@@ -198,7 +228,7 @@ namespace GymManagement.Controllers
             return View(model);
         }
 
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(string id)
         {
             var user = await _userHelper.GetUserById(id);
@@ -228,14 +258,14 @@ namespace GymManagement.Controllers
                 {
                     ViewBag.Message = "User updated!";
                 }
-                else 
+                else
                 {
                     ModelState.AddModelError(string.Empty, response.Errors.FirstOrDefault().Description);
                 }
             }
             return View(model);
         }
-        
+
         public async Task<IActionResult> ChangeUser()
         {
             var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
@@ -260,7 +290,7 @@ namespace GymManagement.Controllers
                 user.LastName = model.LastName;
                 user.PhoneNumber = model.PhoneNumber;
                 var response = await _userHelper.UpdateUserAsync(user);
-                if (response.Succeeded) 
+                if (response.Succeeded)
                 {
                     ViewBag.Message = "User updated!";
                 }
@@ -292,5 +322,157 @@ namespace GymManagement.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateToken([FromBody] LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userHelper.GetUserByEmailAsync(model.Username);
+                if (user != null)
+                {
+                    var result = await _userHelper.ValidatePasswordAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        var claims = new[]
+                        {
+                            new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                        };
+
+                        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"]));
+                        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                        var token = new JwtSecurityToken(_configuration["Token:Issuer"],
+                            _configuration["Token:Audience"],
+                            claims,
+                            expires: DateTime.UtcNow.AddDays(15),
+                            signingCredentials: credentials);
+                        var results = new
+                        {
+                            token = new JwtSecurityTokenHandler().WriteToken(token),
+                            expiration = token.ValidTo
+                        };
+
+                        return this.Created(string.Empty, results);
+                    }
+                }
+            }
+
+            return BadRequest();
+
+        }
+
+        public async Task<IActionResult> AddedConfirmEmail(string userId, string token)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+            {
+                return NotFound();
+            }
+
+            var user = await _userHelper.GetUserById(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _userHelper.ConfirmEmailAsync(user, token);
+
+            var model = new ConfirmEmailViewModel
+            {
+                token = token,
+            };
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddedConfirmEmail(ConfirmEmailViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userHelper.GetUserById(model.userId);
+
+                var response = await _userHelper.ConfirmEmailAsync(user, model.token);
+
+                if (response.Succeeded)
+                {
+                    await _userHelper.AddPasswordAsync(user, model.Password);
+
+                    ViewBag.Message = "Your password has been set. You may log in now.";
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, response.Errors.FirstOrDefault().Description);
+                }
+
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Error");
+            }
+            return View(model);
+        }
+
+        public IActionResult RecoverPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RecoverPassword(RecoverPasswordViewModel model)
+        {
+            if (ModelState.IsValid) 
+            {
+                var user = await _userHelper.GetUserByEmailAsync(model.Email);
+
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Couldn't find a user the email that was provided.");
+                    return View(model);
+                }
+                
+                var myToken = await _userHelper.GeneratePasswordResetTokenAsync(user);
+
+                var link = this.Url.Action("ResetPassword", "Account", new { token = myToken }, protocol: HttpContext.Request.Scheme);
+
+                Response response = _mailHelper.SendEmail(model.Email, "Gym Management Password Reset",
+                    $"<h1>Gym Management Password Rese</h1>" +
+                    $"To reset your password plesse click on this link: </br>" +
+                    $"<a href= \"{link}\">Reset password</a>");
+
+                if (response.IsSuccess)
+                {
+                    this.ViewBag.Message = "The instructions to reset your password have been sent to your email.";
+                }
+                return View();
+            }
+            return View(model);
+        }
+
+        public IActionResult ResetPassword(string token)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            var user = await _userHelper.GetUserByEmailAsync(model.UserName);
+            if (user != null)
+            {
+                var result = await _userHelper.ResetPasswordAsync(user, model.Token, model.Password);
+                if (result.Succeeded)
+                {
+                    this.ViewBag.Message = "Password reset succesful.";
+                    return View();
+                }
+                this.ViewBag.Message = "An error occurred while resetting the password.";
+                return View(model);
+            }
+            ViewBag.Message = "User not found.";
+            return View(model);
+        }
+       
     }
+
 }

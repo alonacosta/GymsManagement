@@ -1,0 +1,39 @@
+﻿@model GymManagement.Models.ConfirmEmailViewModel
+
+@{
+    ViewData["Title"] = "Confirm Email";
+}
+
+<h2>@ViewData["Title"]</h2>
+<div class="text-success">
+    <p>
+        @ViewBag.Message
+    </p>
+</div>
+<div>
+    <p>
+        As this is your first time logging on, please enter a new password.
+    </p>
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="AddedConfirmEmail">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="userId" />
+                <input type="hidden" asp-for="token" />
+                <div class="form-group">
+                    <label asp-for="Password">Password</label>
+                    <input asp-for="Password" type="password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-warning"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Confirm"> Confirm</label>
+                    <input asp-for="Confirm" type="password" class="form-control" />
+                    <span asp-validation-for="Confirm" class="text-warning"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Edit" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
