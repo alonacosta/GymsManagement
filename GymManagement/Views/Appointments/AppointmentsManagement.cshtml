@@ -1,0 +1,62 @@
+﻿@model IEnumerable<GymManagement.Data.Entities.AppointmentTemp>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+    <h2 class="col">Appointments</h2>
+    <div class="col">
+        <a asp-action="ConfirmBookingAll"  class="btn btn-success">Confirm Books</a>
+    </div>
+</div>
+
+
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Client.User.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartSession)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Duration)
+            </th>
+           
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>               
+                <th>
+                    @Html.DisplayFor(modelItem => item.Client.User.FullName)
+                </th>              
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartSession)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Duration)
+                </td>              
+
+                <td>
+                    <a asp-action="CancelBooking" asp-route-id="@item.Id" class="btn btn-danger">Cancel Book</a>
+                   @*  @if (item.StartSession > DateTime.Now)
+                    {
+                        <a asp-action="CancelBooking" asp-route-id="@item.Id" class="btn btn-danger">Cancel Book</a>
+                    } *@
+                </td>               
+            </tr>
+        }
+    </tbody>
+    </table>
+
+

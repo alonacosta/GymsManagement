@@ -26,9 +26,13 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Gyms" asp-action="Index">Gyms</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Sessions" asp-action="Index">Sessions</a>
-                        </li>
+                       
+                        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Client")) 
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Appointments" asp-action="Index">Appointments</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
@@ -37,7 +41,19 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="UserManagementIndex">User Management</a></li>
+                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="UserManagementIndex">User Management</a></li>   
+                                    <li class="nav-item">
+                                          <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Sessions" asp-action="Index">Sessions Management</a>
+                                     </li>
+                                </ul>                            
+                            </li>
+                        }
+                        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Employee"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Office</a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">                                   
+                                    <li><a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Appointments" asp-action="AppointmentsManagement">Appointments Management</a></li>
                                 </ul>
                             </li>
                         }

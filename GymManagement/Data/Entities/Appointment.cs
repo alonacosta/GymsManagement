@@ -4,8 +4,8 @@
     {
         public int Id { get; set; }
 
-        public Session? Session { get; set; }
+        public Session Session { get; set; }
         
-        public Client? Client { get; set; }
+        public Client Client { get; set; }
     }
 }

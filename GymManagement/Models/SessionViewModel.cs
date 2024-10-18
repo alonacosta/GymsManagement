@@ -6,6 +6,6 @@
     public class SessionViewModel : Session
     {
         [Display(Name ="Image")]
-        public IFormFile ImageFile { get; set; }
+        public IFormFile? ImageFile { get; set; }
     }
 }

@@ -4,5 +4,6 @@
 
     public interface ISessionRepository : IGenericRepository<Session>
     {
+        Task UpdateSessionWithAppointmentsAsync(int id, Session session);
     }
 }

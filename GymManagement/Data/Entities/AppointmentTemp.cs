@@ -19,6 +19,15 @@
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm tt}", ApplyFormatInEditMode = false)]
         public DateTime EndSession { get; set; }
 
-        public int RemainingCapacity { get; set; }  
+        public int RemainingCapacity { get; set; }
+
+        public string Duration
+        {
+            get
+            {
+                var duration = EndSession - StartSession;
+                return $"{(int)duration.TotalHours}h {duration.Minutes}m";
+            }
+        }
     }
 }
