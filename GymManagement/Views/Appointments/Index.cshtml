@@ -48,7 +48,7 @@
                     @Html.DisplayFor(modelItem => item.Session.IsGroup)
                 </td>              
                 <td>
-                    @if(item.Session.StartSession > DateTime.Now)
+                    @if(item.GymSession.Session.StartSession > DateTime.Now)
                     {
                         <a asp-action="CancelBooking" asp-route-id="@item.Id" class="btn btn-danger">Cancel Book</a>
                     }  

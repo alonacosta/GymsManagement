@@ -28,13 +28,13 @@ namespace GymManagement.Data
             if(await _userHelper.IsUserInRoleAsync(user, "Admin")) {
                 return _context.Appointments
                     .Include(a => a.Client)
-                    .Include(a => a.Session)
+                    .Include(a => a.Session)                   
                     .OrderByDescending(a => a.Session.StartSession);                   
             }
 
             return _context.Appointments
                 .Include(a => a.Session)
-                .Include(a => a.Client)
+                .Include(a => a.Client)                
                 .Where(a => a.Client.User.Id == user.Id)
                 .OrderByDescending(a => a.Session.StartSession);
         }

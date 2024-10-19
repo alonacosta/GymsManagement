@@ -37,11 +37,11 @@
         public int RemainingCapacity => Appointments == null ? 100 : Capacity - Appointments.Count();
 
         [Display(Name = "Start Session")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm tt}", ApplyFormatInEditMode = false)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm tt}", ApplyFormatInEditMode = false)]
         public DateTime? StartSessionLocal => this.StartSession == null ? null : this.StartSession.ToLocalTime();
 
         [Display(Name = "End Session")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm tt}", ApplyFormatInEditMode = false)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm tt}", ApplyFormatInEditMode = false)]
         public DateTime? EndSessionLocal => this.EndSession == null ? null : this.EndSession.ToLocalTime();
 
         public string Duration

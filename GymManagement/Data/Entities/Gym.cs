@@ -7,6 +7,7 @@
         public int Id { get; set; }
 
         [Required]
+        [Display(Name = "Gym Name")]
         public string? Name { get; set; }
 
         [Required]

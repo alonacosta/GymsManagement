@@ -1,6 +1,7 @@
 ﻿namespace GymManagement.Data
 {
     using GymManagement.Data.Entities;
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
 
     public class SessionRepository : GenericRepository<Session>, ISessionRepository
@@ -73,5 +74,21 @@
         //        .Where(s => s.Id == id)
         //        .FirstOrDefaultAsync();    
         //}
+
+        public IEnumerable<SelectListItem> GetComboSessions()
+        {   
+            var list = _context.Sessions.Select(s => new SelectListItem
+           {
+                Text = s.Name,
+                    Value = s.Id.ToString()
+                }).OrderBy(l => l.Text).ToList();
+
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "(Select a session...)",
+                    Value = "0"
+                });
+                 return list;
+        }
     }
 }

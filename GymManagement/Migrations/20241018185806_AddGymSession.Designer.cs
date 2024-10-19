@@ -4,6 +4,7 @@ using GymManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GymManagement.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241018185806_AddGymSession")]
+    partial class AddGymSession
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +39,7 @@ namespace GymManagement.Migrations
                     b.Property<int>("GymSessionId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SessionId")
+                    b.Property<int>("SessionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -223,9 +226,6 @@ namespace GymManagement.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Capacity")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("EndSession")
                         .HasColumnType("datetime2");
@@ -542,7 +542,9 @@ namespace GymManagement.Migrations
 
                     b.HasOne("GymManagement.Data.Entities.Session", "Session")
                         .WithMany("Appointments")
-                        .HasForeignKey("SessionId");
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Client");
 

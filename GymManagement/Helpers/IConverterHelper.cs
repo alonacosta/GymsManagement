@@ -12,5 +12,7 @@
         Session ToSession(SessionViewModel model, Guid imageId, bool isNew);
 
         SessionViewModel ToSessionViewModel(Session session);
+        GymSession ToGymSession(GymWithSessionViewModel model, bool isNew);
+        GymWithSessionViewModel ToGymWithSessionViewModel(GymSession gymSession);
     }
 }

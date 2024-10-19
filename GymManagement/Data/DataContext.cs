@@ -18,6 +18,7 @@ namespace GymManagement.Data
         public DbSet<Employee> Employees { get; set; }
         
         public DbSet<Post> Posts { get; set; }
+        public DbSet<GymSession> GymSessions { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {

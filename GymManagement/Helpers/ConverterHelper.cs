@@ -61,5 +61,32 @@ namespace GymManagement.Helpers
                 ImageId = session.ImageId,
             };
         }
+
+        public GymSession ToGymSession(GymWithSessionViewModel model, bool isNew)
+        {
+            return new GymSession
+            {
+                Id = isNew ? 0 : model.Id,
+                SessionId = model.SessionId,
+                GymId = model.GymId,               
+                StartSession = model.StartSession,
+                EndSession = model.EndSession,
+                Capacity= model.Capacity,
+            };
+        }
+
+        public GymWithSessionViewModel ToGymWithSessionViewModel(GymSession gymSession)
+        {
+            return new GymWithSessionViewModel
+            {
+                Id = gymSession.Id,
+                SessionId = gymSession.SessionId,
+                GymId = gymSession.GymId,
+                StartSession = gymSession.StartSession,
+                EndSession = gymSession.EndSession,
+                Capacity = gymSession.Capacity,
+              
+            };
+        }
     }
 }
