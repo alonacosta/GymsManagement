@@ -69,6 +69,7 @@ builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IGymSessionRepository, GymSessionRepository>();
+builder.Services.AddScoped<IFreeAppointmentRepository, FreeAppointmentRepository>();
 
 // Add Seed service
 builder.Services.AddTransient<SeedDb>();

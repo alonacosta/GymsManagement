@@ -257,5 +257,25 @@ namespace GymManagement.Controllers
 
             return RedirectToAction("BookAwait", "Appointments", new { countryId = countryId, gymId = gymId });
         }
+
+        //public async Task<IActionResult> TryFreeSession(int? id, int? gymId, int? countryId)
+        //{
+        //    if (id == null || gymId == null || countryId == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    ViewData["CountryId"] = countryId;
+        //    ViewData["GymId"] = gymId;
+
+        //    var gymSession = await _gymSessionRepository.GetGymSessionByIdAsync(id.Value);
+
+        //    if (gymSession == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(gymSession);
+        //}
     }
 }

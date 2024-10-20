@@ -20,6 +20,8 @@ namespace GymManagement.Data
         public DbSet<Post> Posts { get; set; }
         public DbSet<GymSession> GymSessions { get; set; }
 
+        public DbSet<FreeAppointment> FreeAppointments { get; set; }
+
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
 

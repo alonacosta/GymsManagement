@@ -8,18 +8,36 @@
 <h2>Sessions From Gym</h2>
 
 <div class="row mt-4">
-    @foreach (var item in Model)
+    @if (Model != null && Model.Any())
     {
-        <div class="card me-3" style="width: 18rem;">
-            <img src="@item.Session.ImageFullPath" class="card-img-top" alt="Gym Photo" style="width:100%; height:200px; object-fit:cover;">
-            <div class="card-body">
-                <h5 class="card-title">@Html.DisplayFor(modelItem => item.Session.Name)</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary">@Html.DisplayFor(modelItem => item.StartSession)</h6>
-                <p class="card-text"> @Html.DisplayNameFor(modelItem => item.Duration),  @Html.DisplayFor(modelItem => item.Duration)</p>
-                <p class="card-text"> @Html.DisplayNameFor(modelItem => item.Capacity),  @Html.DisplayFor(modelItem => item.Capacity)</p>
-                <a asp-action="BookSession" asp-controller="GymSessions" asp-route-countryId="@countryId" asp-route-gymId="@gymId" asp-route-id="@item.Id" class="card-link btn btn-outline-success w-100">Book</a>
+        @foreach (var item in Model)
+        {
+        
+            <div class="card me-3" style="width: 18rem;">
+                <img src="@item.Session.ImageFullPath" class="card-img-top" alt="Gym Photo" style="width:100%; height:200px; object-fit:cover;">
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Session.Name)</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">@Html.DisplayFor(modelItem => item.StartSession)</h6>
+                    <p class="card-text"> @Html.DisplayNameFor(modelItem => item.Duration),  @Html.DisplayFor(modelItem => item.Duration)</p>
+                    <p class="card-text"> @Html.DisplayNameFor(modelItem => item.Capacity),  @Html.DisplayFor(modelItem => item.Capacity)</p>
+                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Client"))
+                    {
+                        <a asp-action="BookSession" asp-controller="GymSessions" asp-route-countryId="@countryId" asp-route-gymId="@gymId" asp-route-id="@item.Id" class="card-link btn btn-outline-success w-100">Book</a>
+                    }
+                    else if (!this.User.Identity.IsAuthenticated)
+                    {
+                        @* <a asp-action="TryFreeSession" asp-controller="FreeAppointments" asp-route-countryId="@countryId" asp-route-gymId="@gymId" asp-route-id="@item.Id" class="card-link btn btn-outline-success w-100">Try for Free</a> *@
+                        <a asp-action="TryFreeSession" asp-controller="FreeAppointments"  class="card-link btn btn-outline-success w-100">Try for Free</a>
+                    }
+                </div>
             </div>
-        </div>
+        }
+    }
+    else
+    {
+        <p>
+            There are no sessions available yet!
+        </p>
     }
 </div>
 

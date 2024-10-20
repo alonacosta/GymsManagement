@@ -6,11 +6,19 @@
 }
 
 <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
-    <h3>BookAwait</h3>
+    <h3>Book Await</h3>
 
     <div class="col-6">
-        <h3>Await for the confirmation</h3>
-        <a asp-action="GetSessionsFromGym" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@gymId" class="btn btn-success">Back to Sessions</a>
+       @*  <h3>Await for the confirmation</h3> *@
+        <h2 class="text-primary mb-4">Booking Confirmation Awaited</h2>
+        <p class="lead">Thank you for choosing our gym! We are currently processing your request.</p>
+        <p>Please wait for the confirmation.</p>
+
+        <div class="mt-4">
+            <a href="/" class="btn btn-primary me-2">Return to Homepage</a>
+            <a asp-action="GetSessionsFromGym" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@gymId" class="btn btn-success">Back to Sessions</a>
+        </div>
+      @*   <a asp-action="GetSessionsFromGym" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@gymId" class="btn btn-success">Back to Sessions</a> *@
     </div>
 </div>
 
