@@ -14,9 +14,12 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.ImageId)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.StartSession)
             </th>
             <th>
@@ -24,26 +27,27 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Capacity)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.IsOnline)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsGroup)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageId)
-            </th>
+           
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+                <td>
+                    <img src="@item.ImageFullPath" alt="Image Session" style="width:100px;height:150px;max-width:100%;height:auto;" />
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
+           @*  <td>
                 @Html.DisplayFor(modelItem => item.StartSession)
             </td>
             <td>
@@ -51,16 +55,14 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Capacity)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.IsOnline)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsGroup)
             </td>
-            <td>
-                <img src="@item.ImageFullPath" alt="Image Session" style="width:100px;height:150px;max-width:100%;height:auto;" />
-            </td>
+            
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>

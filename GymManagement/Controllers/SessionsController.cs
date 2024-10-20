@@ -114,7 +114,7 @@
 
                     var session = _converterHelper.ToSession(model, imageId, false);
 
-                    await _sessionRepository.UpdateSessionWithAppointmentsAsync(model.Id, session);
+                    await _sessionRepository.UpdateAsync(session);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
