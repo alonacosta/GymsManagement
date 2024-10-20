@@ -157,12 +157,27 @@
         {
             var session = await _sessionRepository.GetByIdAsync(id);
 
-            if (session != null)
+            try
             {
-                await _sessionRepository.DeleteAsync(session);
+                if (session != null)
+                {
+                    await _sessionRepository.DeleteAsync(session);
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
+                {
+                    ViewBag.ErrorTitle = $"{session.Name} is probably being used!!!";
+                    ViewBag.ErrorMessage = $"{session.Name} can't be deleted because there are gyms sessions that use it <br/>" +
+                    $"First try deleting all the gyms sessions that are using it," +
+                    $" and delete it again";
+                }
+                return View("Error");
             }
 
-            return RedirectToAction(nameof(Index));
         }
     }
 }

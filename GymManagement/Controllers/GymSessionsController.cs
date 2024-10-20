@@ -160,14 +160,29 @@ namespace GymManagement.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var gymSession = await _gymSessionRepository.GetByIdAsync(id);
-            if (gymSession != null)
+            try
             {
-                await _gymSessionRepository.DeleteAsync(gymSession);
-            }
+                if (gymSession != null)
+                {
+                    await _gymSessionRepository.DeleteAsync(gymSession);
+                }
 
-            return RedirectToAction("Index", new {gymId = gymSession.GymId});
+                return RedirectToAction("Index", new { gymId = gymSession.GymId });
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
+                {
+                    ViewBag.ErrorTitle = $"This session is probably being used!!!";
+                    ViewBag.ErrorMessage = $"This session can't be deleted because there are appointments that use it <br/>" +
+                    $"First try deleting all the appointments that are using it," +
+                    $" and delete it again";
+                }
+                return View("Error");
+            }
         }
 
+        [Authorize(Roles = "Client")]
         public async Task<IActionResult> BookSession(int? id, int? gymId, int? countryId)
         {
             if (id == null || gymId == null || countryId == null)
@@ -189,6 +204,7 @@ namespace GymManagement.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Client")]
         public async Task<IActionResult> BookSession(int? id, int? gymId, int? countryId, GymSession gymSession)
         {
             if (id == null || gymId == null || countryId == null)

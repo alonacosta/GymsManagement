@@ -194,12 +194,28 @@ namespace GymManagement.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var gym = await _gymRepository.GetByIdAsync(id);
-            if (gym != null)
+
+            try
             {
-                await _gymRepository.DeleteAsync(gym);
+                if (gym != null)
+                {
+                    await _gymRepository.DeleteAsync(gym);
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
+                {
+                    ViewBag.ErrorTitle = $"{gym.Name} is probably being used!!!";
+                    ViewBag.ErrorMessage = $"{gym.Name} can't be deleted because there are sessions that use it <br/>" +
+                    $"First try deleting all the sessions that are using it," +
+                    $" and delete it again";
+                }
+                return View("Error");
             }
 
-            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult ChooseCountry() 
@@ -235,7 +251,13 @@ namespace GymManagement.Controllers
         public async Task<JsonResult> GetCitiesAsync(int countryId)
         {
             var country = await _countryRepository.GetCountryWithCitiesAsync(countryId);
-            return Json(country.Cities.OrderBy(c => c.Name));
+            var cities = country.Cities
+                .OrderBy(c => c.Name)
+                .Select(c => new { id = c.Id, name = c.Name })
+                .ToList();
+
+            return Json(cities);
+            //return Json(country.Cities.OrderBy(c => c.Name));
         }
 
         public IActionResult GymNotFound()

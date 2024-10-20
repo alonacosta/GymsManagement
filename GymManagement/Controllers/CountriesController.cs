@@ -4,6 +4,7 @@
     using GymManagement.Data.Entities;
     using GymManagement.Models;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
 
     public class CountriesController : Controller
     {
@@ -95,20 +96,36 @@
 
         public async Task<IActionResult> Delete(int? id) 
         {
-            if (id == null) 
+            if (id == null)
             {
                 return NotFound();
             }
 
             var country = await _countryRepository.GetByIdAsync(id.Value);
 
-            if (country == null) 
-            { 
-                return NotFound(); 
+            if (country == null)
+            {
+                return NotFound();
             }
 
-            await _countryRepository.DeleteAsync(country);
-            return RedirectToAction("Index");
+            try
+            {   
+                await _countryRepository.DeleteAsync(country);
+                return RedirectToAction("Index");
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
+                {
+                    ViewBag.ErrorTitle = $"{country.Name} is probably being used!!!";
+                    ViewBag.ErrorMessage = $"{country.Name} can't be deleted because there are cities and gyms that use it <br/>" +
+                    $"First try deleting all the gyms and cities that are using it," +
+                    $" and delete it again";
+                }
+
+                return View("Error");
+            }
+
         }
 
         public async Task<IActionResult> AddCity(int? id) 
@@ -193,9 +210,24 @@
                 return NotFound();
             }
 
-            var countryId = await _countryRepository.DeleteCityAsync(city);
+            try
+            {
+                var countryId = await _countryRepository.DeleteCityAsync(city);
 
-            return RedirectToAction("Details", new { id = countryId });
+                return RedirectToAction("Details", new { id = countryId });
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
+                {
+                    ViewBag.ErrorTitle = $"{city.Name} is probably being used!!!";
+                    ViewBag.ErrorMessage = $"{city.Name} can't be deleted because there are gyms that use it <br/>" +
+                    $"First try deleting all the gyms that are using it," +
+                    $" and delete it again";
+                }
+
+                return View("Error");
+            }
         }
     }
 }
