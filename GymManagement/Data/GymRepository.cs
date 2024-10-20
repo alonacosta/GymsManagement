@@ -41,15 +41,21 @@ namespace GymManagement.Data
                 .Where(g => g.CityId == cityId)
                 .ToListAsync();
 
-
-            return gyms;
-            //_context = context;
+            return gyms;           
         }
 
         public IQueryable GetGymsWithCities()
         {
             return _context.Gyms
                 .Include(g => g.City)                
+                .OrderBy(g => g.Name);
+        }
+
+        public IQueryable GetGymsWithCitiesFromCountry(int countryId)
+        {
+            return _context.Gyms
+                .Include(g => g.City)
+                .Where(c => c.City.Country.Id == countryId)
                 .OrderBy(g => g.Name);
         }
 

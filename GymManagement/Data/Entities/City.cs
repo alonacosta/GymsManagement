@@ -12,6 +12,7 @@
         public string? Name { get; set; }
 
         public ICollection<Gym>? Gyms { get; set; }
+        public Country? Country { get; set; }
 
         [Display(Name = "Number of gyms")]
         public int NumberGyms => Gyms == null ? 0 : Gyms.Count;

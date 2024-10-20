@@ -313,7 +313,13 @@ namespace GymManagement.Controllers
         public async Task<IActionResult> GetCitiesAsync(int countryId)
         {
             var country = await _countryRepository.GetCountryWithCitiesAsync(countryId);
-            return Json(country.Cities.OrderBy(c => c.Name));
+            if (country == null || country.Cities == null)
+            {
+                return Json(new List<object>()); // Retornar uma lista vazia em vez de null
+            }
+
+            return Json(country.Cities.OrderBy(c => c.Name).Select(c => new { c.Id, c.Name }));
+            //return Json(country.Cities.OrderBy(c => c.Name));
         }
 
         [HttpPost]

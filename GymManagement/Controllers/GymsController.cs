@@ -14,16 +14,19 @@ namespace GymManagement.Controllers
         private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
         private readonly ICountryRepository _countryRepository;
+        private readonly IGymSessionRepository _gymSessionRepository;
 
         public GymsController(IGymRepository gymRepository,
             IBlobHelper blobHelper,
             IConverterHelper converterHelper,
-            ICountryRepository countryRepository)
+            ICountryRepository countryRepository,
+            IGymSessionRepository gymSessionRepository)
         {
             _gymRepository = gymRepository;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
             _countryRepository = countryRepository;
+            _gymSessionRepository = gymSessionRepository;
         }
 
         // GET: Gyms
@@ -197,6 +200,34 @@ namespace GymManagement.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult ChooseCountry() 
+        {
+            var countries = _countryRepository.GetCountriesWithCitiesAndGyms();
+            return View(countries); 
+        }
+
+        public IActionResult GymsFromCountry(int? countryId)
+        {
+            if (countryId == null) { return NotFound(); }
+
+            var gyms = _gymRepository.GetGymsWithCitiesFromCountry(countryId.Value);
+
+            ViewData["CountryId"] = countryId;
+            return View(gyms);            
+        }
+
+        public IActionResult GetSessionsFromGym(int? gymId, int? countryId)
+        {
+            if(gymId == null) { return NotFound(); }
+            if (countryId == null) { return NotFound(); }
+
+            ViewData["CountryId"] = countryId;
+            ViewData["GymId"] = gymId;
+
+            var sessions = _gymSessionRepository.GetGymSessions(gymId.Value);
+            return View(sessions);
         }
 
         [HttpPost]

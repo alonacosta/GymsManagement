@@ -1,14 +1,19 @@
 ﻿
 @{
     ViewData["Title"] = "BookAwait";
+    var countryId = ViewData["CountryId"];
+    var gymId = ViewData["GymId"];
 }
 
-<h2>BookAwait</h2>
+<div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+    <h3>BookAwait</h3>
 
-<div class="col-6">
-    <h3>Await for the confirmation</h3>
-    <a asp-action="Index" asp-controller="Sessions" class="btn btn-success">Back to Sessions</a>
+    <div class="col-6">
+        <h3>Await for the confirmation</h3>
+        <a asp-action="GetSessionsFromGym" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@gymId" class="btn btn-success">Back to Sessions</a>
+    </div>
 </div>
+
 
 
 

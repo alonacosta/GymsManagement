@@ -1,0 +1,21 @@
+﻿@model IEnumerable<GymManagement.Data.Entities.Country>
+@{
+    ViewData["Title"] = "ChooseCountry";
+}
+
+<div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+    <h3>Choose your Country</h3>
+    @foreach(var item in Model)
+    {
+        <div class="list-group mt-3">
+            @*  <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+        The current link item
+        </a> *@
+          @*   <a href="@Url.Action("GymsFromCountry", "Gyms", new { countryId = item.Id })"  class="list-group-item list-group-item-action list-group-item-light fw-bold"> @Html.DisplayFor(modelItem => item.Name)</a> *@
+            <a asp-action="GymsFromCountry" asp-controller="Gyms" asp-route-countryId="@item.Id" class="list-group-item list-group-item-action list-group-item-light fw-bold"> @Html.DisplayFor(modelItem => item.Name)</a>
+        </div>
+    }
+   
+</div>
+
+

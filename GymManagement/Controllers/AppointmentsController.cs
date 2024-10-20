@@ -3,6 +3,7 @@ using GymManagement.Data.Entities;
 using GymManagement.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace GymManagement.Controllers
 {
@@ -27,8 +28,17 @@ namespace GymManagement.Controllers
         }
 
         // GET: Appointments/BookAwait
-        public IActionResult BookAwait() 
+        [Authorize(Roles = "Client")]
+        public IActionResult BookAwait(int? countryId, int? gymId) 
         {
+            if (countryId == null || gymId == null)
+            {
+                return NotFound();
+            } 
+
+            ViewData["CountryId"] = countryId;
+            ViewData["GymId"] = gymId;
+
             return View();  
         }
 
@@ -66,24 +76,40 @@ namespace GymManagement.Controllers
 
         }
 
-        [Authorize(Roles = "Client")]
-        public async Task<IActionResult> ConfirmBooking(int? id)
+        [Authorize(Roles = "Employee")]
+        public async Task<IActionResult> CancelBookingTemp(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var appointmentTemp = await _appointmentRepository.GetAppointmentTempByIdAsync(id.Value);
-            if (appointmentTemp == null)
+            var response = await _appointmentRepository.CancelBookingTempAsync(id.Value);
+            if (response)
             {
-                return NotFound();
+                return RedirectToAction("AppointmentsManagement", "Appointments");
             }
-
-            var response = await _appointmentRepository.ConfirmBookingAsync(appointmentTemp.Client.Id, appointmentTemp.Name);
             return RedirectToAction("AppointmentsManagement", "Appointments");
+
         }
 
-        
+        //[Authorize(Roles = "Client")]
+        //public async Task<IActionResult> ConfirmBooking(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var appointmentTemp = await _appointmentRepository.GetAppointmentTempByIdAsync(id.Value);
+        //    if (appointmentTemp == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var response = await _appointmentRepository.ConfirmBookingAsync(appointmentTemp.Client.Id, appointmentTemp.Name);
+        //    return RedirectToAction("AppointmentsManagement", "Appointments");
+        //}
+
+
     }
 }

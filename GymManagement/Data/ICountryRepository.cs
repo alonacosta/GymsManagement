@@ -7,6 +7,7 @@
     public interface ICountryRepository : IGenericRepository<Country>
     {
         IQueryable GetCountriesWithCities();
+        IQueryable GetCountriesWithCitiesAndGyms();
 
         Task<Country> GetCountryWithCitiesAsync(int id);
 

@@ -6,5 +6,6 @@ namespace GymManagement.Data
     {
         IQueryable GetGymSessions(int id);
         Task<GymSession> GetGymSessionByIdAsync(int id);
+        Task UpdateSessionWithAppointmentsAsync(int id, GymSession gymSession);
     }
 }

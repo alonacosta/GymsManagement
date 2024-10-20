@@ -25,25 +25,27 @@ namespace GymManagement.Data
                 return null; 
             }
 
-            if(await _userHelper.IsUserInRoleAsync(user, "Admin")) {
-                return _context.Appointments
-                    .Include(a => a.Client)
-                    .Include(a => a.Session)                   
-                    .OrderByDescending(a => a.Session.StartSession);                   
-            }
+            //if(await _userHelper.IsUserInRoleAsync(user, "Admin")) {
+            //    return _context.Appointments
+            //        .Include(a => a.Client)
+            //        .Include(a => a.Session) 
+            //        .Include(a => a.GymSession)
+            //        .OrderByDescending(a => a.GymSession.StartSession);                   
+            //}
 
-            return _context.Appointments
-                .Include(a => a.Session)
-                .Include(a => a.Client)                
+            return _context.Appointments                
+                .Include(a => a.Client)
+                 .Include(a => a.GymSession)
+                 .ThenInclude(a => a.Session)
                 .Where(a => a.Client.User.Id == user.Id)
-                .OrderByDescending(a => a.Session.StartSession);
+                .OrderByDescending(a => a.GymSession.StartSession);
         }
 
         public IQueryable<AppointmentTemp> GetAppointmentsTemp()
         {
             return _context.AppointmentsTemp
                 .Include(a => a.Client)
-                .ThenInclude(a=> a.User)
+                .ThenInclude(a => a.User)
                 .OrderBy(a => a.Id);
         }
 
@@ -62,13 +64,13 @@ namespace GymManagement.Data
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> IsClientHasAppointmentAsync(int clientId, string sessionName, int sessionId)
+        public async Task<bool> IsClientHasAppointmentAsync(int clientId, DateTime startSession, string sessionName, int sessionId)
         {
             var clientHasAppointmentTemp = await _context.AppointmentsTemp
-                .Where(at => at.Client.Id == clientId && at.Name == sessionName).FirstOrDefaultAsync();
+                .Where(at => at.Client.Id == clientId && at.Name == sessionName && at.StartSession == startSession).FirstOrDefaultAsync();
 
             var clientHasAppointment = await _context.Appointments
-                .Where(a => a.Client.Id == clientId && a.Session.Id == sessionId).FirstOrDefaultAsync();
+                .Where(a => a.Client.Id == clientId && a.GymSession.Id == sessionId).FirstOrDefaultAsync();
 
             if (clientHasAppointment != null || clientHasAppointmentTemp != null) 
             { 
@@ -120,7 +122,8 @@ namespace GymManagement.Data
         {
             var appointment = await _context.Appointments
                 .Include(a => a.Client)
-                .Include(a => a.Session)
+                .Include(a => a.GymSession)
+                .ThenInclude(a => a.Session)
                 .Where(a => a.Id == id)
                 .FirstOrDefaultAsync();
 
@@ -129,21 +132,50 @@ namespace GymManagement.Data
                 return false;
             }
 
-            var sessionId = appointment.Id;
+            //var sessionId = appointment.Id;
+            var gymSessionId = appointment.GymSession.Id;
             
+            var gymSession = await _context.GymSessions
+                .Where(gs => gs.Id ==  gymSessionId)
+                .FirstOrDefaultAsync();
 
-          var session = await _context.Sessions                
-                .Where(s => s.Id == sessionId).FirstOrDefaultAsync();
+          //var session = await _context.Sessions                
+          //      .Where(s => s.Id == sessionId).FirstOrDefaultAsync();
             
-            if (session == null) 
+            if (gymSession == null) 
             {
                 return false;
             }
 
-            session.Capacity++;
+            gymSession.Capacity++;
 
             _context.Appointments.Remove(appointment);
-            _context.Update(session);
+            _context.Update(gymSession);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> CancelBookingTempAsync(int id)
+        {
+            var appointmentTemp = await _context.AppointmentsTemp
+                .Include(ap => ap.Client)
+                .Where(ap => ap.Id == id)
+                .FirstOrDefaultAsync();   
+
+            var gymSession = await _context.GymSessions
+                .Include(gs => gs.Session)
+                .Where(gs => gs.Session.Name == appointmentTemp.Name && gs.StartSession == appointmentTemp.StartSession)
+                .FirstOrDefaultAsync();           
+
+            if (gymSession == null)
+            {
+                return false;
+            }
+
+            gymSession.Capacity++;
+
+            _context.AppointmentsTemp.Remove(appointmentTemp);
+            _context.Update(gymSession);
             await _context.SaveChangesAsync();
             return true;
         }
@@ -170,12 +202,14 @@ namespace GymManagement.Data
 
             foreach (var temp in appointmentsTemp) 
             {
-                var session = await _context.Sessions
-                    .Where(s => s.Name == temp.Name).FirstOrDefaultAsync();
+                //var session = await _context.Sessions
+                //    .Where(s => s.Name == temp.Name).FirstOrDefaultAsync();
+                var gymSession = await _context.GymSessions
+                    .Where(s => s.Session.Name == temp.Name && s.StartSession == temp.StartSession).FirstOrDefaultAsync();
 
                 var appointment = new Appointment
                 {
-                    Session = session,
+                    GymSession = gymSession,
                     Client = temp.Client,
                 };
 

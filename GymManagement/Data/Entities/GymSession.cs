@@ -5,6 +5,8 @@ namespace GymManagement.Data.Entities
     public class GymSession : IEntity
     {
         public int Id { get; set; }
+
+        [Display(Name = "Session")]
         public int SessionId { get; set; }
         public Session? Session { get; set; }
         public int GymId { get; set; }

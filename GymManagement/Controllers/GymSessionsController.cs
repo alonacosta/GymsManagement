@@ -1,9 +1,11 @@
 ﻿using GymManagement.Data;
+using GymManagement.Data.Entities;
 using GymManagement.Helpers;
 using GymManagement.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Vereyon.Web;
 
 namespace GymManagement.Controllers
 {
@@ -13,16 +15,25 @@ namespace GymManagement.Controllers
         private readonly ISessionRepository _sessionRepository;
         private readonly IConverterHelper _converterHelper;
         private readonly IGymRepository _gymRepository;
+        private readonly IFlashMessage _flashMessage;
+        private readonly IUserHelper _userHelper;
+        private readonly IAppointmentRepository _appointmentRepository;
 
         public GymSessionsController(IGymSessionRepository gymSessionRepository,
             ISessionRepository sessionRepository,
             IConverterHelper converterHelper,
-            IGymRepository gymRepository)
+            IGymRepository gymRepository,
+            IFlashMessage flashMessage,
+            IUserHelper userHelper,
+            IAppointmentRepository appointmentRepository)
         {
             _gymSessionRepository = gymSessionRepository;
             _sessionRepository = sessionRepository;
             _converterHelper = converterHelper;
             _gymRepository = gymRepository;
+            _flashMessage = flashMessage;
+            _userHelper = userHelper;
+            _appointmentRepository = appointmentRepository;
         }
 
         // GET: GymSessions/5
@@ -95,6 +106,7 @@ namespace GymManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(GymWithSessionViewModel model)
         {
             if (ModelState.IsValid)
@@ -103,8 +115,9 @@ namespace GymManagement.Controllers
                 {
                     var gymSession = _converterHelper.ToGymSession(model, false);
 
-                   await _gymSessionRepository.UpdateAsync(gymSession);
-                   
+                    //await _gymSessionRepository.UpdateAsync(gymSession);
+                    await _gymSessionRepository.UpdateSessionWithAppointmentsAsync(model.Id, gymSession);
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -123,6 +136,7 @@ namespace GymManagement.Controllers
         }
 
         //GET: GymSessions/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -142,6 +156,7 @@ namespace GymManagement.Controllers
         // POST: GymSessions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var gymSession = await _gymSessionRepository.GetByIdAsync(id);
@@ -151,6 +166,80 @@ namespace GymManagement.Controllers
             }
 
             return RedirectToAction("Index", new {gymId = gymSession.GymId});
+        }
+
+        public async Task<IActionResult> BookSession(int? id, int? gymId, int? countryId)
+        {
+            if (id == null || gymId == null || countryId == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["CountryId"] = countryId;
+            ViewData["GymId"] = gymId;
+
+            var gymSession = await _gymSessionRepository.GetGymSessionByIdAsync(id.Value);
+
+            if (gymSession == null)
+            {
+                return NotFound();
+            }
+
+            return View(gymSession);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> BookSession(int? id, int? gymId, int? countryId, GymSession gymSession)
+        {
+            if (id == null || gymId == null || countryId == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["CountryId"] = countryId;
+            ViewData["GymId"] = gymId;
+
+            gymSession = await _gymSessionRepository.GetGymSessionByIdAsync(id.Value);
+
+            if (gymSession == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+            if (user == null) { return NotFound(); }
+
+            var client = await _appointmentRepository.GetClientByUserIdAsync(user.Id);
+
+            if (await _appointmentRepository.IsClientHasAppointmentAsync(client.Id, gymSession.StartSession, gymSession.Session.Name, gymSession.SessionId))
+            {
+                _flashMessage.Danger("You already have an appointment booked in this Session!");                
+                
+                return View(gymSession);
+            }
+
+            if (gymSession.Capacity <= 0)
+            {
+                _flashMessage.Danger("This session is fully booked.");
+                return View(gymSession);
+            }
+
+            gymSession.Capacity--;
+
+            await _gymSessionRepository.UpdateAsync(gymSession);
+
+            var appointmentTemp = new AppointmentTemp
+            {
+                Client = client,
+                Name = gymSession.Session.Name,
+                StartSession = gymSession.StartSession,
+                EndSession = gymSession.EndSession,
+                RemainingCapacity = gymSession.Capacity,
+            };
+
+            await _appointmentRepository.AddAppointmentTempAsync(appointmentTemp);
+
+            return RedirectToAction("BookAwait", "Appointments", new { countryId = countryId, gymId = gymId });
         }
     }
 }

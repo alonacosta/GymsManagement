@@ -21,6 +21,14 @@
                 .OrderBy(c => c.Name);
         }
 
+        public IQueryable GetCountriesWithCitiesAndGyms()
+        {
+            return _context.Countries
+                .Include(c => c.Cities)
+                .ThenInclude(c => c.Gyms)               
+                .OrderBy(c => c.Name);
+        }
+
         public async Task<Country> GetCountryWithCitiesAsync(int id)
         {
             return await _context.Countries
