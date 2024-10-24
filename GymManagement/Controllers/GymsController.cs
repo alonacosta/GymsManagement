@@ -246,6 +246,36 @@ namespace GymManagement.Controllers
             return View(sessions);
         }
 
+        public IActionResult GetClassesMap(int? gymId, int? countryId)
+        {
+            if (gymId == null) { return NotFound(); }
+            if (countryId == null) { return NotFound(); }
+
+            ViewData["CountryId"] = countryId;
+            ViewData["GymId"] = gymId;
+           
+
+            var appData = new List<AppointmentData>();            
+
+            var sessions = _gymSessionRepository.GetGymSessionsById(gymId.Value);
+
+           
+            foreach ( var session in sessions)
+            {
+                appData.Add(new AppointmentData
+                {
+                    Id = session.Id,
+                    Subject = session.Session.Name,
+                    StartTime = session.StartSession,
+                    EndTime = session.EndSession,
+                    IsReadonly = session.StartSession >= DateTime.Now ? false : true,
+                    PrimaryColor = "#FFFFFF",
+                    SecondaryColor = "#FF4858"
+                });
+            }
+            return View(appData);
+        }
+
         [HttpPost]
         [Route("Gyms/GetCitiesAsync")]
         public async Task<JsonResult> GetCitiesAsync(int countryId)

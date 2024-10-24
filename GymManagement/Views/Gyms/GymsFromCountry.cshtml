@@ -14,7 +14,8 @@
             <div class="card-body">
                 <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
                 <p class="card-text"> @Html.DisplayFor(modelItem => item.Address),  @Html.DisplayFor(modelItem => item.City.Name)</p>
-                <a asp-action="GetSessionsFromGym" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@item.Id" class="card-link btn btn-outline-success w-100">See Sessions</a>
+               @*  <a asp-action="GetSessionsFromGym" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@item.Id" class="card-link btn btn-outline-success w-100">See Sessions</a> *@
+                <a asp-action="GetClassesMap" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@item.Id" class="card-link btn btn-outline-success w-100">Classes Map</a>
             </div>
         </div>       
     }   

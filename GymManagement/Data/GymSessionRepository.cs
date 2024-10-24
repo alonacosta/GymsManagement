@@ -21,6 +21,15 @@ namespace GymManagement.Data
                 .OrderBy(gs => gs.StartSession);
         }
 
+        public IQueryable<GymSession> GetGymSessionsById(int gymId)
+        {
+            return _context.GymSessions
+                .Include(gs => gs.Session)
+                .Include(gs => gs.Gym)
+                .Where(gs => gs.Gym.Id == gymId)
+                .OrderBy(gs => gs.StartSession);
+        }
+
         public async Task<GymSession> GetGymSessionByIdAsync(int id)
         {
             return await _context.GymSessions

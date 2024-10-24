@@ -1,0 +1,252 @@
+﻿@model IEnumerable<GymManagement.Models.AppointmentData>
+@{
+    ViewData["Title"] = "GetSessionsFromGym";
+    var countryId = ViewData["CountryId"];
+    var gymId = ViewData["GymId"];
+
+    // List<AppointmentData> appointmentDatas = new List<AppointmentData>
+}
+
+<h2>Classes Map</h2>
+
+<ejs-schedule id="schedule"
+    currentView="Month"    
+    startHour="08:00"
+    endHour="21:00"    
+>
+    <e-schedule-eventsettings datasource="Model" enableTooltip=true template="#EventTemplate"></e-schedule-eventsettings>
+    <e-schedule-views>
+        @* <e-schedule-view option="Day"></e-schedule-view> *@
+       <e-schedule-view option="Week"></e-schedule-view>
+        @* <e-schedule-view option="WorkWeek"></e-schedule-view> *@
+       @*  <e-schedule-view option="Month" ></e-schedule-view> *@
+   </e-schedule-views>
+   <e-schedule-quickinfotemplates header="#headerTemplate" content="#contentTemplate" footer="#footerTemplate">
+    </e-schedule-quickinfotemplates>
+</ejs-schedule>
+
+<style>
+    /* .e-schedule .e-content-wrap .e-appointment {
+        border-radius: 8px;
+     
+     */}
+     .e-appointment-wrapper {
+        background: transparent;
+        border: none;
+        padding: 0;
+        border-radius: 8px;
+     }
+    .e-schedule .e-vertical-view .e-day-wrapper .e-appointment {
+        background: transparent;
+        border: none;
+        padding:0;
+        border-radius: 8px;
+    }
+   
+    .e-schedule .template-wrap {
+        height: 100%;
+        white-space: normal;
+        border-radius: 8px;
+    }
+
+    .e-schedule .template-wrap .subject {
+        font-weight: 600;
+        font-size: 15px;
+        padding: 4px 4px 4px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow:hidden;
+    }
+
+     .e-schedule .template-wrap .time {
+        height: 50px;
+        font-size: 12px;
+        padding: 4px 6px 4px;       
+        overflow:hidden;
+    }
+
+    /* Pop-up */
+    .e-textlabel {
+        font-weight: bold;
+        padding-right: 5px;
+    }
+
+    .custom-event-editor td {
+        padding: 5px;
+    }
+
+    .e-quick-popup-wrapper .e-cell-content {
+        padding: 0 10px 10px 10px;
+    }
+
+        .e-quick-popup-wrapper .e-cell-content div {
+            padding-bottom: 10px;
+        }
+
+        .e-quick-popup-wrapper .e-cell-content .e-field {
+            border-left-width: 0;
+            border-top-width: 0;
+            border-right-width: 0;
+            height: 25px;
+            width: 100%;
+        }
+
+    .e-quick-popup-wrapper .e-event-content {
+        display: flex;
+    }
+
+        .e-quick-popup-wrapper .e-event-content img {
+            width: 100px;
+        }
+
+    .e-quick-popup-wrapper .e-event-header {
+        position: absolute;
+        right: 0;
+    }
+
+    .e-quick-popup-wrapper .e-cell-footer .e-event-create,
+    .e-quick-popup-wrapper .e-event-footer .e-event-edit
+     {
+        position: absolute;
+        right: 0;
+    }
+
+    .e-quick-popup-wrapper .e-event-footer .e-event-book {
+
+    }
+
+    .e-quick-popup-wrapper .e-event-footer .e-event-delete {
+        padding-left: 100px;
+    }
+
+    .e-quick-popup-wrapper .e-event-content .subject {
+        padding-top: 30px;
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+
+</style>
+
+<script id="EventTemplate" type="text/x-template">   
+    <div class="template-wrap" style="background:${SecondaryColor};">
+	    <div class="subject" style="background:{{PrimaryColor}};"> ${Subject} </div>
+		<div class="time"> ${getTimeString(StartTime)} - ${ getTimeString(EndTime)} </div>       
+    </div>    
+</script>
+
+<script id="headerTemplate" type="text/x-template">
+    <div>
+        ${if (elementType === 'cell')}
+        <div class="e-cell-header">
+            <div class="e-header-icon-wrapper">
+                <button class="e-close" title="Close"></button>
+            </div>
+        </div>
+        ${else}
+        <div class="e-event-header">
+            <div class="e-header-icon-wrapper">
+                <button class="e-close" title="CLOSE"></button>
+            </div>
+        </div>
+        ${/if}
+    </div>
+</script>
+
+<script id="contentTemplate" type="text/x-template">
+    <div>
+        ${if (elementType === 'cell')}
+        <div class="e-cell-content">          
+            <div>
+                 <div class="subject" style="background:{{PrimaryColor}}; padding: 4px; color: #fff;">
+                    ${Subject}
+                 </div>
+                 <div class="time" style="padding: 4px;">
+                    ${getTimeString(StartTime)} - ${getTimeString(EndTime)}
+                 </div>
+            </div>           
+        </div>
+        ${else}
+        <div class="e-event-content">
+            <div class="e-subject-wrap">
+                ${if (Subject)}
+                     <div class="subject">${Subject}</div>${/if} 
+                ${if (StartTime && EndTime) }
+                    <div class="time"> ${getTimeString(StartTime)} - ${getTimeString(EndTime)}</div>
+                ${/if}              
+            </div>
+        </div>
+        ${/if}
+    </div>
+</script>
+
+<script id="footerTemplate" type="text/x-template">
+    <div>
+        ${if (elementType === 'cell')}
+        <div class="e-cell-footer">
+            <button class="e-event-details" title="Extra Details">Extra Details</button>
+            <button class="e-event-create" title="Add">Add</button>
+        </div>
+        ${else}
+        <div class="e-event-footer">
+            ${if (Id)}
+            <button class="e-event-book btn btn-success me-1" title="Book" onclick="redirectToBookSession(@countryId, @gymId, ${Id})">Book</button>
+            ${/if}
+             <button class="btn btn-danger e-cancel" title="Cancel" onclick="closeQuickInfoPopup()">Cancel</button>           
+        </div>
+        ${/if}
+    </div>
+</script>
+
+<script type="text/javascript">
+    var instance = new ej.base.Internationalization();
+    function getTimeString(value) {
+        return instance.formatDate(value, { skeleton: 'hm' });
+    }
+
+    function closeQuickInfoPopup() {
+        var scheduleObj = document.getElementById('schedule').ej2_instances[0]; 
+        scheduleObj.closeQuickInfoPopup(); 
+    }
+
+    function redirectToBookSession(countryId, gymId, appointmentId) {
+        window.location.href = `/GymSessions/BookSession?countryId=${countryId}&gymId=${gymId}&id=${appointmentId}`;
+    }
+
+</script>
+
+
+@* <div class="row mt-4">
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var item in Model)
+        {
+
+            <div class="card me-3" style="width: 18rem;">
+                <img src="@item.Session.ImageFullPath" class="card-img-top" alt="Gym Photo" style="width:100%; height:200px; object-fit:cover;">
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Session.Name)</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">@Html.DisplayFor(modelItem => item.StartSession)</h6>
+                    <p class="card-text"> @Html.DisplayNameFor(modelItem => item.Duration),  @Html.DisplayFor(modelItem => item.Duration)</p>
+                    <p class="card-text"> @Html.DisplayNameFor(modelItem => item.Capacity),  @Html.DisplayFor(modelItem => item.Capacity)</p>
+                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Client"))
+                    {
+                        <a asp-action="BookSession" asp-controller="GymSessions" asp-route-countryId="@countryId" asp-route-gymId="@gymId" asp-route-id="@item.Id" class="card-link btn btn-outline-success w-100">Book</a>
+                    }
+                    else if (!this.User.Identity.IsAuthenticated)
+                    {
+                        @* <a asp-action="TryFreeSession" asp-controller="FreeAppointments" asp-route-countryId="@countryId" asp-route-gymId="@gymId" asp-route-id="@item.Id" class="card-link btn btn-outline-success w-100">Try for Free</a> *@
+                        @* <a asp-action="TryFreeSession" asp-controller="FreeAppointments" class="card-link btn btn-outline-success w-100">Try for Free</a>
+                    }
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>
+            There are no sessions available yet!
+        </p>
+    }
+</div> *@ 
+

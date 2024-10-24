@@ -12,7 +12,7 @@ using Vereyon.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense('Ngo9BigBOggjHTQxAR8/V1NDaF5cWWtCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWH9cc3RXR2BeUUJxXkc=');
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NDaF5cWWtCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWH9cc3RXR2BeUUJxXkc=");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
