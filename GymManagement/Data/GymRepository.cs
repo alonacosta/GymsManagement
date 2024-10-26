@@ -66,5 +66,6 @@ namespace GymManagement.Data
                 .Where(g => g.Id == id)
                 .FirstOrDefaultAsync();
         }
+
     }
 }

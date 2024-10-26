@@ -21,6 +21,37 @@ namespace GymManagement.Data
                 .OrderBy(gs => gs.StartSession);
         }
 
+        public IQueryable GetOnlineGymSessions(int gymId)
+        {
+            return _context.GymSessions
+                .Include(gs => gs.Session)
+                .Include(gs => gs.Gym)
+                .Where(gs => gs.Gym.Id == gymId)
+                .Where(gs => gs.Session.IsOnline == true)
+                .OrderBy(gs => gs.StartSession);
+        } 
+
+        public IQueryable GetGroupGymSessions(int gymId)
+        {
+            return _context.GymSessions
+                .Include(gs => gs.Session)
+                .Include(gs => gs.Gym)
+                .Where(gs => gs.Gym.Id == gymId)
+                .Where(gs => gs.Session.IsGroup == true)
+                .OrderBy(gs => gs.StartSession);
+        } 
+
+        public IQueryable GetGroupnOnlineGymSessions(int gymId)
+        {
+            return _context.GymSessions
+                .Include(gs => gs.Session)
+                .Include(gs => gs.Gym)
+                .Where(gs => gs.Gym.Id == gymId)
+                .Where(gs => gs.Session.IsGroup == true)
+                .Where(gs => gs.Session.IsOnline == true)
+                .OrderBy(gs => gs.StartSession);
+        } 
+
         public async Task<GymSession> GetGymSessionByIdAsync(int id)
         {
             return await _context.GymSessions

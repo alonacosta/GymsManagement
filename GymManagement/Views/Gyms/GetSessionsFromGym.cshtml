@@ -10,6 +10,22 @@
 <div class="row mt-4">
     @if (Model != null && Model.Any())
     {
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <input class="form-check-input" type="checkbox" value="" id="isOnline">
+                        <label class="form-check-label" for="isOnline">
+                            Online Class
+                        </label>
+                    </div>
+                    <div class="col">
+                        <input class="form-check-input" type="checkbox" value="" id="isGroup">
+                        <label class="form-check-label" for="isGroup">
+                            Group Class
+                        </label>
+                    </div>
+                </div>
+            </div>
         @foreach (var item in Model)
         {
         
@@ -41,3 +57,25 @@
     }
 </div>
 
+<script>
+    const isOnlineCheckbox = document.getElementById('isOnline')
+    const isGroupCheckbox = document.getElementById('isGroup')
+
+    isOnlineCheckbox.addEventListener('change', (event) => {
+        alert(event.currentTarget.checked);
+        alert(isGroupCheckbox.checked)
+
+        try {
+            const response = await fetch('@Url.Action("GetSessionsFromGym", "Gyms")', 
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+        }
+        catch (error) {
+            console.error('An error has occurred:', error)
+        }
+    })
+</script>

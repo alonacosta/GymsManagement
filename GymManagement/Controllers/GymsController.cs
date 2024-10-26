@@ -241,8 +241,33 @@ namespace GymManagement.Controllers
 
             ViewData["CountryId"] = countryId;
             ViewData["GymId"] = gymId;
-
+            
             var sessions = _gymSessionRepository.GetGymSessions(gymId.Value);
+            return View(sessions);
+        }
+
+        [HttpPost]
+        public IActionResult GetSessionsFromGym(int? gymId, int? countryId, bool isOnline, bool isGroup)
+        {
+            if(gymId == null) { return NotFound(); }
+            if (countryId == null) { return NotFound(); }
+
+            ViewData["CountryId"] = countryId;
+            ViewData["GymId"] = gymId;
+            
+            var sessions = _gymSessionRepository.GetGymSessions(gymId.Value);
+            if (isOnline == true && isGroup == true) 
+            {
+                sessions = _gymSessionRepository.GetGroupnOnlineGymSessions(gymId.Value);
+            } else if (isOnline == true) 
+            {
+                sessions = _gymSessionRepository.GetOnlineGymSessions(gymId.Value);
+            }
+            else if (isGroup == true)
+            {
+                sessions = _gymSessionRepository.GetGroupGymSessions(gymId.Value);
+            }
+            //
             return View(sessions);
         }
 
