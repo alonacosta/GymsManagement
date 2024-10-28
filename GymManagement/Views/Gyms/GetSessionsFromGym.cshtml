@@ -31,6 +31,12 @@
                             Group Class
                         </label>
                     </div>
+                <div class="col">
+                    <label class="form-control-label" for="isGroupCheckbox">
+                        Starts after:
+                    </label>
+                    <input class="form-control valid" type="datetime-local"  id="date">
+                </div>
                 </div>
             </div>
         @foreach (var item in Model)
@@ -67,27 +73,36 @@
 <script>
     const isOnlineCheckbox = document.getElementById('isOnlineCheckbox')
     const isGroupCheckbox = document.getElementById('isGroupCheckbox')
+    const dateBox = document.getElementById('date')
     const gymId = document.getElementById('gymId')
     const countryId = document.getElementById('countryId')
     const isOnline = document.getElementById('isOnline')
     const isGroup = document.getElementById('isGroup')
 
 
-    isOnlineCheckbox.addEventListener('change', (event) => {
-        redirect();
-    })
-
-    isGroupCheckbox.addEventListener('change', (event) => {
-        redirect();
-    })
+    
 
     function redirect() {
-        const redirectUrl = `/Gyms/GetSessionsFromGym/?gymId=${gymId.value}&countryId=${countryId.value}&isOnline=${isOnlineCheckbox.checked}&isGroup=${isGroupCheckbox.checked}`
+        const redirectUrl = `/Gyms/GetSessionsFromGym/?gymId=${gymId.value}&countryId=${countryId.value}&isOnline=${isOnlineCheckbox.checked}&isGroup=${isGroupCheckbox.checked}&startTime=${dateBox.value}`
 
         window.location.href = redirectUrl;
     }
 
-    window.onload = function initCheckboxes() {
+    window.onload = function initInputs() {
+        initCheckboxes();
+        isOnlineCheckbox.addEventListener('change', (event) => {
+            redirect();
+        })
+
+        isGroupCheckbox.addEventListener('change', (event) => {
+            redirect();
+        })
+        
+        dateBox.addEventListener('change', (event) => {
+        redirect();})
+    }
+    
+    function initCheckboxes() {
         if (isGroup.value) {
             isGroupCheckbox.checked = true
         } else {
@@ -100,4 +115,6 @@
         }
         
     }
+
+
 </script>

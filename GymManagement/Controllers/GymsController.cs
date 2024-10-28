@@ -246,7 +246,8 @@ namespace GymManagement.Controllers
             return View(sessions);
         }*/
 
-        public IActionResult GetSessionsFromGym(int? gymId, int? countryId, bool isOnline, bool isGroup)
+        
+        public IActionResult GetSessionsFromGym(int? gymId, int? countryId, bool isOnline, bool isGroup, DateTime? startTime)
         {
             if(gymId == null) { return NotFound(); }
             if (countryId == null) { return NotFound(); }
@@ -256,17 +257,17 @@ namespace GymManagement.Controllers
             ViewData["isOnline"] = isOnline;
             ViewData["isGroup"] = isGroup;
 
-            var sessions = _gymSessionRepository.GetGymSessions(gymId.Value);
+            var sessions = _gymSessionRepository.GetGymSessions(gymId.Value, startTime);
             if (isOnline == true && isGroup == true) 
             {
-                sessions = _gymSessionRepository.GetGroupnOnlineGymSessions(gymId.Value);
+                sessions = _gymSessionRepository.GetGroupnOnlineGymSessions(gymId.Value, startTime);
             } else if (isOnline == true) 
             {
-                sessions = _gymSessionRepository.GetOnlineGymSessions(gymId.Value);
+                sessions = _gymSessionRepository.GetOnlineGymSessions(gymId.Value, startTime);
             }
             else if (isGroup == true)
             {
-                sessions = _gymSessionRepository.GetGroupGymSessions(gymId.Value);
+                sessions = _gymSessionRepository.GetGroupGymSessions(gymId.Value, startTime);
             }
             //
             return View(sessions);

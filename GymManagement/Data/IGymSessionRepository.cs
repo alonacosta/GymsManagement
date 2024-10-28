@@ -4,13 +4,13 @@ namespace GymManagement.Data
 {
     public interface IGymSessionRepository : IGenericRepository<GymSession>
     {
-        IQueryable GetGymSessions(int id);
+        IQueryable GetGymSessions(int id, DateTime? startTime);
 
-        IQueryable GetGroupGymSessions(int gymId);
+        IQueryable GetGroupGymSessions(int gymId, DateTime? startTime);
 
-        public IQueryable GetOnlineGymSessions(int gymId);
+        IQueryable GetOnlineGymSessions(int gymId, DateTime? startTime);
 
-        public IQueryable GetGroupnOnlineGymSessions(int gymId);
+        IQueryable GetGroupnOnlineGymSessions(int gymId, DateTime? startTime);
         
         Task<GymSession> GetGymSessionByIdAsync(int id);
         Task UpdateSessionWithAppointmentsAsync(int id, GymSession gymSession);
