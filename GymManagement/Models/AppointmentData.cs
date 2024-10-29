@@ -14,6 +14,8 @@
         public string PrimaryColor { get; set; }
         public string SecondaryColor { get; set; }
 
+        public string StateButton { get; set; }
+
        
        
     }

@@ -286,7 +286,8 @@ namespace GymManagement.Controllers
                     ImageName = session.Session.Name,
                     Url = session.Session.ImageFullPath,
                     PrimaryColor = "#FFFFFF",
-                    SecondaryColor = "#FF4858"
+                    SecondaryColor = "#FF4858",
+                    StateButton = session.StartSession < DateTime.Now ? "disabled" : "",
                 });
             }
             return View(appData);

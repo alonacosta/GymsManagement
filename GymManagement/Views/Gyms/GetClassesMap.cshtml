@@ -16,7 +16,8 @@
 <ejs-schedule id="schedule"
     currentView="Month"    
     startHour="08:00"
-    endHour="21:00"    
+    endHour="21:00"  
+    
 >
     <e-schedule-eventsettings datasource="Model" enableTooltip=true template="#EventTemplate"></e-schedule-eventsettings>
     <e-schedule-views>
@@ -29,25 +30,6 @@
     </e-schedule-quickinfotemplates>
 </ejs-schedule>
 
-@* @code {
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (firstRender)
-        {
-            // Forçar re-renderização do QuickInfo após o primeiro carregamento
-            StateHasChanged();
-        }
-    }
-
-    private void SetupQuickInfo()
-    {
-        // Define o quickInfo para garantir carregamento completo dos templates
-        var schedule = Syncfusion.Blazor.Schedule;
-        schedule.EnableQuickInfo = false;
-        StateHasChanged(); // Atualiza o estado
-        schedule.EnableQuickInfo = true;
-    }
-} *@
 
 <style>
     /* .e-schedule .e-content-wrap .e-appointment {
@@ -99,6 +81,12 @@
         padding: 5px;
     }
 
+    .e-quick-popup-wrapper{
+        width: 200px;
+        max-width: 200px;
+        height: auto;
+    }
+
     .e-quick-popup-wrapper .e-cell-content {
         padding: 0 10px 10px 10px;
     }
@@ -117,6 +105,8 @@
 
     .e-quick-popup-wrapper .e-event-content {
         display: flex;
+        align-items: center;
+        gap: 10px;
     }
 
         .e-quick-popup-wrapper .e-event-content img {
@@ -150,8 +140,9 @@
     }
 
     .e-quick-popup-wrapper .e-event-content .image img {
-        height: 100%;
+        height: auto;
         width: 100%;
+        
     }
 
 
@@ -224,7 +215,7 @@
         ${else}
         <div class="e-event-footer">
             ${if (Id)}
-            <button class="e-event-book btn btn-success me-1" title="Book" onclick="redirectToBookSession(@countryId, @gymId, ${Id})">Book</button>
+            <button class="e-event-book btn btn-success me-1" title="Book" onclick="redirectToBookSession(@countryId, @gymId, ${Id})" ${StateButton}>Book</button>
             ${/if}
              <button class="btn btn-danger e-cancel" title="Cancel" onclick="closeQuickInfoPopup()">Cancel</button>           
         </div>
@@ -247,16 +238,15 @@
     console.log("isClient:", isClient);
 
     function redirectToBookSession(countryId, gymId, appointmentId) {
-        console.log("Redirecting with isClient:", isClient);
+        console.log("Redirecting with isClient:", isClient);       
+
         if (isClient) {
             window.location.href = `/GymSessions/BookSession?countryId=${countryId}&gymId=${gymId}&id=${appointmentId}`;
         }
         else {
             window.location.href = `/FreeAppointments/TryFreeSession?countryId=${countryId}&gymId=${gymId}&id=${appointmentId}`;
-        }
-      
+        }      
     }  
-
 </script>
 
 
