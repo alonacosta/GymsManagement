@@ -3,8 +3,12 @@
     ViewData["Title"] = "GetSessionsFromGym";
     var countryId = ViewData["CountryId"];
     var gymId = ViewData["GymId"];
+    bool isClient = Convert.ToBoolean(ViewData["IsClient"]);
+    bool istClient = ViewBag.IsClient ?? false;
 
-    // List<AppointmentData> appointmentDatas = new List<AppointmentData>
+
+    // var isClient = ViewData["IsClient"]; 
+   
 }
 
 <h2>Classes Map</h2>
@@ -24,6 +28,26 @@
    <e-schedule-quickinfotemplates header="#headerTemplate" content="#contentTemplate" footer="#footerTemplate">
     </e-schedule-quickinfotemplates>
 </ejs-schedule>
+
+@* @code {
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Forçar re-renderização do QuickInfo após o primeiro carregamento
+            StateHasChanged();
+        }
+    }
+
+    private void SetupQuickInfo()
+    {
+        // Define o quickInfo para garantir carregamento completo dos templates
+        var schedule = Syncfusion.Blazor.Schedule;
+        schedule.EnableQuickInfo = false;
+        StateHasChanged(); // Atualiza o estado
+        schedule.EnableQuickInfo = true;
+    }
+} *@
 
 <style>
     /* .e-schedule .e-content-wrap .e-appointment {
@@ -125,6 +149,11 @@
         font-size: 14px;
     }
 
+    .e-quick-popup-wrapper .e-event-content .image img {
+        height: 100%;
+        width: 100%;
+    }
+
 
 </style>
 
@@ -173,7 +202,12 @@
                      <div class="subject">${Subject}</div>${/if} 
                 ${if (StartTime && EndTime) }
                     <div class="time"> ${getTimeString(StartTime)} - ${getTimeString(EndTime)}</div>
-                ${/if}              
+                ${/if}  
+                ${if (ImageName && Url)}
+                    <div class="image">
+                        <img src="${Url}" alt="${ImageName}" />
+                    </div>
+                    ${/if}
             </div>
         </div>
         ${/if}
@@ -209,9 +243,19 @@
         scheduleObj.closeQuickInfoPopup(); 
     }
 
+    const isClient = @((bool)ViewData["IsClient"] ? "true" : "false");
+    console.log("isClient:", isClient);
+
     function redirectToBookSession(countryId, gymId, appointmentId) {
-        window.location.href = `/GymSessions/BookSession?countryId=${countryId}&gymId=${gymId}&id=${appointmentId}`;
-    }
+        console.log("Redirecting with isClient:", isClient);
+        if (isClient) {
+            window.location.href = `/GymSessions/BookSession?countryId=${countryId}&gymId=${gymId}&id=${appointmentId}`;
+        }
+        else {
+            window.location.href = `/FreeAppointments/TryFreeSession?countryId=${countryId}&gymId=${gymId}&id=${appointmentId}`;
+        }
+      
+    }  
 
 </script>
 

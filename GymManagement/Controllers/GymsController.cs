@@ -15,18 +15,21 @@ namespace GymManagement.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICountryRepository _countryRepository;
         private readonly IGymSessionRepository _gymSessionRepository;
+        private readonly IUserHelper _userHelper;
 
         public GymsController(IGymRepository gymRepository,
             IBlobHelper blobHelper,
             IConverterHelper converterHelper,
             ICountryRepository countryRepository,
-            IGymSessionRepository gymSessionRepository)
+            IGymSessionRepository gymSessionRepository,
+            IUserHelper userHelper)
         {
             _gymRepository = gymRepository;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
             _countryRepository = countryRepository;
             _gymSessionRepository = gymSessionRepository;
+            _userHelper = userHelper;
         }
 
         // GET: Gyms
@@ -215,7 +218,6 @@ namespace GymManagement.Controllers
                 }
                 return View("Error");
             }
-
         }
 
         public IActionResult ChooseCountry() 
@@ -246,15 +248,27 @@ namespace GymManagement.Controllers
             return View(sessions);
         }
 
-        public IActionResult GetClassesMap(int? gymId, int? countryId)
+        public async Task<IActionResult> GetClassesMap(int? gymId, int? countryId)
         {
             if (gymId == null) { return NotFound(); }
-            if (countryId == null) { return NotFound(); }
+            if (countryId == null) { return NotFound(); }   
+            
+            bool isClient = false;
+
+            if (this.User.Identity.IsAuthenticated)
+            {
+                var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+                
+                if (user == null) { return NotFound(); }
+
+                 isClient = await _gymRepository.IsUserIsClient(user.Id, gymId.Value);  
+            }
 
             ViewData["CountryId"] = countryId;
             ViewData["GymId"] = gymId;
+            ViewData["IsClient"] = isClient;
+            ViewBag.IsClient = isClient;
            
-
             var appData = new List<AppointmentData>();            
 
             var sessions = _gymSessionRepository.GetGymSessionsById(gymId.Value);
@@ -269,6 +283,8 @@ namespace GymManagement.Controllers
                     StartTime = session.StartSession,
                     EndTime = session.EndSession,
                     IsReadonly = session.StartSession >= DateTime.Now ? false : true,
+                    ImageName = session.Session.Name,
+                    Url = session.Session.ImageFullPath,
                     PrimaryColor = "#FFFFFF",
                     SecondaryColor = "#FF4858"
                 });

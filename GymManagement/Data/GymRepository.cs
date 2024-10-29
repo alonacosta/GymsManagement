@@ -66,5 +66,20 @@ namespace GymManagement.Data
                 .Where(g => g.Id == id)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<bool> IsUserIsClient(string userId, int gymId)
+        {
+           var isClient = await _context.Clients
+                .Include(c => c.User)
+                .Include(c => c.Gym)
+                .Where(c => c.User.Id == userId && c.Gym.Id == gymId)
+                .FirstOrDefaultAsync();
+
+            if(isClient == null)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

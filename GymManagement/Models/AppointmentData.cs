@@ -8,10 +8,13 @@
         public DateTime EndTime { get; set; }
         public bool? IsReadonly { get; set; }
 
+        public string ImageName { get; set; }
+        public string Url { get; set; }
+
         public string PrimaryColor { get; set; }
         public string SecondaryColor { get; set; }
 
-      
+       
        
     }
 }

@@ -18,7 +18,7 @@ namespace GymManagement.Data
                 .Include(gs => gs.Session)
                 .Include(gs => gs.Gym)
                 .Where(gs => gs.Gym.Id == gymId)
-                .OrderBy(gs => gs.StartSession);
+                .OrderByDescending(gs => gs.StartSession);
         }
 
         public IQueryable<GymSession> GetGymSessionsById(int gymId)
