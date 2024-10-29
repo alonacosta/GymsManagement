@@ -21,15 +21,6 @@ namespace GymManagement.Data
                 .Include(gs => gs.Gym)
                 .Where(gs => gs.Gym.Id == gymId)
                 .OrderByDescending(gs => gs.StartSession);
-        }
-
-        public IQueryable<GymSession> GetGymSessionsById(int gymId)
-        {
-            return _context.GymSessions
-                .Include(gs => gs.Session)
-                .Include(gs => gs.Gym)
-                .Where(gs => gs.Gym.Id == gymId)
-                .OrderBy(gs => gs.StartSession);
             }
             else
             {
@@ -37,10 +28,17 @@ namespace GymManagement.Data
                 .Include(gs => gs.Session)
                 .Include(gs => gs.Gym)
                 .Where(gs => gs.Gym.Id == gymId)
-                .Where(gs => gs.StartSession > startTime)
                 .OrderBy(gs => gs.StartSession);
             }
+        }
 
+        public IQueryable<GymSession> GetGymSessionsById(int gymId)
+        {            
+            return _context.GymSessions
+            .Include(gs => gs.Session)
+            .Include(gs => gs.Gym)
+            .Where(gs => gs.Gym.Id == gymId)                
+            .OrderBy(gs => gs.StartSession);            
         }
 
         public IQueryable GetOnlineGymSessions(int gymId, DateTime? startTime)
@@ -155,6 +153,15 @@ namespace GymManagement.Data
             }
 
             await _context.SaveChangesAsync();
+        }
+
+        public IQueryable GetGymSessions(int id)
+        {
+            return _context.GymSessions
+               .Include(gs => gs.Session)
+               .Include(gs => gs.Gym)
+               .Where(gs => gs.Gym.Id == id)
+               .OrderByDescending(gs => gs.StartSession);
         }
     }
 }
