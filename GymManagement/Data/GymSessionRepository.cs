@@ -12,9 +12,11 @@ namespace GymManagement.Data
             _context = context;
         }
 
-        public IQueryable GetGymSessions(int gymId)
+        public IQueryable GetGymSessions(int gymId, DateTime? startTime)
         {
-            return _context.GymSessions
+            if (startTime == null)
+            {
+                return _context.GymSessions
                 .Include(gs => gs.Session)
                 .Include(gs => gs.Gym)
                 .Where(gs => gs.Gym.Id == gymId)
@@ -28,7 +30,89 @@ namespace GymManagement.Data
                 .Include(gs => gs.Gym)
                 .Where(gs => gs.Gym.Id == gymId)
                 .OrderBy(gs => gs.StartSession);
+            }
+            else
+            {
+                return _context.GymSessions
+                .Include(gs => gs.Session)
+                .Include(gs => gs.Gym)
+                .Where(gs => gs.Gym.Id == gymId)
+                .Where(gs => gs.StartSession > startTime)
+                .OrderBy(gs => gs.StartSession);
+            }
+
         }
+
+        public IQueryable GetOnlineGymSessions(int gymId, DateTime? startTime)
+        {
+            if (startTime == null)
+            {
+                return _context.GymSessions
+                .Include(gs => gs.Session)
+                .Include(gs => gs.Gym)
+                .Where(gs => gs.Gym.Id == gymId)
+                .Where(gs => gs.Session.IsOnline == true)
+                .OrderBy(gs => gs.StartSession);
+            }
+            else
+            {
+                return _context.GymSessions
+                .Include(gs => gs.Session)
+                .Include(gs => gs.Gym)
+                .Where(gs => gs.Gym.Id == gymId)
+                .Where(gs => gs.Session.IsOnline == true)
+                .Where(gs => gs.StartSession > startTime)
+                .OrderBy(gs => gs.StartSession);
+            }
+        } 
+
+        public IQueryable GetGroupGymSessions(int gymId, DateTime? startTime)
+        {
+            if (startTime == null)
+            {
+                return _context.GymSessions
+                .Include(gs => gs.Session)
+                .Include(gs => gs.Gym)
+                .Where(gs => gs.Gym.Id == gymId)
+                .Where(gs => gs.Session.IsGroup == true)
+                .OrderBy(gs => gs.StartSession);
+            }
+            else
+            {
+                return _context.GymSessions
+                .Include(gs => gs.Session)
+                .Include(gs => gs.Gym)
+                .Where(gs => gs.Gym.Id == gymId)
+                .Where(gs => gs.Session.IsGroup == true)
+                .Where(gs => gs.StartSession > startTime)
+                .OrderBy(gs => gs.StartSession);
+            }
+        } 
+
+        public IQueryable GetGroupnOnlineGymSessions(int gymId, DateTime? startTime)
+        {
+            if (startTime == null)
+            {
+                return _context.GymSessions
+                .Include(gs => gs.Session)
+                .Include(gs => gs.Gym)
+                .Where(gs => gs.Gym.Id == gymId)
+                .Where(gs => gs.Session.IsGroup == true)
+                .Where(gs => gs.Session.IsOnline == true)
+                .OrderBy(gs => gs.StartSession);
+            }
+            else
+            {
+                return _context.GymSessions
+                .Include(gs => gs.Session)
+                .Include(gs => gs.Gym)
+                .Where(gs => gs.Gym.Id == gymId)
+                .Where(gs => gs.Session.IsGroup == true)
+                .Where(gs => gs.Session.IsOnline == true)
+                .Where(gs => gs.StartSession > startTime)
+                .OrderBy(gs => gs.StartSession);
+            }
+        } 
 
         public async Task<GymSession> GetGymSessionByIdAsync(int id)
         {

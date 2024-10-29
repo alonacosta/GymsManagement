@@ -3,6 +3,9 @@
     ViewData["Title"] = "GetSessionsFromGym";
     var countryId = ViewData["CountryId"];
     var gymId = ViewData["GymId"];
+    var isOnline = ViewData["isOnline"];
+    var isGroup = ViewData["isGroup"];
+
 }
 
 <h2>Sessions From Gym</h2>
@@ -10,6 +13,32 @@
 <div class="row mt-4">
     @if (Model != null && Model.Any())
     {
+        <input type="hidden" id="countryId" value=@countryId>
+        <input type="hidden" id="gymId" value=@gymId>
+        <input type="hidden" id="isOnline" value="@isOnline"/>
+        <input type="hidden" id="isGroup" value="@isGroup"/>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <input class="form-check-input" type="checkbox" value="" id="isOnlineCheckbox">
+                        <label class="form-check-label" for="isOnlineCheckbox">
+                            Online Class
+                        </label>
+                    </div>
+                    <div class="col">
+                        <input class="form-check-input" type="checkbox" value="" id="isGroupCheckbox">
+                        <label class="form-check-label" for="isGroupCheckbox">
+                            Group Class
+                        </label>
+                    </div>
+                <div class="col">
+                    <label class="form-control-label" for="isGroupCheckbox">
+                        Starts after:
+                    </label>
+                    <input class="form-control valid" type="datetime-local"  id="date">
+                </div>
+                </div>
+            </div>
         @foreach (var item in Model)
         {
         
@@ -41,3 +70,51 @@
     }
 </div>
 
+<script>
+    const isOnlineCheckbox = document.getElementById('isOnlineCheckbox')
+    const isGroupCheckbox = document.getElementById('isGroupCheckbox')
+    const dateBox = document.getElementById('date')
+    const gymId = document.getElementById('gymId')
+    const countryId = document.getElementById('countryId')
+    const isOnline = document.getElementById('isOnline')
+    const isGroup = document.getElementById('isGroup')
+
+
+    
+
+    function redirect() {
+        const redirectUrl = `/Gyms/GetSessionsFromGym/?gymId=${gymId.value}&countryId=${countryId.value}&isOnline=${isOnlineCheckbox.checked}&isGroup=${isGroupCheckbox.checked}&startTime=${dateBox.value}`
+
+        window.location.href = redirectUrl;
+    }
+
+    window.onload = function initInputs() {
+        initCheckboxes();
+        isOnlineCheckbox.addEventListener('change', (event) => {
+            redirect();
+        })
+
+        isGroupCheckbox.addEventListener('change', (event) => {
+            redirect();
+        })
+        
+        dateBox.addEventListener('change', (event) => {
+        redirect();})
+    }
+    
+    function initCheckboxes() {
+        if (isGroup.value) {
+            isGroupCheckbox.checked = true
+        } else {
+            isGroupCheckbox.checked = false
+        }
+        if (isOnline.value) {
+            isOnlineCheckbox.checked = true
+        } else {
+            isOnlineCheckbox.checked = false
+        }
+        
+    }
+
+
+</script>

@@ -236,15 +236,42 @@ namespace GymManagement.Controllers
             return View(gyms);            
         }
 
-        public IActionResult GetSessionsFromGym(int? gymId, int? countryId)
+        /*public IActionResult GetSessionsFromGym(int? gymId, int? countryId)
         {
             if(gymId == null) { return NotFound(); }
             if (countryId == null) { return NotFound(); }
 
             ViewData["CountryId"] = countryId;
             ViewData["GymId"] = gymId;
-
+            
             var sessions = _gymSessionRepository.GetGymSessions(gymId.Value);
+            return View(sessions);
+        }*/
+
+        
+        public IActionResult GetSessionsFromGym(int? gymId, int? countryId, bool isOnline, bool isGroup, DateTime? startTime)
+        {
+            if(gymId == null) { return NotFound(); }
+            if (countryId == null) { return NotFound(); }
+
+            ViewData["CountryId"] = countryId;
+            ViewData["GymId"] = gymId;
+            ViewData["isOnline"] = isOnline;
+            ViewData["isGroup"] = isGroup;
+
+            var sessions = _gymSessionRepository.GetGymSessions(gymId.Value, startTime);
+            if (isOnline == true && isGroup == true) 
+            {
+                sessions = _gymSessionRepository.GetGroupnOnlineGymSessions(gymId.Value, startTime);
+            } else if (isOnline == true) 
+            {
+                sessions = _gymSessionRepository.GetOnlineGymSessions(gymId.Value, startTime);
+            }
+            else if (isGroup == true)
+            {
+                sessions = _gymSessionRepository.GetGroupGymSessions(gymId.Value, startTime);
+            }
+            //
             return View(sessions);
         }
 

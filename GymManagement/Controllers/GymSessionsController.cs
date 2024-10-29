@@ -48,7 +48,7 @@ namespace GymManagement.Controllers
             ViewData["GymId"] = gymId;
             ViewData["GymName"] = $"{gym.Name} - {gym.Address}";            
 
-            return View(_gymSessionRepository.GetGymSessions(gymId.Value));
+            return View(_gymSessionRepository.GetGymSessions(gymId.Value, null));
         }
 
         // GET: GymSessions/Create/5
