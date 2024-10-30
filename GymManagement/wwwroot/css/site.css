@@ -1,3 +1,9 @@
+:root {
+    --primary-color: #EE3524; /* red */
+    --backgrey-color: #EEEEEE; /* grey background color */
+    --color-white: #FFFFFF; /* white color */
+}
+
 html {
   font-size: 14px;
 }
@@ -19,6 +25,7 @@ html {
 
 body {
   margin-bottom: 60px;
+  background-color: var(--backgrey-color);
 }
 
 
@@ -220,3 +227,99 @@ a.more-link {
     font-size: 30px;
     text-transform: uppercase;
 }
+
+/* Home Page */
+.home-full-width {
+    position: relative;
+    width: 100vw;
+    height: 70vh;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    overflow: hidden;
+    padding: 0;
+}
+
+/*.carousel-item img {
+    height: 100%;
+    object-fit: cover;
+}*/
+
+.carousel-inner {
+ /*   position:relative;*/
+    width: 100vw;
+    height: 70vh;
+    overflow: hidden;
+ 
+}
+
+.carousel-img {
+    height: 70vh;
+    width: 100vw;   
+    object-fit: cover;
+    object-position: center;
+    margin: 0 auto;
+}
+
+/*.carousel-caption-bottom {*/
+   /* position: absolute;
+    bottom: 0;
+    width: 100%;*/
+    /*background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));*/ /* Degradê do preto ao transparente */
+    /*color: white;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}*/
+   
+ 
+
+.carousel-caption-botton-text {
+    margin-bottom: 5%;
+}
+
+    .carousel-caption-botton-text h1 {
+        margin-bottom: 1%;
+        font-family: "Archivo Black", sans-serif;
+    }
+    .carousel-caption-botton-text p {
+        margin-bottom: 5%;
+        font-family: "Bebas Neue", serif;
+        letter-spacing: 2px;
+        font-weight: 400;
+    }
+
+.carousel-caption-btn,
+.carousel-caption-btn:link,
+.carousel-caption-btn:visited {
+    background-color: var(--primary-color);
+    display: inline-block;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 15px 50px;
+    color: var(--color-white);
+    border-radius: 10rem;
+    transition: all 0.2s;
+    position: relative;
+    cursor: pointer;
+}
+
+.carousel-caption-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 1rem 2rem rgba($color-black, 0.2);
+    color: var(--color-white);
+}
+.carousel-caption-btn::after
+{
+    transform: scaleX(1.4) scaleY(1.6);
+    opacity: 0;
+}
+
+    .carousel-caption-btn:active,
+    .carousel-caption-btn:focus {
+        transform: translateY(-1px);
+        box-shadow: 0 0.5rem 1rem rgba($color-black, 0.2);
+    }

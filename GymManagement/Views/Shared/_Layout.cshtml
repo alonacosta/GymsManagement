@@ -6,6 +6,9 @@
     <title>@ViewData["Title"] - GymManagement</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Raleway:500,800" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bebas+Neue&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/GymManagement.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/27.1.48/fluent.css" />
@@ -13,7 +16,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom border-dark box-shadow ">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Gym Management</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -23,32 +26,32 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Gyms" asp-action="ChooseCountry">Gyms</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Gyms" asp-action="ChooseCountry">Gyms</a>
                         </li>
                        
                         @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Client")) 
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Appointments" asp-action="Index">Appointments</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Appointments" asp-action="Index">Appointments</a>
                             </li>
                         }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="UserManagementIndex">User Management</a></li>  
+                                    <li><a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Account" asp-action="UserManagementIndex">User Management</a></li>  
                                     <li class="nav-item">
-                                         <a class="nav-link text-dark" asp-area="" asp-controller="Countries" asp-action="Index">Countries and Cities Management</a>
+                                         <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Countries" asp-action="Index">Countries and Cities Management</a>
                                      </li>
                                      <li class="nav-item">
-                                         <a class="nav-link text-dark" asp-area="" asp-controller="Gyms" asp-action="Index">Gyms Management</a>
+                                         <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Gyms" asp-action="Index">Gyms Management</a>
                                      </li>
                                     <li class="nav-item">
                                           <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Sessions" asp-action="Index">Sessions Management</a>
@@ -73,7 +76,7 @@
                         @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
                         {
                             <li class="nav-item ">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="Index">Forum</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Posts" asp-action="Index">Forum</a>
                             </li>
                         }
                     </ul>
@@ -81,14 +84,14 @@
                         @if (this.User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ChangeUser">@this.User.Identity.Name</a>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="ChangeUser">@this.User.Identity.Name</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
 
                             </li>
                         }
@@ -103,7 +106,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted text-light bg-dark">
         <div class="container">
             &copy; 2024 - GymManagement - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
