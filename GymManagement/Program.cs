@@ -9,6 +9,7 @@ using System.Configuration;
 using System.Text;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Vereyon.Web;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,6 +94,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
 app.UseAuthentication();
 app.UseAuthorization();

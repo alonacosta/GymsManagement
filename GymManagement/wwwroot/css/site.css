@@ -1,5 +1,7 @@
 :root {
     --primary-color: #EE3524; /* red */
+    --primary-color-lighter: #F15D50; /* red lighter*/
+    --primary-color-darker: #47100b; /* red darker */
     --backgrey-color: #EEEEEE; /* grey background color */
     --color-white: #FFFFFF; /* white color */
 }
@@ -322,6 +324,19 @@ a.more-link {
     cursor: pointer;
 }
 
+.check-red-btn,
+.check-red-btn:link,
+.check-red-btn:visited {
+    background-color: var(--primary-color);
+    display: inline-block;
+    text-decoration: none;
+    padding: 5px 10px;
+    color: var(--color-white);   
+    transition: all 0.2s;
+    position: relative;
+    cursor: pointer;
+}
+
 .carousel-caption-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 1rem 2rem rgba($color-black, 0.2);
@@ -329,10 +344,13 @@ a.more-link {
 }
 
 
-.join-now-btn:hover {
-   /* transform: translateY(-3px);*/
-   /* box-shadow: 0 1rem 2rem rgba($color-black, 0.2);*/
+.join-now-btn:hover {  
    background-color: var(--primary-color);
+    color: var(--color-white);
+}
+
+.check-red-btn:hover {   
+    background-color: var(--primary-color-lighter);    
     color: var(--color-white);
 }
 
@@ -347,3 +365,42 @@ a.more-link {
         transform: translateY(-1px);
         box-shadow: 0 0.5rem 1rem rgba($color-black, 0.2);
     }
+
+.card-plan-item {
+    background-color: #f7f7f7;
+}
+.card-name{
+    color: var(--primary-color-darker);
+}
+
+.number-price {
+    font-size: 36px;
+    font-weight: bold;
+    color: var(--primary-color-darker);
+}
+
+.description-container {
+    min-height: 100px;
+}
+
+.styled-list {
+    list-style: none; 
+    padding-left: 0; 
+}
+
+    .styled-list li {
+        position: relative;
+        padding-left: 25px; 
+        margin-bottom: 8px; 
+        line-height: 1.5;
+    }
+
+        .styled-list li::before {
+            content: "\f005"; 
+            font-family: "Font Awesome 5 Free"; 
+            font-weight: 900; 
+            color: var(--primary-color); 
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
