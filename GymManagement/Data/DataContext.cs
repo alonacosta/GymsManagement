@@ -21,6 +21,7 @@ namespace GymManagement.Data
         public DbSet<GymSession> GymSessions { get; set; }
 
         public DbSet<FreeAppointment> FreeAppointments { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -37,6 +38,10 @@ namespace GymManagement.Data
             {
                 fk.DeleteBehavior = DeleteBehavior.NoAction;
             }
+
+            modelBuilder.Entity<Subscription>()
+                .Property(p=>p.Price)
+                .HasColumnType("decimal(18,2)");
 
             base.OnModelCreating(modelBuilder);
         }
