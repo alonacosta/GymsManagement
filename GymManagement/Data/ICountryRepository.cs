@@ -8,6 +8,7 @@
     {
         IQueryable GetCountriesWithCities();
         IQueryable GetCountriesWithCitiesAndGyms();
+        //IQueryable GetCountriesWithCitiesAndGymsForSearch(string searchCountry);
 
         Task<Country> GetCountryWithCitiesAsync(int id);
 

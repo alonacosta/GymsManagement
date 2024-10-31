@@ -29,6 +29,16 @@
                 .OrderBy(c => c.Name);
         }
 
+        //public IQueryable GetCountriesWithCitiesAndGymsForSearch(string searchCountry)
+        //{
+        //    return _context.Countries
+        //   .Include(c => c.Cities)
+        //   .ThenInclude(c => c.Gyms)
+        //   .Where(c => string.IsNullOrWhiteSpace(searchCountry) ||
+        //                c.Name.Contains(searchCountry, StringComparison.OrdinalIgnoreCase))
+        //   .OrderBy(c => c.Name);
+        //}
+
         public async Task<Country> GetCountryWithCitiesAsync(int id)
         {
             return await _context.Countries

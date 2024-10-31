@@ -3,19 +3,44 @@
     ViewData["Title"] = "ChooseCountry";
 }
 
-<div class="shadow p-3 mb-5 bg-body-tertiary rounded">
-    <h3>Choose your Country</h3>
+<div class="shadow p-5 mb-5 bg-body-tertiary rounded bg-light">
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Choose your Country</h3>
+        </div>
+        <div class="col-md-6">           
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Search countries..." aria-label="Search country" aria-describedby="button-search" id="searchInput" oninput="filterCountries()">
+            </div>            
+        </div>
+        
+    </div>
+    
     @foreach(var item in Model)
     {
-        <div class="list-group mt-3">
-            @*  <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-        The current link item
-        </a> *@
-          @*   <a href="@Url.Action("GymsFromCountry", "Gyms", new { countryId = item.Id })"  class="list-group-item list-group-item-action list-group-item-light fw-bold"> @Html.DisplayFor(modelItem => item.Name)</a> *@
-            <a asp-action="GymsFromCountry" asp-controller="Gyms" asp-route-countryId="@item.Id" class="list-group-item list-group-item-action list-group-item-light fw-bold"> @Html.DisplayFor(modelItem => item.Name)</a>
+        <div class="list-group mt-3" id="countryList">
+            <a asp-action="GymsFromCountry" asp-controller="Gyms" asp-route-countryId="@item.Id" class="list-group-item list-group-item-action list-group-item-light fw-bold list-countries" data-country-name="@item.Name">
+                @Html.DisplayFor(modelItem => item.Name)
+            </a>
         </div>
     }
    
 </div>
 
 
+<script>
+    function filterCountries() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.trim().toLowerCase();       
+        const countries = document.querySelectorAll('#countryList .list-group-item');
+
+        for (let i = 0; i < countries.length; i++) {
+            const countryName = countries[i].getAttribute('data-country-name');
+            if (countryName.toLowerCase().includes(filter)) {
+                countries[i].style.display = ''; 
+            } else {
+                countries[i].style.display = 'none'; 
+            }
+        }
+    }
+</script>

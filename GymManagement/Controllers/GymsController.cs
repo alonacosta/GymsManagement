@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GymManagement.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Syncfusion.EJ2.Linq;
+using System.Linq;
 
 namespace GymManagement.Controllers
 {
@@ -223,6 +225,11 @@ namespace GymManagement.Controllers
         public IActionResult ChooseCountry() 
         {
             var countries = _countryRepository.GetCountriesWithCitiesAndGyms();
+
+            //if (!string.IsNullOrEmpty(searchCountry)) 
+            //{
+            //   countries = _countryRepository.GetCountriesWithCitiesAndGymsForSearch(searchCountry);
+            //}
             return View(countries); 
         }
 

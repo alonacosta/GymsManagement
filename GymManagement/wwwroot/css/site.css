@@ -413,6 +413,22 @@ a.more-link {
    
 }
 
+/* Gyms */
+.gym-card {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+    .gym-card.hidden {
+        opacity: 0;
+        transform: scale(0.95);
+        pointer-events: none;
+        position: absolute;
+    }
+
+
+
+    /* Responsive */
+
 @media (max-width: 1000px) {
     .btn-call-action {
         max-width: 50%;

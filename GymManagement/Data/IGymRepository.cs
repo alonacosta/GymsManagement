@@ -9,7 +9,7 @@ namespace GymManagement.Data
 
         Task<IEnumerable<Gym>> GetGymsByCityId(int cityId);
         IQueryable GetGymsWithCities();
-        IQueryable GetGymsWithCitiesFromCountry(int countryId);
+        IQueryable GetGymsWithCitiesFromCountry(int countryId);      
         Task<Gym> GetGymWithCityAsync(int id);
         Task<bool> IsUserIsClient(string userId, int gymId);
     }

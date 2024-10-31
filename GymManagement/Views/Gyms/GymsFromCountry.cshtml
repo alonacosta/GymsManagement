@@ -4,22 +4,51 @@
     var countryId = ViewData["CountryId"];
 }
 
-<h2>Gyms</h2>
+<div class="shadow p-5 mb-5 bg-body-tertiary rounded bg-light">
 
-<div class="row mt-3">
-    @foreach (var item in Model)
-    { 
-        <div class="card me-4 mb-4" style="width: 18rem;">
-            <img src="@item.ImageFullPath" class="card-img-top" alt="Gym Photo" style="width:100%; height:200px; object-fit:cover;">
-            <div class="card-body">
-                <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
-                <p class="card-text"> @Html.DisplayFor(modelItem => item.Address),  @Html.DisplayFor(modelItem => item.City.Name)</p>
-               @*  <a asp-action="GetSessionsFromGym" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@item.Id" class="card-link btn btn-outline-success w-100">See Sessions</a> *@
-                <a asp-action="GetClassesMap" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@item.Id" class="card-link btn btn-outline-success w-100">Classes Map</a>
-            </div>
-        </div>       
-    }   
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Gyms</h2>
+        </div>   
+        <div class="col-md-6">           
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Search your city..." aria-label="Search city" aria-describedby="button-search" id="searchCity" oninput="filterCities()">
+            </div>            
+         </div>
+     </div>
+
+    <div class="row mt-3 justify-content-center">
+        @foreach (var item in Model)
+        {
+            <div class="card me-4 mb-4 col-md-5 d-flex gym-card" data-city-name="@item.City.Name">
+                <img src="@item.ImageFullPath" class="card-img-top" alt="Gym Photo" style="width:100%; height:200px; object-fit:cover;">
+                <div class="card-body" >
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                    <p class="card-text"> @Html.DisplayFor(modelItem => item.Address),  @Html.DisplayFor(modelItem => item.City.Name)</p>
+                   @*  <a asp-action="GetSessionsFromGym" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@item.Id" class="card-link btn btn-outline-success w-100">See Sessions</a> *@
+                   <a asp-action="GymDetails" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@item.Id" class="card-link btn btn-outline-info px-md-5">More</a>
+                    <a asp-action="GetClassesMap" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@item.Id" class="card-link btn btn-outline-success px-md-5">Classes Map</a>
+                </div>
+            </div>       
+        }   
+    </div>
 </div>
 
+<script>
+    function filterCities() {
+        const input = document.getElementById('searchCity');
+        const filter = input.value.trim().toLowerCase();
+        const gyms = document.querySelectorAll('.gym-card');
 
+        gyms.forEach(gym => {
+            const cityName = gym.getAttribute('data-city-name');
+            console.log('Filtering:', filter, 'City:', cityName);
+            if (cityName.toLowerCase().includes(filter)) {
+                gym.setAttribute('style', 'display: flex !important;');
+            } else {
+                gym.setAttribute('style', 'display: none !important;');
+            }
+        });
+    }
+</script>
 
