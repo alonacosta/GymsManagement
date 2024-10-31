@@ -88,5 +88,17 @@ namespace GymManagement.Helpers
               
             };
         }
+
+        public ChangeUserViewModel ToChangeUserViewModel(User updatedUser)
+        {
+            return new ChangeUserViewModel
+            {
+                FirstName = updatedUser.FirstName,
+                LastName = updatedUser.LastName,
+                PhoneNumber = updatedUser.PhoneNumber,
+                ImageId = updatedUser.ImageId,
+                ImagePath = updatedUser.ImageUserFullPath
+            };
+        }
     }
 }

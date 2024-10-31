@@ -23,13 +23,17 @@ namespace GymManagement.Controllers
         private readonly ICountryRepository _countryRepository;
         private readonly IGymRepository _gymRepository;
         private readonly IFlashMessage _flashMessage;
+        private readonly IBlobHelper _blobHelper;
+        private readonly IConverterHelper _converterHelper;
 
         public AccountController(IUserHelper userHelper,
             IMailHelper mailHelper,
             IConfiguration configuration,
             ICountryRepository countryRepository,
             IGymRepository gymRepository,
-            IFlashMessage flashMessage)
+            IFlashMessage flashMessage,
+            IBlobHelper blobHelper,
+            IConverterHelper converterHelper)
         {
             _userHelper = userHelper;
             _mailHelper = mailHelper;
@@ -37,6 +41,8 @@ namespace GymManagement.Controllers
             _countryRepository = countryRepository;
             _gymRepository = gymRepository;
             _flashMessage = flashMessage;
+            _blobHelper = blobHelper;
+            _converterHelper = converterHelper;
         }
 
         public IActionResult Login()
@@ -281,6 +287,8 @@ namespace GymManagement.Controllers
                 model.FirstName = user.FirstName;
                 model.LastName = user.LastName;
                 model.PhoneNumber = user.PhoneNumber;
+                model.ImageId = user.ImageId;
+                model.ImagePath = user.ImageUserFullPath;
             }
 
             return View(model);
@@ -288,23 +296,46 @@ namespace GymManagement.Controllers
 
         [HttpPost]
         public async Task<IActionResult> ChangeUser(ChangeUserViewModel model)
-        {
-            var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
-            if (user != null)
+        { 
+            if(ModelState.IsValid)
             {
-                user.FirstName = model.FirstName;
-                user.LastName = model.LastName;
-                user.PhoneNumber = model.PhoneNumber;
-                var response = await _userHelper.UpdateUserAsync(user);
-                if (response.Succeeded)
+                var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+
+                Guid imageId = model.ImageId;
+
+                if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
-                    ViewBag.Message = "User updated!";
+                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users");
                 }
-                else
+
+                if (user != null)
                 {
-                    ModelState.AddModelError(string.Empty, response.Errors.FirstOrDefault().Description);
+                    user.FirstName = model.FirstName;
+                    user.LastName = model.LastName;
+                    user.PhoneNumber = model.PhoneNumber;
+                    user.ImageId = imageId;                   
+
+                    var response = await _userHelper.UpdateUserAsync(user);
+
+                    if (response.Succeeded)
+                    {
+                        var updatedUser = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+
+                        model = _converterHelper.ToChangeUserViewModel(updatedUser);                       
+
+                        ViewBag.Message = "User updated!";
+
+                        ModelState.Clear();
+
+                        _flashMessage.Confirmation("User updated!");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, response.Errors.FirstOrDefault().Description);
+                    }
                 }
-            }
+            }        
+            
             return View(model);
         }
 
@@ -315,7 +346,7 @@ namespace GymManagement.Controllers
             var country = await _countryRepository.GetCountryWithCitiesAsync(countryId);
             if (country == null || country.Cities == null)
             {
-                return Json(new List<object>()); // Retornar uma lista vazia em vez de null
+                return Json(new List<object>()); // Return an empty list instead of null
             }
 
             return Json(country.Cities.OrderBy(c => c.Name).Select(c => new { c.Id, c.Name }));

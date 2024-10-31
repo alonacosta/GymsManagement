@@ -14,5 +14,6 @@
         SessionViewModel ToSessionViewModel(Session session);
         GymSession ToGymSession(GymWithSessionViewModel model, bool isNew);
         GymWithSessionViewModel ToGymWithSessionViewModel(GymSession gymSession);
+        ChangeUserViewModel ToChangeUserViewModel(User updatedUser);
     }
 }

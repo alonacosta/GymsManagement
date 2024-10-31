@@ -15,7 +15,15 @@
         [MaxLength(50, ErrorMessage = "The field {0} can only contain {1} caracters.")]
         public string? LastName { get; set; }
 
+        public Guid ImageId { get; set; }
+
         [Display(Name ="Full Name")]
         public string FullName => $"{FirstName} {LastName}";
+
+        public string ImageUserFullPath => ImageId == Guid.Empty
+            ? "https://gymmanagement.blob.core.windows.net/default/no-profile.png"
+            : $"https://gymmanagement.blob.core.windows.net/users/{ImageId}";
+
+
     }
 }

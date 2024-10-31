@@ -17,7 +17,16 @@ namespace GymManagement.Models
 
         [Required]
         [MaxLength(9, ErrorMessage = "The phone number has to contain at least 9 characters")]
+        [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
+
+        [Display(Name = "Image")]
+        public Guid ImageId { get; set; }
+
+        public string? ImagePath { get; set; }
+
+        [Display(Name = "Image")]
+        public IFormFile? ImageFile { get; set; }
     }
 }
 
