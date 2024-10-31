@@ -404,3 +404,32 @@ a.more-link {
             left: 0;
             top: 0;
         }
+
+.gym-text-justify {
+    text-align: justify;
+}
+.btn-call-action {
+    max-width: 25%;
+   
+}
+
+@media (max-width: 1000px) {
+    .btn-call-action {
+        max-width: 50%;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .carousel-caption-botton-text h1,
+    .carousel-caption-botton-text p {
+        font-size: 1.5rem; 
+        text-align: center; 
+        opacity: 1; 
+    }
+
+    .btn-call-action {
+        max-width: 100%;
+
+    }   
+}
+

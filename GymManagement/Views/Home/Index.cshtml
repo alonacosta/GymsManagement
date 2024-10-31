@@ -6,8 +6,7 @@
     <div id="carouselExampleCaptions" class="carousel slide">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-           @*  <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button> *@
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>         
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
@@ -26,14 +25,7 @@
                     <a asp-action="Index" asp-controller="Subscriptions" class="btn carousel-caption-btn">Join Now</a>
                 </div>
             </div>
-           @*  <div class="carousel-item carousel-caption-bottom">
-                <img src="https://gymmanagement.blob.core.windows.net/home/gym8.jpeg" class="d-block carousel-img" alt="Gym">
-                <div class="carousel-caption d-none d-md-block carousel-caption-botton-text">
-                    <h1>Healthy and Strong</h1>
-                    <p>Come and try it without any compromise.</p>
-                    <a asp-action="TryFreeSession" asp-controller="FreeAppointments" class="btn carousel-caption-btn">Try for Free</a>
-                </div>
-            </div> *@
+           
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -44,4 +36,62 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-   </div>
+</div>
+<div class="container p-5">
+    <div class="row mb-4">
+        <div class="col-md-6 d-flex align-items-center justify-content-center">
+            <img src="https://gymmanagement.blob.core.windows.net/home/gym1.webp" alt="Gym" class="gym-space-img img-fluid" />
+        </div>
+        <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
+            <h4 class="mb-3">Welcome to Health and Stromg!</h4>
+            <p class="gym-text-justify px-md-3">
+                We believe that true health and strength go beyond just physical appearance – they encompass a lifestyle of balance, dedication, and self-care.
+                Our mission is to provide a supportive and motivating environment where everyone, from beginners to seasoned athletes, can pursue their fitness goals with confidence.                
+            </p>
+            <p class="gym-text-justify px-md-3">
+                At Health and Strong, we combine high-quality equipment, expert trainers, and a wide range of classes tailored to help you build strength, improve flexibility, and boost endurance.
+                We understand that each journey is unique, so we are committed to providing guidance, motivation, and resources to support you every step of the way.
+            </p>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
+            <h4 class="mb-3">Our Spa Experience!</h4>
+            <p class="gym-text-justify px-md-3">
+                At Health and Strong, our spa is designed to be a sanctuary within the gym, where members can recover, rejuvenate, and recharge.
+                We believe that fitness and relaxation go hand in hand, so our spa offers an array of services tailored to complement your workouts and support your overall well-being.
+            </p>
+            <p class="gym-text-justify px-md-3">
+                Indulge in soothing massages that ease muscle tension and help improve flexibility after a workout, or experience hydrotherapy to relieve stress and enhance circulation.
+                Our steam rooms and saunas are perfect for detoxifying the body, promoting relaxation, and relieving muscle soreness, giving you a full reset.
+            </p>
+        </div>
+        <div class="col-md-6 d-flex align-items-center justify-content-center">
+            <img src="https://gymmanagement.blob.core.windows.net/home/spa.jpg" alt="Gym" class="gym-space-img img-fluid" />
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-6 d-flex align-items-center justify-content-center">
+            <img src="https://gymmanagement.blob.core.windows.net/home/food2.webp" alt="Gym" class="gym-space-img img-fluid" />
+        </div>
+        <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
+            <h4 class="mb-3">Healthy Food Matters!</h4>
+            <p class="gym-text-justify px-md-3">
+                At Healthy and Strong, we believe that healthy food is essential for achieving your fitness goals. Proper nutrition fuels your body, enhances your performance, and aids in recovery.
+                Choosing nutritious meals helps you feel energized and ready to tackle your workouts.
+            </p>
+            <p class="gym-text-justify px-md-3">
+                Join us in promoting a healthy lifestyle by incorporating balanced meals into your routine. Remember, healthy food is not just a choice; it's a commitment to a better you!
+            </p>
+        </div>
+    </div>
+    <div class="row mt-5 d-flex flex-column align-items-center justify-content-center">
+        <h4 class="mb-4 text-center">Take advantage of this chance — become a member now!</h4>
+        <a asp-action="Index" asp-controller="Subscriptions" class="btn carousel-caption-btn btn-call-action">Join Now</a>
+    </div>
+</div>
+
+   
+  
+        
+
