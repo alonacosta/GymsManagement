@@ -74,6 +74,7 @@ builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IGymSessionRepository, GymSessionRepository>();
 builder.Services.AddScoped<IFreeAppointmentRepository, FreeAppointmentRepository>();
 builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+builder.Services.AddScoped<IPositionRepository, PositionRepository>();
 
 // Add Seed service
 builder.Services.AddTransient<SeedDb>();

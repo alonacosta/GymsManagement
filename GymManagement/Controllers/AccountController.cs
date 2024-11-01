@@ -25,6 +25,7 @@ namespace GymManagement.Controllers
         private readonly IFlashMessage _flashMessage;
         private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
+        private readonly IPositionRepository _positionRepository;
 
         public AccountController(IUserHelper userHelper,
             IMailHelper mailHelper,
@@ -33,7 +34,8 @@ namespace GymManagement.Controllers
             IGymRepository gymRepository,
             IFlashMessage flashMessage,
             IBlobHelper blobHelper,
-            IConverterHelper converterHelper)
+            IConverterHelper converterHelper,
+            IPositionRepository positionRepository)
         {
             _userHelper = userHelper;
             _mailHelper = mailHelper;
@@ -43,6 +45,7 @@ namespace GymManagement.Controllers
             _flashMessage = flashMessage;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
+            _positionRepository = positionRepository;
         }
 
         public IActionResult Login()
@@ -90,12 +93,15 @@ namespace GymManagement.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Add(string roleName)
         {
+            ViewData["RoleName"] = roleName;
+
             var model = new AddUserViewModel
             {
                 RoleName = roleName,
                 Countries = _countryRepository.GetComboCountries(),
                 Cities = _countryRepository.GetComboCities(0),
-                Gyms = _gymRepository.GetComboGyms(0)
+                Gyms = _gymRepository.GetComboGyms(0),
+                Positions = _positionRepository.GetComboPositions(),
             };
             return View(model);
         }
@@ -114,7 +120,6 @@ namespace GymManagement.Controllers
                     Email = model.Username,
                     PhoneNumber = model.PhoneNumber
                 };
-
             }
             var result = await _userHelper.AddUserAsync(user);
 
@@ -124,7 +129,7 @@ namespace GymManagement.Controllers
                 return View(model);
             }
 
-            await _userHelper.CreateUserEntity(user, model.RoleName, model.GymId);
+            await _userHelper.CreateUserEntity(user, model.RoleName, model.GymId, model.PositionId);
 
             await _userHelper.AddUsertoRole(user, model.RoleName);
 

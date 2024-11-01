@@ -40,5 +40,9 @@ namespace GymManagement.Models
         public IEnumerable<SelectListItem> Gyms { get; set; }
 
         public string RoleName { get; set; }
+
+        public int PositionId { get; set; }
+
+        public IEnumerable<SelectListItem> Positions { get; set; }
     }
 }

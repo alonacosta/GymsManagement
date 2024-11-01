@@ -1,4 +1,5 @@
 ﻿using GymManagement.Data.Entities;
+using Microsoft.AspNetCore.JsonPatch.Internal;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,6 +34,17 @@ namespace GymManagement.Data
                 });
             }
             return list;
+        }
+
+        public async Task<List<Employee>> GetEmployeesFromGymAsync(int gymId)
+        {
+            return await _context.Employees
+                .Include(e => e.User)
+                .Include(e => e.Gym)
+                .Include(e => e.Position)
+                .Where(e => e.Gym.Id == gymId)
+                .OrderBy(e => e.User.FirstName)
+                .ToListAsync();               
         }
 
         public async Task<IEnumerable<Gym>> GetGymsByCityId(int cityId)

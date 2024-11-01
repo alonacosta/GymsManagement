@@ -1,7 +1,7 @@
 :root {
     --primary-color: #EE3524; /* red */
     --primary-color-lighter: #F15D50; /* red lighter*/
-    --primary-color-darker: #47100b; /* red darker */
+    --primary-color-darker: #180504; /*#47100b;*/ /* red darker */
     --backgrey-color: #EEEEEE; /* grey background color */
     --color-white: #FFFFFF; /* white color */
 }
@@ -553,6 +553,31 @@ a.more-link {
         width: 100%;
     }
 
+
+.employee-div-circle {
+    width: 75px;
+    height: 75px; 
+    border-radius: 50%; 
+    overflow: hidden; 
+    display: flex; 
+    justify-content: center;
+    align-items: center; 
+}
+
+    .employee-div-circle img {
+        width: 100%; /* Faz a imagem preencher a div */
+        height: auto; /* Mantém a proporção */
+    }
+
+.position-employee {
+    font-size:smaller;
+}
+
+.sessions-link{
+    margin-top: 30px;
+}
+
+
 /* Responsive */
 @media (max-width: 1000px) {
     .btn-call-action {
@@ -571,6 +596,10 @@ a.more-link {
     .btn-call-action {
         max-width: 100%;
 
-    }   
+    }
+    .sessions-link {
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
 }
 

@@ -102,7 +102,7 @@ namespace GymManagement.Helpers
             return await _userManager.UpdateAsync(user);
         }
 
-        public async Task CreateUserEntity(User user, string roleName, int gymId)
+        public async Task CreateUserEntity(User user, string roleName, int gymId, int positionId)
         {
             if (roleName == "Client")
             {
@@ -118,6 +118,7 @@ namespace GymManagement.Helpers
                 Employee newEmployee = new Employee
                 {
                     User = user,
+                    PositionId = positionId,
                 };
                 await _context.Set<Employee>().AddAsync(newEmployee);
                 await AddEmployeeToGymAsync(gymId, newEmployee);

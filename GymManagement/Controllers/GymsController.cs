@@ -222,17 +222,15 @@ namespace GymManagement.Controllers
             }
         }
 
+        // GET: Gyms/ChooseCountry
         public IActionResult ChooseCountry() 
         {
             var countries = _countryRepository.GetCountriesWithCitiesAndGyms();
-
-            //if (!string.IsNullOrEmpty(searchCountry)) 
-            //{
-            //   countries = _countryRepository.GetCountriesWithCitiesAndGymsForSearch(searchCountry);
-            //}
+            
             return View(countries); 
         }
 
+        // GET: Gyms/GymFromCountry/countryId=5
         public IActionResult GymsFromCountry(int? countryId)
         {
             if (countryId == null) { return NotFound(); }
@@ -241,6 +239,33 @@ namespace GymManagement.Controllers
 
             ViewData["CountryId"] = countryId;
             return View(gyms);            
+        }
+
+        // GET: Gyms/GymGetails/countryId=5
+        public async Task<IActionResult> GymDetails(int? countryId, int? gymId)
+        {
+            if (countryId == null) { return NotFound(); }
+            if (gymId == null) { return NotFound(); }
+
+            ViewData["CountryId"] = countryId;
+            ViewData["GymId"] = gymId;
+
+            var gym = await _gymRepository.GetGymWithCityAsync(gymId.Value);
+
+            var employees = await _gymRepository.GetEmployeesFromGymAsync(gym.Id);
+
+            var model = new GymDetailsViewModel
+            {
+                GymId = gymId.Value,
+                Name = gym.Name,
+                Address = gym.Address,
+                City = gym.City,
+                ImageGymId = gym.ImageId,
+                ImageGymUrl = gym.ImageFullPath,
+                Employees = employees,
+            }; 
+
+            return View(model);
         }
 
         /*public IActionResult GetSessionsFromGym(int? gymId, int? countryId)

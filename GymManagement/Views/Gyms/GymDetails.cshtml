@@ -1,0 +1,40 @@
+﻿@model GymManagement.Models.GymDetailsViewModel
+@{
+    ViewData["Title"] = "GymDetails";
+
+    var countryId = ViewData["CountryId"];
+    var gymId = ViewData["GymId"];
+}
+
+<div class="shadow p-5 mb-5 bg-body-tertiary rounded bg-light">
+    <div class="row">
+        <div class="col-md-6 d-flex align-items-center justify-content-center">
+            <img src="@Url.Content(Model.ImageGymUrl)" alt="Gym" class="gym-space-img img-fluid" />
+        </div>
+        <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
+            <h4 class="mb-3 mt-sm-2 text-center">Welcome to @Model.Name</h4>
+            <p class="gym-text-justify px-md-4 text-center">
+                @Model.Address, @Model.City.Name
+            </p>
+            <a asp-action="GetSessionsFromGym" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@gymId" class="card-link sessions-link btn btn-gym-red px-5">All Sessions</a>           
+        </div>
+    </div>
+    <div class="row my-md-5 d-flex justify-content-center align-items-center">
+        <h4 class="mb-4 mt-2 text-center">Our Team</h4>
+        @foreach(var item in Model.Employees)
+        {
+            <div class="card me-3 py-3 px-md-1 d-flex justify-content-center align-items-center" style="width: 12rem;">
+                <div class="employee-div-circle">
+                    <img src="@Url.Content(item.User.ImageUserFullPath)" class="card-img-top" alt="Employee Photo">
+                </div>
+              
+                <div class="card-body">
+                    <h6 class="card-title text-center">@Html.DisplayFor(modelItem => item.User.FullName)</h6>
+                    <p class="card-subtitle position-employee mb-2 text-secondary text-center">@Html.DisplayFor(modelItem => item.Position.Name)</p>                    
+                </div>
+            </div>
+        }
+        
+    </div>
+</div>
+

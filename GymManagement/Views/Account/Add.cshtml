@@ -1,6 +1,7 @@
 ﻿@model GymManagement.Models.AddUserViewModel
 @{
     ViewData["Title"] = "Add";
+    var roleName = ViewData["RoleName"];
 }
 
 <hr />
@@ -48,7 +49,16 @@
                 <label asp-for="GymId" class="control-label">Gym</label>
                 <select asp-for="GymId" asp-items="Model.Gyms" class="form-control"></select>
                 <span asp-validation-for="GymId" class="text-danger"></span>
-            </div>            
+            </div>
+            @if(roleName?.ToString() == "Employee")
+            {
+                <div class="form-group">
+                    <label asp-for="PositionId" class="control-label">Position</label>
+                    <select asp-for="PositionId" asp-items="Model.Positions" class="form-control"></select>
+                    <span asp-validation-for="PositionId" class="text-danger"></span>
+                </div>
+            }
+           
 
             <div class="form-group">
                 <input type="submit" value="Register" class="btn btn-primary" />
@@ -56,8 +66,6 @@
         </form>
     </div>
 </div>
-
-
 
 <div>
     <a asp-action="UserManagementIndex">Back to the User Manager Index</a>
@@ -113,6 +121,11 @@
                             }
                         });
                         return false;
+                    });
+
+                    // Position change event
+                    $("#PositionId").change(function () {
+                        var PositionId = $(this).val();                    
                     });
                 });
             </script>

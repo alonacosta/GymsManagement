@@ -22,6 +22,7 @@ namespace GymManagement.Data
 
         public DbSet<FreeAppointment> FreeAppointments { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
+        public DbSet<Position> Positions { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
