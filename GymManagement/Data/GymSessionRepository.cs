@@ -28,7 +28,8 @@ namespace GymManagement.Data
                 .Include(gs => gs.Session)
                 .Include(gs => gs.Gym)
                 .Where(gs => gs.Gym.Id == gymId)
-                .OrderBy(gs => gs.StartSession);
+                .Where(gs => gs.StartSession > startTime)
+                .OrderByDescending(gs => gs.StartSession);
             }
         }
 
@@ -37,8 +38,8 @@ namespace GymManagement.Data
             return _context.GymSessions
             .Include(gs => gs.Session)
             .Include(gs => gs.Gym)
-            .Where(gs => gs.Gym.Id == gymId)                
-            .OrderBy(gs => gs.StartSession);            
+            .Where(gs => gs.Gym.Id == gymId)
+            .OrderByDescending(gs => gs.StartSession);            
         }
 
         public IQueryable GetOnlineGymSessions(int gymId, DateTime? startTime)
@@ -50,7 +51,7 @@ namespace GymManagement.Data
                 .Include(gs => gs.Gym)
                 .Where(gs => gs.Gym.Id == gymId)
                 .Where(gs => gs.Session.IsOnline == true)
-                .OrderBy(gs => gs.StartSession);
+                .OrderByDescending(gs => gs.StartSession);
             }
             else
             {
@@ -60,7 +61,7 @@ namespace GymManagement.Data
                 .Where(gs => gs.Gym.Id == gymId)
                 .Where(gs => gs.Session.IsOnline == true)
                 .Where(gs => gs.StartSession > startTime)
-                .OrderBy(gs => gs.StartSession);
+                .OrderByDescending(gs => gs.StartSession);
             }
         } 
 
@@ -73,7 +74,7 @@ namespace GymManagement.Data
                 .Include(gs => gs.Gym)
                 .Where(gs => gs.Gym.Id == gymId)
                 .Where(gs => gs.Session.IsGroup == true)
-                .OrderBy(gs => gs.StartSession);
+                .OrderByDescending(gs => gs.StartSession);
             }
             else
             {
@@ -83,7 +84,7 @@ namespace GymManagement.Data
                 .Where(gs => gs.Gym.Id == gymId)
                 .Where(gs => gs.Session.IsGroup == true)
                 .Where(gs => gs.StartSession > startTime)
-                .OrderBy(gs => gs.StartSession);
+                .OrderByDescending(gs => gs.StartSession);
             }
         } 
 
@@ -97,7 +98,7 @@ namespace GymManagement.Data
                 .Where(gs => gs.Gym.Id == gymId)
                 .Where(gs => gs.Session.IsGroup == true)
                 .Where(gs => gs.Session.IsOnline == true)
-                .OrderBy(gs => gs.StartSession);
+                .OrderByDescending(gs => gs.StartSession);
             }
             else
             {
@@ -108,7 +109,7 @@ namespace GymManagement.Data
                 .Where(gs => gs.Session.IsGroup == true)
                 .Where(gs => gs.Session.IsOnline == true)
                 .Where(gs => gs.StartSession > startTime)
-                .OrderBy(gs => gs.StartSession);
+                .OrderByDescending(gs => gs.StartSession);
             }
         } 
 
