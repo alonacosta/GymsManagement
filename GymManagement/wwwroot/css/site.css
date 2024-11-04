@@ -577,6 +577,9 @@ a.more-link {
     margin-top: 30px;
 }
 
+.full-height{
+    height: 80vh;  
+}
 
 /* Responsive */
 @media (max-width: 1000px) {

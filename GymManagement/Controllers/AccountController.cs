@@ -272,8 +272,8 @@ namespace GymManagement.Controllers
                 var response = await _userHelper.UpdateUserAsync(user);
 
                 if (response.Succeeded)
-                {
-                    ViewBag.Message = "User updated!";
+                {                  
+                    _flashMessage.Info("User Updated!");
                 }
                 else
                 {
