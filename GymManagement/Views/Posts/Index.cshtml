@@ -4,37 +4,41 @@
     ViewData["Title"] = "Forum";
 }
 
-<h1>Forum</h1>
-
-<p>
-    <a asp-action="CreateDiscussion">Create New</a>
-</p>
-@if (!Model.Any())
-{
-    <p>No discussion threads have been created yet!</p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Post title</th>
-                
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+<div class="shadow-none p-3 mb-5 bg-body-tertiary rounded bg-white">
+    <div class="row">
+        <h3 class="col">Forum</h3>
+        <p class="col">
+            <a asp-action="CreateDiscussion" class="btn btn-primary"><i class="fas fa-save"></i> Create New</a>
+        </p>
+    </div>
+    
+    @if (!Model.Any())
+    {
+        <p>No discussion threads have been created yet!</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        <h4>
-                            <a asp-action="Discussion" asp-route-id="@item.Id">@item.OriginalPost.Title</a>
-                        </h4>
-                        <!--<a asp-action="CreateDiscussion" asp-route-id="@item.Id">Edit</a-->
-                    </td>
+                    <th>Post title</th>
+                
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <h5>
+                                <a asp-action="Discussion" asp-route-id="@item.Id">@item.OriginalPost.Title</a>
+                            </h5>
+                            <!--<a asp-action="CreateDiscussion" asp-route-id="@item.Id">Edit</a-->
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-}
+    }
+</div>

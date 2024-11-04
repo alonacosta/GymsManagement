@@ -4,44 +4,44 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Create New Session for Gym</h2>
-
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="GymId" />
+<div class="shadow-none p-3 mb-5 bg-body-tertiary rounded bg-white">
+    <h3>Create New Session for Gym</h3>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="GymId" />
            
-            <div class="form-group">
-                <label asp-for="SessionId" class="control-label"></label>
-                <select asp-for="SessionId" asp-items="Model.Sessions" class="form-control"></select>
-                <span asp-validation-for="SessionId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StartSession" class="control-label"></label>
-                <input asp-for="StartSession" class="form-control" />
-                <span asp-validation-for="StartSession" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EndSession" class="control-label"></label>
-                <input asp-for="EndSession" class="form-control" />
-                <span asp-validation-for="EndSession" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Capacity" class="control-label"></label>
-                <input asp-for="Capacity" class="form-control" />
-                <span asp-validation-for="Capacity" class="text-danger"></span>
-            </div>
+                <div class="form-group mb-2">
+                    <label asp-for="SessionId" class="control-label"></label>
+                    <select asp-for="SessionId" asp-items="Model.Sessions" class="form-control"></select>
+                    <span asp-validation-for="SessionId" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-2">
+                    <label asp-for="StartSession" class="control-label"></label>
+                    <input asp-for="StartSession" class="form-control" />
+                    <span asp-validation-for="StartSession" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-2">
+                    <label asp-for="EndSession" class="control-label"></label>
+                    <input asp-for="EndSession" class="form-control" />
+                    <span asp-validation-for="EndSession" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Capacity" class="control-label"></label>
+                    <input asp-for="Capacity" class="form-control" />
+                    <span asp-validation-for="Capacity" class="text-danger"></span>
+                </div>
            
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="Index" asp-route-Gymid="@Model.GymId" class="btn btn-success">Back to List</a>
-            </div>
-        </form>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Create</button>
+                    <a asp-action="Index" asp-route-Gymid="@Model.GymId" class="btn btn-success"><i class="fas fa-chevron-left"></i> Back to List</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
 @section Scripts
 {
     @{

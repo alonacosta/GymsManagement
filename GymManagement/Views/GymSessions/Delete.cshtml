@@ -4,58 +4,59 @@
     ViewData["Title"] = "Delete";
 }
 
-<h2>Delete</h2>
-
-<h6>Are you sure you want to delete this?</h6>
-<div>
-    <hr />
-    <div class="row">
-        <div class="col-md-8"> 
-            <dl class="row">
-                <dt class="col-sm-3">
-                    @Html.DisplayNameFor(model => model.Session.Name)
-                </dt>
-                <dd class="col-sm-9">
-                    @Html.DisplayFor(model => model.Session.Name)
-                </dd>
-                <dt class="col-sm-3">
-                    @Html.DisplayNameFor(model => model.Gym.Name)
-                </dt>
-                <dd class="col-sm-9">
-                    @Html.DisplayFor(model => model.Gym.Name),  @Html.DisplayFor(model => model.Gym.Address)
-                </dd>
-                <dt class="col-sm-3">
-                    @Html.DisplayNameFor(model => model.StartSession)
-                </dt>
-                <dd class="col-sm-9">
-                    @Html.DisplayFor(model => model.StartSession)
-                </dd>
-                <dt class="col-sm-3">
-                    @Html.DisplayNameFor(model => model.Duration)
-                </dt>
-                <dd class="col-sm-9">
-                    @Html.DisplayFor(model => model.Duration)
-                </dd>
-                <dt class="col-sm-3">
-                    @Html.DisplayNameFor(model => model.Capacity)
-                </dt>
-                <dd class="col-sm-9">
-                    @Html.DisplayFor(model => model.Capacity)
-                </dd>
+<div class="shadow-none p-3 mb-5 bg-body-tertiary rounded bg-white">
+    <h3>Delete</h3>
+    <h6>Are you sure you want to delete this?</h6>
+    <div>
+        <hr />
+        <div class="row">
+            <div class="col-md-8"> 
+                <dl class="row">
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.Session.Name)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Session.Name)
+                    </dd>
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.Gym.Name)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Gym.Name),  @Html.DisplayFor(model => model.Gym.Address)
+                    </dd>
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.StartSession)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.StartSession)
+                    </dd>
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.Duration)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Duration)
+                    </dd>
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.Capacity)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Capacity)
+                    </dd>
                
-            </dl>
+                </dl>
+            </div>
+            <div class="col-md-4">
+                <img src="@Url.Content(Model.Session.ImageFullPath)" alt="Image" style="width:300px;height:450px;max-width:100%;height:auto;" />
+            </div>
         </div>
-        <div class="col-md-4">
-            <img src="@Url.Content(Model.Session.ImageFullPath)" alt="Image" style="width:300px;height:450px;max-width:100%;height:auto;" />
-        </div>
-    </div>
 
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="hidden" asp-for="GymId" />
-        <input type="submit" value="Delete" class="btn btn-danger" />
-        <a asp-action="Index" asp-route-Gymid="@Model.GymId" class="btn btn-success">Back to List</a>
-    </form>
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="GymId" />            
+            <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+            <a asp-action="Index" asp-route-Gymid="@Model.GymId" class="btn btn-success"><i class="fas fa-chevron-left"></i> Back to List</a>
+        </form>
+    </div>
 </div>
 
 

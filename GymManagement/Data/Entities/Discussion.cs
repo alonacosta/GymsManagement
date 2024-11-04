@@ -4,8 +4,8 @@
     {
         public int Id { get; set; }
 
-        public Post OriginalPost { get; set; }
+        public Post OriginalPost { get; set; } 
 
-        public ICollection<Post> Replies { get; set; }
+        public ICollection<Post> Replies { get; set; } 
     }
 }

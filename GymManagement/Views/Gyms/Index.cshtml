@@ -4,53 +4,51 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Gyms</h2>
-
-<p>
-    <a asp-action="Create" class="btn btn-success">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CityId)
-            </th>
-            
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <img src="@item.ImageFullPath" alt="Image Gym" style="width:100px;height:150px;max-width:100%;height:auto;" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.City.Name)
+<div class="shadow p-5 mb-5 bg-body-tertiary rounded bg-white">
+    <h3>Gyms</h3>
+    <p>
+        <a asp-action="Create" class="btn btn-success"><i class="fas fa-save"></i> Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="align-middle">
+                    @Html.DisplayNameFor(model => model.ImageId)
+                </th>
+                <th class="align-middle">
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th class="align-middle">
+                    @Html.DisplayNameFor(model => model.Address)
+                </th>
+                <th class="align-middle">
+                    @Html.DisplayNameFor(model => model.CityId)
+                </th>            
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                    <td class="align-middle">
+                    <img src="@item.ImageFullPath" alt="Image Gym" style="width:80px;height:120px;max-width:100%;height:auto;" />
                 </td>
-           
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a> 
-                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a> 
-                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                    <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                    <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.City.Name)
+                </td>           
+                    <td class="align-middle">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fas fa-edit"></i></a> 
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="fas fa-list"></i></a> 
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class="fas fa-trash"></i></a>
                     <a asp-action="Index" asp-controller="GymSessions" asp-route-GymId="@item.Id" class="btn btn-success">Manage Sessions</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                </td>
+            </tr>    }
+        </tbody>
+    </table>
+</div>

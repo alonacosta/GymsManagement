@@ -581,9 +581,17 @@ a.more-link {
     height: 80vh;  
 }
 
-/* Responsive */
-@media (max-width: 1000px) {
-    .btn-call-action {
+.full-height-country,
+.full-height-appoint {
+    height: 75vh;
+}
+
+.full-height-session {
+    height: 65vh;
+}
+    /* Responsive */
+    @media (max-width: 1000px) {
+        .btn-call-action {
         max-width: 50%;
     }
 }

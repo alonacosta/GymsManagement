@@ -4,26 +4,28 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Create Country</h2>
+<div class="shadow-none p-3 bg-body-tertiary rounded bg-white full-height-country">
+    <h3 class="mb-3">Create Country</h3>
 
-<hr />
-@* <flash dismissable="true" /> *@
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <hr />
+    @* <flash dismissable="true" /> *@
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-success">Back to List</a>
-            </div>
-        </form>
+                <div class="form-group mb-3">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Create</button>
+                    <a asp-action="Index" class="btn btn-success"><i class="fas fa-chevron-left"></i> Back to List</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

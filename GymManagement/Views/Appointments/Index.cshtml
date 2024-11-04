@@ -3,62 +3,63 @@
     ViewData["Title"] = "Index";
 }
 
-<h3>Your Appointments</h3>
+<div class="shadow-none p-3 mb-3 bg-body-tertiary rounded bg-white">
+    <h3>Your Appointments</h3>
 
-<table class="table mt-3">
-    <thead>
-        <tr>         
-            <th>
-                @Html.DisplayNameFor(model => model.GymSession.Session.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GymSession.StartSession)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GymSession.Duration)
-            </th>
+    <table class="table mt-3">
+        <thead>
+            <tr>         
+                <th>
+                    @Html.DisplayNameFor(model => model.GymSession.Session.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GymSession.StartSession)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GymSession.Duration)
+                </th>
           
-            <th>
-                @Html.DisplayNameFor(model => model.GymSession.Session.IsOnline)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GymSession.Session.IsGroup)
-            </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GymSession.Session.IsOnline)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GymSession.Session.IsGroup)
+                </th>
           
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>               
-                <td>
-                    @Html.DisplayFor(modelItem => item.GymSession.Session.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.GymSession.StartSession)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.GymSession.Duration)
-                </td>              
-                <td>
-                    @Html.DisplayFor(modelItem => item.GymSession.Session.IsOnline)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.GymSession.Session.IsGroup)
-                </td>              
-                <td>
-                    @if(item.GymSession.StartSession > DateTime.Now)
-                    {
-                        <a asp-action="CancelBooking" asp-route-id="@item.Id" class="btn btn-danger">Cancel Book</a>
-                    }  
-                    else
-                    {
-                        <a asp-action="CancelBooking" asp-route-id="@item.Id" class="btn btn-secondary disabled" aria-disabled="true">Cancel Book</a>
-                    }
-                </td>
+                <th></th>
             </tr>
-        }
-    </tbody>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>               
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GymSession.Session.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GymSession.StartSession)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GymSession.Duration)
+                    </td>              
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GymSession.Session.IsOnline)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GymSession.Session.IsGroup)
+                    </td>              
+                    <td>
+                        @if(item.GymSession.StartSession > DateTime.Now)
+                        {
+                            <a asp-action="CancelBooking" asp-route-id="@item.Id" class="btn btn-danger">Cancel Book</a>
+                        }  
+                        else
+                        {
+                            <a asp-action="CancelBooking" asp-route-id="@item.Id" class="btn btn-secondary disabled" aria-disabled="true">Cancel Book</a>
+                        }
+                    </td>
+                </tr>
+            }
+         </tbody>
     </table>
-
+</div>

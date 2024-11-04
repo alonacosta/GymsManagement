@@ -12,8 +12,7 @@
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="Search countries..." aria-label="Search country" aria-describedby="button-search" id="searchInput" oninput="filterCountries()">
             </div>            
-        </div>
-        
+        </div>        
     </div>
     
     @foreach(var item in Model)
@@ -23,8 +22,7 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </a>
         </div>
-    }
-   
+    }   
 </div>
 
 

@@ -9,78 +9,74 @@
     
 }
 
-<h2>Sessions From Gym</h2>
-
-<div class="row mt-4">
-    @if (Model != null && Model.Any())
-    {
-        <input type="hidden" id="countryId" value=@countryId>
-        <input type="hidden" id="gymId" value=@gymId>
-        <input type="hidden" id="isOnline" value="@isOnline"/>
-        <input type="hidden" id="isGroup" value="@isGroup"/>
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        <input class="form-check-input" type="checkbox" value="" id="isOnlineCheckbox">
-                        <label class="form-check-label" for="isOnlineCheckbox">
-                            Online Class
-                        </label>
-                    </div>
-                    <div class="col">
-                        <input class="form-check-input" type="checkbox" value="" id="isGroupCheckbox">
-                        <label class="form-check-label" for="isGroupCheckbox">
-                            Group Class
-                        </label>
-                    </div>
-                <div class="col">
-                    <label class="form-control-label" for="isGroupCheckbox">
-                        Starts after:
-                    </label>
-                    <input class="form-control valid" type="datetime-local"  id="date">
-                </div>
-                </div>
-            </div>
-        @foreach (var item in Model)
+<div class="shadow p-5 mb-5 bg-body-tertiary rounded bg-light">
+    <h3>Sessions From Gym</h3>
+    <div class="row mt-4">
+        @if (Model != null && Model.Any())
         {
-        
-            <div class="card me-3 mb-3" style="width: 18rem;">
-                <img src="@item.Session.ImageFullPath" class="card-img-top" alt="Gym Photo" style="width:100%; height:200px; object-fit:cover;">
-                <div class="card-body">
-                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Session.Name)</h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">@Html.DisplayFor(modelItem => item.StartSession)</h6>
-                    <p class="card-text"> @Html.DisplayNameFor(modelItem => item.Duration),  @Html.DisplayFor(modelItem => item.Duration)</p>
-                    <p class="card-text"> @Html.DisplayNameFor(modelItem => item.Capacity),  @Html.DisplayFor(modelItem => item.Capacity)</p>
-
-                    
-                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Client"))
-                    {
-                        <a asp-action="BookSession" asp-controller="GymSessions" asp-route-countryId="@countryId" asp-route-gymId="@gymId" asp-route-id="@item.Id" class="card-link btn btn-outline-success w-100">Book</a>
-                    }
-                    else if (!this.User.Identity.IsAuthenticated)
-                    {
-                        if (item.StartSession < DateTime.Now)
-                        {
-                            <a asp-action="TryFreeSession" asp-controller="FreeAppointments" class="card-link btn btn-outline-secondary w-100 disabled" disable>Try for Free</a>
-                        }
-                        else
-                        {
-                            <a asp-action="TryFreeSession" asp-controller="FreeAppointments" class="card-link btn btn-outline-success w-100">Try for Free</a>
-                        }
-                        @* <a asp-action="TryFreeSession" asp-controller="FreeAppointments" asp-route-countryId="@countryId" asp-route-gymId="@gymId" asp-route-id="@item.Id" class="card-link btn btn-outline-success w-100">Try for Free</a> *@
-                       
-                    }
+            <input type="hidden" id="countryId" value=@countryId>
+            <input type="hidden" id="gymId" value=@gymId>
+            <input type="hidden" id="isOnline" value="@isOnline"/>
+            <input type="hidden" id="isGroup" value="@isGroup"/>
+                <div class="container">
+                    <div class="row mb-3 d-flex align-items-center">
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" value="" id="isOnlineCheckbox">
+                            <label class="form-check-label" for="isOnlineCheckbox">
+                                Online Class
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" value="" id="isGroupCheckbox">
+                            <label class="form-check-label" for="isGroupCheckbox">
+                                Group Class
+                            </label>
+                        </div>
+                        <div class="col">
+                            <label class="form-control-label" for="isGroupCheckbox">
+                                Starts after:
+                            </label>
+                            <input class="form-control valid" type="datetime-local"  id="date">
+                        </div>
+                    </div>
                 </div>
-            </div>
+            @foreach (var item in Model)
+            {        
+                <div class="card me-3 mb-3" style="width: 18rem;">
+                    <img src="@item.Session.ImageFullPath" class="card-img-top" alt="Gym Photo" style="width:100%; height:200px; object-fit:cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Session.Name)</h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">@Html.DisplayFor(modelItem => item.StartSession)</h6>
+                        <p class="card-text"> @Html.DisplayNameFor(modelItem => item.Duration),  @Html.DisplayFor(modelItem => item.Duration)</p>
+                        <p class="card-text"> @Html.DisplayNameFor(modelItem => item.Capacity),  @Html.DisplayFor(modelItem => item.Capacity)</p>
+                    
+                        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Client"))
+                        {
+                            <a asp-action="BookSession" asp-controller="GymSessions" asp-route-countryId="@countryId" asp-route-gymId="@gymId" asp-route-id="@item.Id" class="card-link btn btn-outline-success w-100">Book</a>
+                        }
+                        else if (!this.User.Identity.IsAuthenticated)
+                        {
+                            if (item.StartSession < DateTime.Now)
+                            {
+                                <a asp-action="TryFreeSession" asp-controller="FreeAppointments" class="card-link btn btn-outline-secondary w-100 disabled" disable>Try for Free</a>
+                            }
+                            else
+                            {
+                                <a asp-action="TryFreeSession" asp-controller="FreeAppointments" class="card-link btn btn-outline-success w-100">Try for Free</a>
+                            }
+                        }
+                    </div>
+                </div>
+            }
         }
-    }
-    else
-    {
-        <p>
-            There are no sessions available yet!
-        </p>
-    }
+        else
+        {
+            <p>
+                There are no sessions available yet!
+            </p>
+        }
+    </div>
 </div>
-
 <script>
     const isOnlineCheckbox = document.getElementById('isOnlineCheckbox')
     const isGroupCheckbox = document.getElementById('isGroupCheckbox')
@@ -89,9 +85,6 @@
     const countryId = document.getElementById('countryId')
     const isOnline = document.getElementById('isOnline')
     const isGroup = document.getElementById('isGroup')
-
-
-    
 
     function redirect() {
         const redirectUrl = `/Gyms/GetSessionsFromGym/?gymId=${gymId.value}&countryId=${countryId.value}&isOnline=${isOnlineCheckbox.checked}&isGroup=${isGroupCheckbox.checked}&startTime=${dateBox.value}`
@@ -126,6 +119,5 @@
         }
         
     }
-
 
 </script>

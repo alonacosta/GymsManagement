@@ -4,57 +4,58 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
-
-<div>
-    <h4>Country</h4>
+<div class="shadow-none p-3 bg-body-tertiary rounded bg-white">
+    <h3>Contry Details</h3>
+    <div>  
+        <div class="d-flex align-items-center mb-3">
+            <div class="fw-bold me-2">
+                @Html.DisplayNameFor(model => model.Name):
+            </div>
+            <div class="fs-5">
+                @Html.DisplayFor(model => model.Name)
+            </div>
+        </div>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning"><i class="fas fa-edit"></i> Edit</a>
+            <a asp-action="Index" class="btn btn-success"><i class="fas fa-chevron-left"></i> Back to list</a>
+        </div>
+    </div>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-    </dl>
-</div>
+    <h4 class=" mt-5 mb-2">Cities</h4>
+    <div>
+        <a asp-action="AddCity" asp-route-id="@Model.Id" class="btn btn-info"><i class="fas fa-plus"></i> Add City</a>
+    
+    </div>
 
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
-    <a asp-action="AddCity" asp-route-id="@Model.Id" class="btn btn-info">Add City</a>
-    <a asp-action="Index" class="btn btn-success">Back to list</a>
-</div>
-
-<h4>Cities</h4>
-
-@if (Model.Cities == null || Model.Cities.Count == 0)
-{
-    <h5>No cities added yet</h5>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Cities.FirstOrDefault().Name)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Cities.OrderBy(c => c.Name))
-            {
+    @if (Model.Cities == null || Model.Cities.Count == 0)
+    {
+        <h5>No cities added yet</h5>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td id="@item.Id">
-                        <a asp-action="EditCity" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
-                        <a asp-action="DeleteCity" asp-route-id="@item.Id" class="btn btn-danger" id="btnDelete">Delete</a>
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Cities.FirstOrDefault().Name)
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Cities.OrderBy(c => c.Name))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td id="@item.Id">
+                            <a asp-action="EditCity" asp-route-id="@item.Id" class="btn btn-warning"><i class="fas fa-edit"></i> Edit</a>
+                            <a asp-action="DeleteCity" asp-route-id="@item.Id" class="btn btn-danger" id="btnDelete"><i class="fas fa-trash"></i> Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

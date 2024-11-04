@@ -12,37 +12,37 @@
             <form asp-action="Add">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="RoleName" />
-                <div class="form-group mb-3">
+                <div class="form-group mb-2">
                     <label asp-for="FirstName" class="control-label">First Name</label>
                     <input asp-for="FirstName" class="form-control" />
                     <span asp-validation-for="FirstName" class="text-danger"></span>
                 </div>
-                <div class="form-group mb-3">
+                <div class="form-group mb-2">
                     <label asp-for="LastName" class="control-label">Last Name</label>
                     <input asp-for="LastName" class="form-control" />
                     <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
-                <div class="form-group mb-3">
+                <div class="form-group mb-2">
                     <label asp-for="Username" class="control-label">Email</label>
                     <input asp-for="Username" class="form-control" />
                     <span asp-validation-for="Username" class="text-danger"></span>
                 </div>
-                <div class="form-group mb-3">
+                <div class="form-group mb-2">
                     <label asp-for="PhoneNumber" class="control-label">Phone number</label>
                     <input asp-for="PhoneNumber" class="form-control" />
                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
-                <div class="form-group mb-3">
+                <div class="form-group mb-2">
                     <label asp-for="CountryId" class="control-label">Country</label>
                     <select asp-for="CountryId" asp-items="Model.Countries" class="form-control"></select>
                     <span asp-validation-for="CountryId" class="text-danger"></span>
                 </div>
-                <div class="form-group mb-3">
+                <div class="form-group mb-2">
                     <label asp-for="CityId" class="control-label">City</label>
                     <select asp-for="CityId" asp-items="Model.Cities" class="form-control"></select>
                     <span asp-validation-for="CityId" class="text-danger"></span>
                 </div>
-                <div class="form-group mb-3">
+                <div class="form-group mb-2">
                     <label asp-for="GymId" class="control-label">Gym</label>
                     <select asp-for="GymId" asp-items="Model.Gyms" class="form-control"></select>
                     <span asp-validation-for="GymId" class="text-danger"></span>
@@ -50,14 +50,14 @@
 
                 @if(roleName?.ToString() == "Employee")
                 {
-                    <div class="form-group mb-3">
+                    <div class="form-group mb-2">
                         <label asp-for="PositionId" class="control-label">Position</label>
                         <select asp-for="PositionId" asp-items="Model.Positions" class="form-control"></select>
                         <span asp-validation-for="PositionId" class="text-danger"></span>
                     </div>
                 }          
 
-                <div class="form-group mb-3">                 
+                <div class="form-group mb-2">                 
                     <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Register</button>
                     <a asp-action="UserManagementIndex" class="btn btn-success"><i class="fas fa-chevron-left"></i> Back to the User Manager Index</a>
                 </div>

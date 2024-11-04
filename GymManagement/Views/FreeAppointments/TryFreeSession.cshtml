@@ -3,52 +3,53 @@
     ViewData["Title"] = "TryFreeSession";
 }
 
-<h2>Book Free Session</h2>
-
-<hr />
-<div class="col-md-4">
-    <flash dismissable="true"/>
-</div>
-<div class="row">
+<div class="shadow-none p-3 bg-body-tertiary rounded bg-white">
+    <h3>Book Free Session</h3>
+    <hr />
     <div class="col-md-4">
-        <form asp-action="TryFreeSession" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <flash dismissable="true"/>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="TryFreeSession" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label">First Name</label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label">Last Name</label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label">Email</label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label">Phone Number</label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SessionName" class="control-label">Session you want</label>
-                <input asp-for="SessionName" class="form-control" />
-                <span asp-validation-for="SessionName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Message" class="control-label">Message</label>
-                <input asp-for="Message" class="form-control" />
-                <span asp-validation-for="Message" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-                <a href="javascript:history.back()" class="btn btn-success">Back to List</a>
-            </div>
-        </form>
+                <div class="form-group mb-2">
+                    <label asp-for="FirstName" class="control-label">First Name</label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-2">
+                    <label asp-for="LastName" class="control-label">Last Name</label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-2">
+                    <label asp-for="Email" class="control-label">Email</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-2">
+                    <label asp-for="PhoneNumber" class="control-label">Phone Number</label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-2">
+                    <label asp-for="SessionName" class="control-label">Session you want</label>
+                    <input asp-for="SessionName" class="form-control" />
+                    <span asp-validation-for="SessionName" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Message" class="control-label">Message</label>
+                    <input asp-for="Message" class="form-control" />
+                    <span asp-validation-for="Message" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <a href="javascript:history.back()" class="btn btn-success">Back to List</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

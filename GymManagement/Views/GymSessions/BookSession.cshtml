@@ -5,76 +5,74 @@
     var gymId = ViewData["GymId"];
 }
 
-<h2>Book Your Session</h2>
-<div style="max-width: 640px;">
-    <flash dismissable="true" />
-</div>
-
-<div class="card mb-3 mt-3" style="max-width: 640px;">
-    <div class="row g-0">
-        <div class="col-md-4">
-            <img src="@Model.Session.ImageFullPath" alt="Image" style="width:150px;height:auto;max-width:100%;height:auto;" />
-        </div>
-        <div class="col-md-8">
-            <div class="card-body">
-                <h5 class="card-title fw-bold mb-3">@Model.Session.Name</h5>
-
-                <dl class="row">
-
-                    <dt class="col-sm-4">
-                        Date / Time
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.StartSession)
-                    </dd>
-                    <dt class="col-sm-4">
-                        @Html.DisplayNameFor(model => model.Duration)
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.Duration)
-                    </dd>
-                    <dt class="col-sm-4">
-                        @Html.DisplayNameFor(model => model.Capacity)
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.Capacity)
-                    </dd>
-                    <dt class="col-sm-4">
-                        Format
-                    </dt>
-                    <dd class="col-sm-8">
-                        @if (Model.Session.IsOnline)
-                        {
-                            <span>Online</span>
-                        }
-                        else
-                        {
-                            <span>In person</span>
-                        }
-                    </dd>
-                    <dt class="col-sm-4">
-                        Modality
-                    </dt>
-                    <dd class="col-sm-8">
-                        @if (Model.Session.IsGroup)
-                        {
-                            <span>Group</span>
-                        }
-                        else
-                        {
-                            <span>Individual</span>
-                        }
-                    </dd>
-                </dl>
-                <form asp-action="BookSession">
-                    <input type="hidden" asp-for="Id" />
-                    <input type="hidden" name="GymId" value="@gymId" />
-                    <input type="hidden" name="CountryId" value="@countryId" />
-                    <input type="submit" value="Book Now" class="btn btn-success" />
-                    <a asp-action="GetClassesMap" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@gymId" class="btn btn-danger">Cancel</a>
-                </form>
+<div class="shadow-none p-5 bg-body-tertiary rounded bg-light">
+    <h3>Book Your Session</h3>
+    <div style="max-width: 640px;">
+        <flash dismissable="true" />
+    </div>
+    <div class="card mb-3 mt-3" style="max-width: 640px;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="@Model.Session.ImageFullPath" alt="Image" style="width:150px;height:auto;max-width:100%;height:auto;" />
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold mb-3">@Model.Session.Name</h5>
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            Date / Time
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.StartSession)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Duration)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Duration)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Capacity)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Capacity)
+                        </dd>
+                        <dt class="col-sm-4">
+                            Format
+                        </dt>
+                        <dd class="col-sm-8">
+                            @if (Model.Session.IsOnline)
+                            {
+                                <span>Online</span>
+                            }
+                            else
+                            {
+                                <span>In person</span>
+                            }
+                        </dd>
+                        <dt class="col-sm-4">
+                            Modality
+                        </dt>
+                        <dd class="col-sm-8">
+                            @if (Model.Session.IsGroup)
+                            {
+                                <span>Group</span>
+                            }
+                            else
+                            {
+                                <span>Individual</span>
+                            }
+                        </dd>
+                    </dl>
+                    <form asp-action="BookSession">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" name="GymId" value="@gymId" />
+                        <input type="hidden" name="CountryId" value="@countryId" />
+                        <input type="submit" value="Book Now" class="btn btn-success" />
+                        <a asp-action="GetClassesMap" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@gymId" class="btn btn-danger">Cancel</a>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
-

@@ -5,7 +5,6 @@
 }
 
 <div class="shadow p-5 mb-5 bg-body-tertiary rounded bg-light">
-
     <div class="row">
         <div class="col-md-6">
             <h2>Gyms</h2>
@@ -24,9 +23,8 @@
                 <img src="@item.ImageFullPath" class="card-img-top" alt="Gym Photo" style="width:100%; height:200px; object-fit:cover;">
                 <div class="card-body" >
                     <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
-                    <p class="card-text"> @Html.DisplayFor(modelItem => item.Address),  @Html.DisplayFor(modelItem => item.City.Name)</p>
-                   @*  <a asp-action="GetSessionsFromGym" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@item.Id" class="card-link btn btn-outline-success w-100">See Sessions</a> *@
-                   <a asp-action="GymDetails" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@item.Id" class="card-link btn btn-outline-gym-red px-md-5">More</a>
+                    <p class="card-text"> @Html.DisplayFor(modelItem => item.Address),  @Html.DisplayFor(modelItem => item.City.Name)</p>                  
+                    <a asp-action="GymDetails" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@item.Id" class="card-link btn btn-outline-gym-red px-md-5">More</a>
                     <a asp-action="GetClassesMap" asp-controller="Gyms" asp-route-countryId="@countryId" asp-route-gymId="@item.Id" class="card-link btn btn-gym-red px-md-5">Classes Map</a>
                 </div>
             </div>       

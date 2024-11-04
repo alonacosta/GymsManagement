@@ -184,7 +184,7 @@ namespace GymManagement.Controllers
                 return NotFound();
             }
 
-            var gym = await _gymRepository.GetByIdAsync(id.Value);
+            var gym = await _gymRepository.GetGymWithCityAsync(id.Value);
             if (gym == null)
             {
                 return NotFound();

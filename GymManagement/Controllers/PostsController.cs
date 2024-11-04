@@ -77,7 +77,8 @@ namespace GymManagement.Controllers
             } 
             else
             {
-                var model = _postRepository.GetDiscussion(id);
+                ViewData["DiscussionId"] = id.Value;
+                var model = _postRepository.GetDiscussion(id.Value);
                 return View(model);
             }
         }
@@ -119,12 +120,12 @@ namespace GymManagement.Controllers
 
         [HttpPost]
         public async Task<IActionResult> UpdatePostAsync(ChangePostViewModel model)
-        {
+        {            
             var post = await _postRepository.GetPostByIdAsync(model.PostId);
             if (post != null)
             {
                 post.Message = model.Message;
-                await _postRepository.UpdatePostAsync(post);
+                await _postRepository.UpdatePostAsync(post);                
             }
             return View(model);
         }

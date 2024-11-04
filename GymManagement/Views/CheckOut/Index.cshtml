@@ -3,17 +3,15 @@
     ViewData["Title"] = "Index";    
 }
 
-<div class="shadow p-4 mb-5 bg-body-tertiary rounded">
-
-	<h2>Choose the subscription</h2>
+<div class="shadow p-4 mb-3 bg-body-tertiary rounded bg-white">
+	<h3 class="mb-4">Choose the subscription</h3>
     <div class="row mt-3 d-flex justify-content-center">
         @foreach(var item in Model)
         {
             <div class="card me-3 card-plan-item text-center" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title">
-                       <span>Plan</span><br/>
-                       <span class="card-name">@item.Name</span>
+                        Plan @item.Name                     
                      </h5>
                      <p class="number-price my-5">@item.Price €</p>
                     @{                        
@@ -27,8 +25,7 @@
                             }
                         </ul>
                     </div>
-                    <a class="card-link btn check-red-btn w-100" asp-area="" asp-route-id="@item.Id" asp-controller="CheckOut" asp-action="CheckOut">Select</a>
-                   @*  <a href="#" class="card-link btn check-red-btn w-100">Select</a>      *@              
+                    <a class="card-link btn check-red-btn w-100" asp-area="" asp-route-id="@item.Id" asp-controller="CheckOut" asp-action="CheckOut">Select</a>                              
                 </div>
             </div>
         }        
