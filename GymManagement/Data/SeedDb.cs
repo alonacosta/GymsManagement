@@ -85,7 +85,20 @@ namespace GymManagement.Data
                 });
 
                 await _context.SaveChangesAsync();
-            }            
+            }
+
+            if (!_context.Subscriptions.Any())
+            {
+                var subscriptions = new List<Subscription>
+                {
+                    new Subscription { Name = "Basic", Description = "Access to gym, Group Classes, Locker included", Price = 29.99M },
+                    new Subscription { Name = "Premium", Description = "Access to gym, Group Classes, Personal trainer, Pool access, Locker included", Price = 49.99M },
+                    new Subscription { Name = "VIP", Description = "Access to gym, Personal trainer, Locker included, Sauna access, Pool access, Group Classes, Massage, Nutrition", Price = 79.99M }
+                };
+
+                _context.Subscriptions.AddRange(subscriptions);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

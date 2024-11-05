@@ -26,7 +26,8 @@ namespace GymManagement.Controllers
 
             var subscription = await _subscriptionRepository.GetByIdAsync(id.Value);
 
-            var domain = "https://localhost:44346/";
+            //var domain = "https://localhost:44346/";
+            var domain = "https://gymmanagementsystem.azurewebsites.net/";
 
             var options = new Stripe.Checkout.SessionCreateOptions
             {
