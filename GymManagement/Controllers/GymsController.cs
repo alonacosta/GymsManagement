@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Syncfusion.EJ2.Linq;
 using System.Linq;
 
+namespace GymManagement.Controllers
+{
     public class GymsController : Controller
     {
         private readonly IGymRepository _gymRepository;
@@ -23,8 +25,7 @@ using System.Linq;
             IConverterHelper converterHelper,
             ICountryRepository countryRepository,
             IGymSessionRepository gymSessionRepository,
-            IUserHelper userHelper)
-            IGymSessionRepository gymSessionRepository,
+            IUserHelper userHelper,           
             IEquipmentsRepository equipmentsRepository)
         {
             _gymRepository = gymRepository;
