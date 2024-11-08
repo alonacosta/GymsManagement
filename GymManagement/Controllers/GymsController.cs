@@ -131,6 +131,25 @@ namespace GymManagement.Controllers
 
             var gymEquipment = await _gymRepository.GetGymEquipmentByGymIdAsync(id.Value);
 
+            var gymEquipmentDetails = _gymRepository.GetGymEquipmentsByGymId(id.Value);
+
+            var gymEquipmentsList = new List<GymEquipmentViewModel>();
+
+            foreach (var item in gymEquipmentDetails) 
+            {
+                var equipmentItem = new GymEquipmentViewModel
+                {
+                    Id = item.Id,
+                    EquipmentName = item.EquipmentName,
+                    GymId = item.GymId,
+                    EquipmentId = item.EquipmentId,
+                };
+
+                gymEquipmentsList.Add(equipmentItem);
+            }
+
+            model.GymEquipmentDetails = gymEquipmentsList;
+
             if (gymEquipment != null)
             {
                 var equipment = await _equipmentsRepository.GetEquipmentByGymEquipmentIdAsync(gymEquipment.Id);

@@ -23,8 +23,10 @@ namespace GymManagement.Models
 
         public IEnumerable<SelectListItem>? Countries { get; set; }
 
-        public ICollection<GymEquipment> GymEquipments { get; set; }
+        public ICollection<GymEquipment>? GymEquipments { get; set; }
 
-        public GymEquipmentViewModel GymEquipment { get; set; }
+        public GymEquipmentViewModel? GymEquipment { get; set; }
+
+        public ICollection<GymEquipmentViewModel> GymEquipmentDetails { get; set; }
     }
 }

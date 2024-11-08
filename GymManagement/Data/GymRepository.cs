@@ -112,6 +112,15 @@ namespace GymManagement.Data
             return list;
         }
 
+        public IQueryable<GymEquipment> GetGymEquipmentsByGymId(int gymId) 
+        {
+            return _context.GymEquipments
+                .Include(ge => ge.Gym)
+                .Include(ge => ge.Equipment)
+                .Where(ge => ge.Id == gymId)
+                .OrderBy(ge => ge.Equipment.Name);
+        }
+
         public async Task<GymEquipment> GetGymEquipmentByIdAsync(int id) 
         {
             return await _context.GymEquipments

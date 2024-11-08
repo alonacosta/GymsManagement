@@ -19,6 +19,8 @@
 
         IEnumerable<SelectListItem> GetComboGymEquipments();
 
+        IQueryable<GymEquipment> GetGymEquipmentsByGymId(int gymId);
+
         Task<GymEquipment> GetGymEquipmentByIdAsync(int id);
 
         Task<GymEquipment> GetGymEquipmentByGymIdAsync(int gymId);

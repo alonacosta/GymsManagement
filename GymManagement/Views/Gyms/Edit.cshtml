@@ -52,7 +52,7 @@
 
     <h4>Gym Equipment</h4>
 
-@if (Model.GymEquipments == null || Model.GymEquipments.Count == 0)
+@if (Model.GymEquipmentDetails == null || Model.GymEquipmentDetails.Count == 0)
 {
     <h5>No gym equipments added yet</h5>
 }
@@ -62,13 +62,13 @@ else
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.GymEquipments.FirstOrDefault().EquipmentName)
+                @Html.DisplayNameFor(model => model.GymEquipmentDetails.FirstOrDefault().EquipmentName)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model.GymEquipments.OrderBy(ge => ge.EquipmentName))
+    @foreach (var item in Model.GymEquipmentDetails)
     {
         <tr>
             <td>
