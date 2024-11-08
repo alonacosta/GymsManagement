@@ -99,6 +99,17 @@ namespace GymManagement.Data
                 _context.Subscriptions.AddRange(subscriptions);
                 await _context.SaveChangesAsync();
             }
+
+            if (!_context.Positions.Any()) 
+            {
+                var positions = new List<Position> 
+                {
+                    new Position {Name = "Personal Trainer"},
+                    new Position {Name = "Yoga Master"}
+                };
+                _context.Positions.AddRange(positions);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

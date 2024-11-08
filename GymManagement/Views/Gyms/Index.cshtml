@@ -24,8 +24,7 @@
                 <th class="align-middle">
                     @Html.DisplayNameFor(model => model.CityId)
                 </th>            
-                <th></th>
-                <th></th>
+                <th></th>               
             </tr>
         </thead>
         <tbody>
@@ -48,10 +47,11 @@
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="fas fa-list"></i></a> 
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class="fas fa-trash"></i></a>
                     <a asp-action="Index" asp-controller="GymSessions" asp-route-GymId="@item.Id" class="btn btn-success">Manage Sessions</a>
+                        <a asp-action="AddGymEquipment" asp-route-id="@item.Id" class="btn btn-success">Add Gym Equipment</a>
                 </td>
-                 <td>
+               @*   <td>
                     <a asp-action="AddGymEquipment" asp-route-id="@item.Id" class="btn btn-success">Add Gym Equipment</a>
-                </td>
+                </td> *@
             </tr>    
             }
         </tbody>
