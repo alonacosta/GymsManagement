@@ -1,0 +1,29 @@
+﻿@model GymManagement.Data.Entities.GymEquipment
+
+@{
+    ViewData["Title"] = "DeleteGymEquipment";
+}
+
+<h2>Delete Gym Equipment</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.EquipmentName)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.EquipmentName)
+        </dd>
+    </dl>
+
+    <form asp-action="DeleteGymEquipment" method="post">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="GymId" />
+
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="Edit" asp-route-GymId="@Model.GymId" class="btn btn-success">Back to Gym</a>
+    </form>
+</div>
+

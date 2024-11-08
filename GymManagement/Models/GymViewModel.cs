@@ -21,7 +21,10 @@ namespace GymManagement.Models
         [Range(1, int.MaxValue, ErrorMessage = "You must select a country.")]
         public int? CountryId { get; set; }
 
-       
         public IEnumerable<SelectListItem>? Countries { get; set; }
+
+        public ICollection<GymEquipment> GymEquipments { get; set; }
+
+        public GymEquipmentViewModel GymEquipment { get; set; }
     }
 }

@@ -25,6 +25,7 @@
                     @Html.DisplayNameFor(model => model.CityId)
                 </th>            
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -48,7 +49,11 @@
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class="fas fa-trash"></i></a>
                     <a asp-action="Index" asp-controller="GymSessions" asp-route-GymId="@item.Id" class="btn btn-success">Manage Sessions</a>
                 </td>
-            </tr>    }
+                 <td>
+                    <a asp-action="AddGymEquipment" asp-route-id="@item.Id" class="btn btn-success">Add Gym Equipment</a>
+                </td>
+            </tr>    
+            }
         </tbody>
     </table>
 </div>

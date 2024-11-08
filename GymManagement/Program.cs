@@ -2,12 +2,9 @@ using GymManagement.Data;
 using GymManagement.Data.Entities;
 using GymManagement.Helpers;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Configuration;
 using System.Text;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Vereyon.Web;
 using Stripe;
 
@@ -69,13 +66,13 @@ builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
 builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 builder.Services.AddScoped<IGymRepository, GymRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
-
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IGymSessionRepository, GymSessionRepository>();
 builder.Services.AddScoped<IFreeAppointmentRepository, FreeAppointmentRepository>();
 builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
 builder.Services.AddScoped<IPositionRepository, PositionRepository>();
+builder.Services.AddScoped<IEquipmentsRepository, EquipmentRepository>();
 
 // Add Seed service
 builder.Services.AddTransient<SeedDb>();
@@ -106,14 +103,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-
-// Aplica migrações e Seed Data
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var seed = services.GetRequiredService<SeedDb>();
-
-    // Chama o método de seed
+    
     await seed.InitializeAsync();
 }
 

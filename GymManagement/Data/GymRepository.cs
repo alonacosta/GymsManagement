@@ -14,7 +14,6 @@ namespace GymManagement.Data
             _context = context;
         }
 
-
         public IEnumerable<SelectListItem> GetComboGyms(int cityId)
         {
             var city = _context.Cities.Find(cityId);
@@ -92,6 +91,69 @@ namespace GymManagement.Data
                 return false;
             }
             return true;
+        }
+
+        public IEnumerable<SelectListItem> GetComboGymEquipments() 
+        {
+            var list = _context.GymEquipments
+                .Select(ge => new SelectListItem
+                {
+                    Text = ge.Equipment.Name,
+                    Value = ge.Id.ToString(),
+
+                }).OrderBy(l => l.Text).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "(Select gym equipment ...)",
+                Value = "0",
+            });
+
+            return list;
+        }
+
+        public async Task<GymEquipment> GetGymEquipmentByIdAsync(int id) 
+        {
+            return await _context.GymEquipments
+                .FirstOrDefaultAsync(ge => ge.Id == id);
+        }
+
+        public async Task<GymEquipment> GetGymEquipmentByGymIdAsync(int gymId) 
+        {
+            return await _context.GymEquipments
+                .Include(ge => ge.Gym)
+                .FirstOrDefaultAsync(ge => ge.GymId == gymId);
+        }
+
+        public async Task AddGymEquipmentAsync(GymEquipment gymEquipment) 
+        { 
+            _context.GymEquipments.Add(gymEquipment);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task EditGymEquipmentAsync(GymEquipment gymEquipment) 
+        { 
+            var existingGymEquipment = await _context.GymEquipments.FindAsync(gymEquipment.Id);
+
+            if (existingGymEquipment == null) 
+            {
+                throw new Exception("Gym equipment not found!");
+            }
+
+            existingGymEquipment.GymId = gymEquipment.GymId;
+            existingGymEquipment.EquipmentId = gymEquipment.EquipmentId;
+
+            _context.GymEquipments.Update(existingGymEquipment);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteGymEquipmentAsync(GymEquipment gymEquipment) 
+        { 
+            _context.GymEquipments.Remove(gymEquipment);
+
+            await _context.SaveChangesAsync();
         }
     }
 }
