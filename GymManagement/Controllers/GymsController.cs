@@ -1,13 +1,13 @@
-﻿using GymManagement.Data;
-using GymManagement.Helpers;
-using GymManagement.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using GymManagement.Data.Entities;
-using Microsoft.AspNetCore.Authorization;
-
-namespace GymManagement.Controllers
+﻿namespace GymManagement.Controllers
 {
+    using GymManagement.Data;
+    using GymManagement.Helpers;
+    using GymManagement.Models;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.AspNetCore.Authorization;
+    using GymManagement.Data.Entities;
+
     public class GymsController : Controller
     {
         private readonly IGymRepository _gymRepository;
@@ -15,27 +15,28 @@ namespace GymManagement.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICountryRepository _countryRepository;
         private readonly IGymSessionRepository _gymSessionRepository;
+        private readonly IEquipmentsRepository _equipmentsRepository;
 
         public GymsController(IGymRepository gymRepository,
             IBlobHelper blobHelper,
             IConverterHelper converterHelper,
             ICountryRepository countryRepository,
-            IGymSessionRepository gymSessionRepository)
+            IGymSessionRepository gymSessionRepository,
+            IEquipmentsRepository equipmentsRepository)
         {
             _gymRepository = gymRepository;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
             _countryRepository = countryRepository;
             _gymSessionRepository = gymSessionRepository;
+            _equipmentsRepository = equipmentsRepository;   
         }
 
-        // GET: Gyms
         public IActionResult Index()
         {
             return View(_gymRepository.GetGymsWithCities());
         }
 
-        // GET: Gyms/Details/5
         [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
@@ -55,7 +56,6 @@ namespace GymManagement.Controllers
             return View(gym);
         }
 
-        // GET: Gyms/
         //[Authorize]
         public IActionResult Create()
         {
@@ -67,11 +67,7 @@ namespace GymManagement.Controllers
             return View(model);
         }
 
-        // POST: Gyms/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(GymViewModel model)
         {
             if (ModelState.IsValid)
@@ -94,7 +90,6 @@ namespace GymManagement.Controllers
             return View(model);
         }
 
-        // GET: Gyms/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -128,17 +123,36 @@ namespace GymManagement.Controllers
                     model.Cities = _countryRepository.GetComboCities(country.Id);
                 }
             }
+
+            var gymEquipment = await _gymRepository.GetGymEquipmentByGymIdAsync(id.Value);
+
+            if (gymEquipment != null)
+            {
+                var equipment = await _equipmentsRepository.GetEquipmentByGymEquipmentIdAsync(gymEquipment.Id);
+
+                if (equipment != null)
+                {
+                    model.GymEquipment = new GymEquipmentViewModel
+                    {
+                        Id = gymEquipment.Id,
+                        EquipmentName = gymEquipment.EquipmentName,
+                        GymId = gymEquipment.GymId,
+                        EquipmentId = gymEquipment.EquipmentId,
+                    };
+                }
+            }
+            else
+            {
+                model.GymEquipment = null;
+            }
+
             model.Countries = _countryRepository.GetComboCountries();
             model.Cities = model.Cities ?? _countryRepository.GetComboCities(model.CountryId ?? 0);
 
             return View(model);
         }
 
-        // POST: Gyms/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(GymViewModel model)
         {
             if (ModelState.IsValid)
@@ -171,7 +185,6 @@ namespace GymManagement.Controllers
             return View(model);
         }
 
-        // GET: Gyms/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -188,10 +201,9 @@ namespace GymManagement.Controllers
             return View(gym);
         }
 
-        // POST: Gyms/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var gym = await _gymRepository.GetByIdAsync(id);
 
@@ -263,6 +275,169 @@ namespace GymManagement.Controllers
         public IActionResult GymNotFound()
         {
             return View();
+        }
+
+        public async Task<IActionResult> AddGymEquipment(int id)
+        {
+            var gym = await _gymRepository.GetByIdAsync(id);
+
+            if (gym == null)
+            {
+                return NotFound();
+            }
+
+            var model = new GymEquipmentViewModel
+            {
+                GymId = gym.Id,
+                Equipments = _equipmentsRepository.GetComboEquipments(),
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddGymEquipment(GymEquipmentViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var gymEquipment = new GymEquipment
+                {
+                    GymId = model.GymId,
+                    EquipmentId = model.EquipmentId,
+                    IsActive = true,
+                };
+
+                await _gymRepository.AddGymEquipmentAsync(gymEquipment);
+
+                return RedirectToAction("Index");
+            }
+
+            model.Equipments = _equipmentsRepository.GetComboEquipments();
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> EditGymEquipment(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var gymEquipment = await _gymRepository.GetGymEquipmentByIdAsync(id.Value);
+
+            if (gymEquipment == null)
+            {
+                return NotFound();
+            }
+
+            var model = new GymEquipmentViewModel
+            {
+                Id = gymEquipment.Id,
+                GymId = gymEquipment.GymId,
+                EquipmentId = gymEquipment.EquipmentId,
+                Equipments = _equipmentsRepository.GetComboEquipments(),
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditGymEquipment(int id, GymEquipmentViewModel model)
+        {
+            if (id != model.Id)
+            {
+                return BadRequest();
+            }
+
+            if (ModelState.IsValid)
+            {
+                var gymEquipment = await _gymRepository.GetGymEquipmentByIdAsync(id);
+
+                if (gymEquipment == null)
+                {
+                    return NotFound();
+                }
+
+                gymEquipment.GymId = model.GymId;
+                gymEquipment.EquipmentId = model.EquipmentId;
+
+                try
+                {
+                    await _gymRepository.EditGymEquipmentAsync(gymEquipment);
+                }
+                catch
+                {
+                    if (!await _gymRepository.ExistAsync(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return RedirectToAction("Index");
+            }
+
+            model.Equipments = _equipmentsRepository.GetComboEquipments();
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> DeleteGymEquipment(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var gymEquipment = await _gymRepository.GetGymEquipmentByIdAsync(id.Value);
+
+            if (gymEquipment == null)
+            {
+                return NotFound();
+            }
+
+            var equipment = await _equipmentsRepository.GetEquipmentByGymEquipmentIdAsync(gymEquipment.Id);
+
+            if (equipment == null)
+            {
+                return NotFound();
+            }
+
+            return View(gymEquipment);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteGymEquipment(int id)
+        {
+            var gymEquipment = await _gymRepository.GetGymEquipmentByIdAsync(id);
+
+            if (gymEquipment != null)
+            {
+                try
+                {
+                    await _gymRepository.DeleteGymEquipmentAsync(gymEquipment);
+
+                    return RedirectToAction("Index");
+                }
+                catch (DbUpdateException ex)
+                {
+                    if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
+                    {
+                        ViewBag.ErrorTitle = $"{gymEquipment.Equipment.Name} is probably being used!!!";
+                        ViewBag.ErrorMessage = $"{gymEquipment.Equipment.Name} can't be deleted because there are gyms that use it <br/>" +
+                        $"First try deleting all the gyms that are using it," +
+                        $" and delete it again";
+                    }
+
+                    return View("Error");
+                }
+            }
+
+            return NotFound();
         }
     }
 }

@@ -49,6 +49,40 @@
     </div>
 </div>
 
+<h4>Gym Equipment</h4>
+
+@if (Model.GymEquipments == null || Model.GymEquipments.Count == 0)
+{
+    <h5>No gym equipments added yet</h5>
+}
+else
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.GymEquipments.FirstOrDefault().EquipmentName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.GymEquipments.OrderBy(ge => ge.EquipmentName))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItel => item.EquipmentName)
+            </td>
+            <td>
+                <a asp-action="EditGymEquipment" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                <a asp-action="DeleteGymEquipment" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+            </td>           
+        </tr>
+    }
+    </tbody>
+</table>
+}
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
