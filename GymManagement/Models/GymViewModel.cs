@@ -27,6 +27,6 @@ namespace GymManagement.Models
 
         public GymEquipmentViewModel? GymEquipment { get; set; }
 
-        public ICollection<GymEquipmentViewModel> GymEquipmentDetails { get; set; }
+        public ICollection<GymEquipmentViewModel>? GymEquipmentDetails { get; set; }
     }
 }

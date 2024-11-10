@@ -150,25 +150,25 @@ namespace GymManagement.Controllers
 
             model.GymEquipmentDetails = gymEquipmentsList;
 
-            if (gymEquipment != null)
-            {
-                var equipment = await _equipmentsRepository.GetEquipmentByGymEquipmentIdAsync(gymEquipment.Id);
+            //if (gymEquipment != null)
+            //{
+            //    var equipment = await _equipmentsRepository.GetEquipmentByGymEquipmentIdAsync(gymEquipment.Id);
 
-                if (equipment != null)
-                {
-                    model.GymEquipment = new GymEquipmentViewModel
-                    {
-                        Id = gymEquipment.Id,
-                        EquipmentName = gymEquipment.EquipmentName,
-                        GymId = gymEquipment.GymId,
-                        EquipmentId = gymEquipment.EquipmentId,
-                    };
-                }
-            }
-            else
-            {
-                model.GymEquipment = null;
-            }
+            //    if (equipment != null)
+            //    {
+            //        model.GymEquipment = new GymEquipmentViewModel
+            //        {
+            //            Id = gymEquipment.Id,
+            //            EquipmentName = gymEquipment.EquipmentName,
+            //            GymId = gymEquipment.GymId,
+            //            EquipmentId = gymEquipment.EquipmentId,
+            //        };
+            //    }
+            //}
+            //else
+            //{
+            //    model.GymEquipment = null;
+            //}
 
             model.Countries = _countryRepository.GetComboCountries();
             model.Cities = model.Cities ?? _countryRepository.GetComboCities(model.CountryId ?? 0);
