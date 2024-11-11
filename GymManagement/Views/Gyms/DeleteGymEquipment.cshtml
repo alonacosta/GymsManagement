@@ -4,26 +4,26 @@
     ViewData["Title"] = "DeleteGymEquipment";
 }
 
-<h2>Delete Gym Equipment</h2>
+<div class="shadow-none p-5 mb-5 bg-body-tertiary rounded bg-white">
+    <h3>Delete Gym Equipment</h3>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.EquipmentName)
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.EquipmentName)
-        </dd>
-    </dl>
+    <h6>Are you sure you want to delete this?</h6>
+    <div>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.EquipmentName)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.EquipmentName)
+            </dd>
+        </dl>
 
-    <form asp-action="DeleteGymEquipment" method="post">
-        <input type="hidden" asp-for="Id" />
-        <input type="hidden" asp-for="GymId" />
-
-        <input type="submit" value="Delete" class="btn btn-danger" />
-        <a asp-action="Edit" asp-route-GymId="@Model.GymId" class="btn btn-success">Back to Gym</a>
-    </form>
+        <form asp-action="DeleteGymEquipment" method="post">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+            <a asp-action="Edit" asp-route-Id="@Model.Id" class="btn btn-success"><i class="fas fa-chevron-left"></i> Back to Gym</a>
+        </form>
+    </div>
 </div>
 

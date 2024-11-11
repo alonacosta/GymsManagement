@@ -4,7 +4,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<div class="shadow p-5 mb-5 bg-body-tertiary rounded bg-white">
+<div class="shadow-none p-5 mb-5 bg-body-tertiary rounded bg-white">
     <h3>Edit Gym</h3>
 
     <hr />
@@ -50,39 +50,41 @@
         </div>
     </div>
 
-    <h4>Gym Equipment</h4>
+    <div class="shadow-none mt-5 bg-body-tertiary rounded bg-white">
+            <h5>Gym Equipment</h5>
 
-@if (Model.GymEquipmentDetails == null || Model.GymEquipmentDetails.Count == 0)
-{
-    <h5>No gym equipments added yet</h5>
-}
-else
-{
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.GymEquipmentDetails.FirstOrDefault().EquipmentName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model.GymEquipmentDetails)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItel => item.EquipmentName)
-            </td>
-            <td>
-                <a asp-action="EditGymEquipment" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
-                <a asp-action="DeleteGymEquipment" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-            </td>           
-        </tr>
-    }
-    </tbody>
-</table>
-}
+        @if (Model.GymEquipmentDetails == null || Model.GymEquipmentDetails.Count == 0)
+        {
+            <h5>No gym equipments added yet</h5>
+        }
+        else
+        {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GymEquipmentDetails.FirstOrDefault().EquipmentName)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.GymEquipmentDetails)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItel => item.EquipmentName)
+                    </td>
+                    <td>
+                        <a asp-action="EditGymEquipment" asp-route-id="@item.Id" class="btn btn-primary"><i class="fas fa-edit"></i> Edit</a>
+                        <a asp-action="DeleteGymEquipment" asp-route-id="@item.Id" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
+                    </td>           
+                </tr>
+            }
+            </tbody>
+        </table>
+        }
+    </div>
 </div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
