@@ -93,22 +93,22 @@ namespace GymManagement.Controllers
         }
 
         //[Authorize(Roles = "Client")]
-        //public async Task<IActionResult> ConfirmBooking(int? id)
+        //public async Task<IActionResult> Rate(int? id)
         //{
         //    if (id == null)
         //    {
         //        return NotFound();
         //    }
-
-        //    var appointmentTemp = await _appointmentRepository.GetAppointmentTempByIdAsync(id.Value);
-        //    if (appointmentTemp == null)
+        //    var response = await _appointmentRepository.CancelBookingAsync(id.Value);
+        //    if (response)
         //    {
-        //        return NotFound();
+        //        return RedirectToAction("Index", "Appointments");
         //    }
+        //    return RedirectToAction("Index", "Appointments");
 
-        //    var response = await _appointmentRepository.ConfirmBookingAsync(appointmentTemp.Client.Id, appointmentTemp.Name);
-        //    return RedirectToAction("AppointmentsManagement", "Appointments");
         //}
+
+
 
 
     }

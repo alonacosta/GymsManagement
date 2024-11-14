@@ -1,0 +1,49 @@
+﻿@model GymManagement.Models.RatingViewModel
+@{
+    ViewData["Title"] = "Rate";
+    var apointmentId = ViewData["AppointmentId"];
+}
+
+<h1>Rate</h1>
+
+<div class="shadow-none p-5 mb-5 bg-body-tertiary rounded bg-white">
+    <h3>Create new Gym</h3>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Rate">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>                
+                <input type="hidden" asp-for="AppointmentId" />
+                <input type="hidden" asp-for="Id"  />
+                <div class="form-group mb-2">
+                    <label asp-for="SelectedRating" class="control-label"></label>
+                    <select asp-for="SelectedRating" asp-items="Model.Ratings" class="form-control"></select>
+                    <span asp-validation-for="SelectedRating" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-2">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Submit</button>
+                    <a asp-action="Index" asp-controller="Appointments" class="btn btn-success"><i class="fas fa-chevron-left"></i> Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@* <form method="post">
+    <div>
+        @foreach (var item in Model.Ratings)
+        {
+            <div>
+                <label>
+                    <input type="radio" name="SelectedRating" value="@item.Value" @if (Model.SelectedRating.ToString() == item.Value)
+                    {
+                        <text>checked</text>
+                    } />
+                    @item.Text
+                </label>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit Rating</button>
+</form> *@

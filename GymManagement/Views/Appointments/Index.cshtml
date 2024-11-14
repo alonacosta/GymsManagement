@@ -57,6 +57,7 @@
                         {
                             <a asp-action="CancelBooking" asp-route-id="@item.Id" class="btn btn-secondary disabled" aria-disabled="true">Cancel Book</a>
                         }
+                        <a asp-action="Rate" asp-controller="GymSessions" asp-route-appointmentId="@item.Id" class="btn btn-primary">Rate</a>
                     </td>
                 </tr>
             }

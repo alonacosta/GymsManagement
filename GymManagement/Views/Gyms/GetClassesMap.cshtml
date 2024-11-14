@@ -153,10 +153,10 @@
         console.log("Redirecting with isClient:", isClient);       
 
         if (isClient) {
-            window.location.href = `/GymSessions/BookSession?countryId=${countryId}&gymId=${gymId}&id=${appointmentId}`;
+            window.location.href = `/GymSessions/BookSession?countryId=${countryId}&gymId=${gymId}&gymSessionId=${appointmentId}`;
         }
         else {
-            window.location.href = `/FreeAppointments/TryFreeSession?countryId=${countryId}&gymId=${gymId}&id=${appointmentId}`;
+            window.location.href = `/FreeAppointments/TryFreeSession?countryId=${countryId}&gymId=${gymId}&gymSessionId=${appointmentId}`;
         }      
     }
 

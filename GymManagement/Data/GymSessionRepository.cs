@@ -1,4 +1,6 @@
 ﻿using GymManagement.Data.Entities;
+using GymManagement.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace GymManagement.Data
@@ -163,6 +165,56 @@ namespace GymManagement.Data
                .Include(gs => gs.Gym)
                .Where(gs => gs.Gym.Id == id)
                .OrderByDescending(gs => gs.StartSession);
+        }
+
+        public async Task<bool> IsExistsRatingAsync(string userId, int gymSessionId)
+        {
+            return await _context.Ratings.AnyAsync(r => r.UserId == userId && r.GymSessionId == gymSessionId);
+        }
+
+        public async Task CreateRatingAsync(Rating rating)
+        {
+            await _context.Ratings.AddAsync(rating);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateRatingAsync(Rating rating)
+        {
+             _context.Ratings.Update(rating);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Rating> GetExistingRatingAsync(string userId, int gymSessionId)
+        {
+            return await _context.Ratings
+                .Where(r => r.UserId == userId && r.GymSessionId == gymSessionId)               
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<int?> GetExistingRatingIdAsync(string userId, int gymSessionId)
+        {
+            return await _context.Ratings
+                .Where(r => r.UserId == userId && r.GymSessionId == gymSessionId)
+                .Select(r => (int?)r.Id)
+                .FirstOrDefaultAsync();
+        }
+
+
+        public async Task<List<GymSessionRatingViewModel>> GetGymSessionsWithAverageRatingAsync(int gymId)
+        {
+            return await _context.Ratings     
+                .Include(r => r.GymSession)
+                .ThenInclude(gs => gs.Session)
+                .ThenInclude(gs => gs.Gym)
+                .Where(r => r.GymSession.Gym.Id == gymId)                
+                .GroupBy(r => new { r.GymSession.Session.Name, r.GymSession.Gym.Id })
+                .Select(g => new GymSessionRatingViewModel
+                {                    
+                    GymSessionName = g.Key.Name,
+                    GymId = g.Key.Id,
+                    AverageRating = g.Average(r => r.Rate),         
+                })
+                .ToListAsync();
         }
     }
 }

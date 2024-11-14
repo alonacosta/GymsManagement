@@ -1,0 +1,34 @@
+﻿@model IEnumerable<GymManagement.Models.GymSessionRatingViewModel>
+@{
+    ViewData["Title"] = "Ratings";
+}
+
+<div class="shadow p-5 mb-5 bg-body-tertiary rounded bg-white">
+    <h3>Ratings</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="align-middle">
+                    @Html.DisplayNameFor(model => model.GymSessionName)
+                </th>
+                <th class="align-middle">
+                    @Html.DisplayNameFor(model => model.AverageRating)
+                </th>             
+               
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>                    
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.GymSessionName)
+                    </td>
+                    <td class="align-middle">                     
+                        @Html.DisplayFor(modelItem => item.AverageRating)
+                    </td>                    
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

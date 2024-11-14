@@ -35,6 +35,7 @@
         public DbSet<FreeAppointment> FreeAppointments { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<Position> Positions { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -56,6 +57,10 @@
             modelBuilder.Entity<Subscription>()
                 .Property(p=>p.Price)
                 .HasColumnType("decimal(18,2)");
+
+            //modelBuilder.Entity<Rating>()
+            //   .Property(p => p.Rate)
+            //   .HasColumnType("decimal(5,2)");
 
             base.OnModelCreating(modelBuilder);
         }

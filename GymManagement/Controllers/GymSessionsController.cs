@@ -4,6 +4,7 @@ using GymManagement.Helpers;
 using GymManagement.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Vereyon.Web;
 
@@ -183,17 +184,18 @@ namespace GymManagement.Controllers
         }
 
         [Authorize(Roles = "Client")]
-        public async Task<IActionResult> BookSession(int? id, int? gymId, int? countryId)
+        public async Task<IActionResult> BookSession(int? gymSessionId, int? gymId, int? countryId)
         {
-            if (id == null || gymId == null || countryId == null)
+            if (gymSessionId == null || gymId == null || countryId == null)
             {
                 return NotFound();
             }
 
             ViewData["CountryId"] = countryId;
             ViewData["GymId"] = gymId;
+            ViewData["GymSessionId"] = gymSessionId;
 
-            var gymSession = await _gymSessionRepository.GetGymSessionByIdAsync(id.Value);
+            var gymSession = await _gymSessionRepository.GetGymSessionByIdAsync(gymSessionId.Value);
 
             if (gymSession == null)
             {
@@ -205,9 +207,9 @@ namespace GymManagement.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Client")]
-        public async Task<IActionResult> BookSession(int? id, int? gymId, int? countryId, GymSession gymSession)
+        public async Task<IActionResult> BookSession(int? gymSessionId, int? gymId, int? countryId, GymSession gymSession)
         {
-            if (id == null || gymId == null || countryId == null)
+            if (gymSessionId == null || gymId == null || countryId == null)
             {
                 return NotFound();
             }
@@ -215,7 +217,7 @@ namespace GymManagement.Controllers
             ViewData["CountryId"] = countryId;
             ViewData["GymId"] = gymId;
 
-            gymSession = await _gymSessionRepository.GetGymSessionByIdAsync(id.Value);
+            gymSession = await _gymSessionRepository.GetGymSessionByIdAsync(gymSessionId.Value);
 
             if (gymSession == null)
             {
@@ -227,7 +229,7 @@ namespace GymManagement.Controllers
 
             var client = await _appointmentRepository.GetClientByUserIdAsync(user.Id);
 
-            if (await _appointmentRepository.IsClientHasAppointmentAsync(client.Id, gymSession.StartSession, gymSession.Session.Name, gymSession.SessionId))
+            if (await _appointmentRepository.IsClientHasAppointmentAsync(client.Id, gymSession.StartSession, gymSession.Session.Name, gymSession.Id))
             {
                 _flashMessage.Danger("You already have an appointment booked in this Session!");                
                 
@@ -258,24 +260,113 @@ namespace GymManagement.Controllers
             return RedirectToAction("BookAwait", "Appointments", new { countryId = countryId, gymId = gymId });
         }
 
-        //public async Task<IActionResult> TryFreeSession(int? id, int? gymId, int? countryId)
-        //{
-        //    if (id == null || gymId == null || countryId == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [Authorize(Roles = "Client")]
+        public IActionResult Rate(int? appointmentId)
+        {
+            if (appointmentId == null)
+            {
+                return NotFound();
+            }
 
-        //    ViewData["CountryId"] = countryId;
-        //    ViewData["GymId"] = gymId;
+            ViewData["AppointmentId"] = appointmentId;
 
-        //    var gymSession = await _gymSessionRepository.GetGymSessionByIdAsync(id.Value);
+            var model = new RatingViewModel
+            {
+                Ratings = GetRatingOptions(),
+                SelectedRating = 0,
+                AppointmentId = appointmentId.Value,
+            };
 
-        //    if (gymSession == null)
-        //    {
-        //        return NotFound();
-        //    }
+            return View(model);
+        }
 
-        //    return View(gymSession);
-        //}
+    
+        // POST: Gymsessions/Rate
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Client")]
+        public async Task<IActionResult> Rate(RatingViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var appointment = await _appointmentRepository.GetAppointmentByIdAsync((int)model.AppointmentId);
+                if (appointment == null)
+                {
+                    return NotFound();
+                }
+
+                var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                var rating = new Rating
+                {
+                    Id = model.Id,
+                    GymSessionId = appointment.GymSession.Id,
+                    Rate = model.SelectedRating,
+                    UserId = user.Id,                   
+                };
+
+                var isExistsRating = await _gymSessionRepository.IsExistsRatingAsync(rating.UserId, rating.GymSessionId);
+
+                if(isExistsRating)
+                {                   
+                    var existingRatingId = await _gymSessionRepository.GetExistingRatingIdAsync(rating.UserId, rating.GymSessionId);
+                    if (existingRatingId == null)
+                    { return NotFound(); }
+                        rating.Id = existingRatingId.Value;
+                    await _gymSessionRepository.UpdateRatingAsync(rating);
+                }
+                else
+                {
+                    await _gymSessionRepository.CreateRatingAsync(rating);
+                }
+
+                return RedirectToAction("Index", "Appointments");
+            }
+            return View(model);
+            
+        }
+
+        private IEnumerable<SelectListItem> GetRatingOptions()
+        {
+            var options = new List<int> { 1, 2, 3, 4, 5 };
+            var list = options.Select(c => new SelectListItem
+            {
+                Text = c.ToString(),
+                Value = c.ToString(),
+
+            }).OrderBy(l => l.Text).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "(Select a rating ...)",
+                Value = "0",
+            });
+
+            return list;
+        }
+
+        [Authorize(Roles = "Employee")]
+        public async Task<IActionResult> Ratings () 
+        {
+            var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+            if(user == null)
+            {
+                return NotFound();
+            }
+
+            var employee = await _appointmentRepository.GetEmployeeByUserIdAsync(user.Id);
+
+            if (employee == null) { return NotFound(); }
+
+            var gymSessionsWithAverageRating = await _gymSessionRepository.GetGymSessionsWithAverageRatingAsync(employee.Gym.Id);
+            return View(gymSessionsWithAverageRating);
+        }
+
+
     }
 }

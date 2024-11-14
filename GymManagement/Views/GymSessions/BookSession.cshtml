@@ -3,6 +3,7 @@
     ViewData["Title"] = "BookSession";
     var countryId = ViewData["CountryId"];
     var gymId = ViewData["GymId"];
+    var gymSessionId = ViewData["GymSessionId"];
 }
 
 <div class="shadow-none p-5 bg-body-tertiary rounded bg-light">
@@ -65,7 +66,8 @@
                         </dd>
                     </dl>
                     <form asp-action="BookSession">
-                        <input type="hidden" asp-for="Id" />
+                        @* <input type="hidden" asp-for="Id" /> *@
+                        <input type="hidden" name="GymSessionId" value="@gymSessionId" />
                         <input type="hidden" name="GymId" value="@gymId" />
                         <input type="hidden" name="CountryId" value="@countryId" />
                         <input type="submit" value="Book Now" class="btn btn-success" />

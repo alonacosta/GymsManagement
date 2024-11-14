@@ -56,6 +56,15 @@ namespace GymManagement.Data
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<Employee> GetEmployeeByUserIdAsync(string id)
+        {
+            return await _context.Employees
+                .Include(e => e.Gym)
+                .Include(e => e.User)
+                .Where(c => c.User.Id == id)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task AddAppointmentTempAsync(AppointmentTemp appointmentTemp)
         {
             if (appointmentTemp == null) { return; }
@@ -64,13 +73,13 @@ namespace GymManagement.Data
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> IsClientHasAppointmentAsync(int clientId, DateTime startSession, string sessionName, int sessionId)
+        public async Task<bool> IsClientHasAppointmentAsync(int clientId, DateTime startSession, string sessionName, int gymSessionId)
         {
             var clientHasAppointmentTemp = await _context.AppointmentsTemp
                 .Where(at => at.Client.Id == clientId && at.Name == sessionName && at.StartSession == startSession).FirstOrDefaultAsync();
 
             var clientHasAppointment = await _context.Appointments
-                .Where(a => a.Client.Id == clientId && a.GymSession.Id == sessionId).FirstOrDefaultAsync();
+                .Where(a => a.Client.Id == clientId && a.GymSession.Id == gymSessionId).FirstOrDefaultAsync();
 
             if (clientHasAppointment != null || clientHasAppointmentTemp != null) 
             { 
@@ -178,6 +187,14 @@ namespace GymManagement.Data
             _context.Update(gymSession);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<Appointment> GetAppointmentByIdAsync(int id)
+        {
+            return await _context.Appointments
+                .Include(a => a.Client)
+                .Include(a => a.GymSession)
+                .Where(a => a.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<AppointmentTemp> GetAppointmentTempByIdAsync(int id)

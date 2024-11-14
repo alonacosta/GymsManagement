@@ -11,6 +11,7 @@ namespace GymManagement.Data.Entities
         public Session? Session { get; set; }
         public int GymId { get; set; }
         public Gym? Gym { get; set; }
+        //public decimal? Rating { get; set; }
 
         [Display(Name = "Start Session")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm}", ApplyFormatInEditMode = false)]
