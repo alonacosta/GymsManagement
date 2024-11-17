@@ -20,12 +20,12 @@
                 </div>
                 <div class="form-group mb-2">
                     <label asp-for="StartSession" class="control-label"></label>
-                    <input asp-for="StartSession" class="form-control" />
+                    <input asp-for="StartSession" class="form-control" value="@Model.StartSession.ToString("yyyy/MM/dd HH:mm")" />
                     <span asp-validation-for="StartSession" class="text-danger"></span>
                 </div>
                 <div class="form-group mb-2">
                     <label asp-for="EndSession" class="control-label"></label>
-                    <input asp-for="EndSession" class="form-control" />
+                    <input asp-for="EndSession" class="form-control" value="@Model.EndSession.ToString("yyyy/MM/dd HH:mm")" />
                     <span asp-validation-for="EndSession" class="text-danger"></span>
                 </div>
                 <div class="form-group mb-3">

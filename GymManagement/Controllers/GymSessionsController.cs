@@ -59,7 +59,9 @@ namespace GymManagement.Controllers
             var model = new GymWithSessionViewModel
             {
                 GymId = gymId,
-                Sessions = _sessionRepository.GetComboSessions()
+                Sessions = _sessionRepository.GetComboSessions(),
+                StartSession = DateTime.Now,
+                EndSession = DateTime.Now.AddHours(1)
             };
             
             return View(model);
@@ -74,10 +76,10 @@ namespace GymManagement.Controllers
         public async Task<IActionResult> Create(GymWithSessionViewModel model)
         {
             if (ModelState.IsValid)
-            {
+            {                
                 var gymSession = _converterHelper.ToGymSession(model, true);
 
-              await _gymSessionRepository.CreateAsync(gymSession);
+                await _gymSessionRepository.CreateAsync(gymSession);
                 return RedirectToAction("Index", new {gymId = model.GymId});
             }
             return View(model);
