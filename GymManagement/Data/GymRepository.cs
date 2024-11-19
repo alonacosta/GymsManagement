@@ -117,7 +117,7 @@ namespace GymManagement.Data
             return _context.GymEquipments
                 .Include(ge => ge.Gym)
                 .Include(ge => ge.Equipment)
-                .Where(ge => ge.Id == gymId)
+                .Where(ge => ge.Gym.Id == gymId)
                 .OrderBy(ge => ge.Equipment.Name);
         }
 
@@ -125,7 +125,7 @@ namespace GymManagement.Data
         {
             return await _context.GymEquipments
                 .FirstOrDefaultAsync(ge => ge.Id == id);
-        }
+        }        
 
         public async Task<GymEquipment> GetGymEquipmentByGymIdAsync(int gymId) 
         {

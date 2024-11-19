@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit";
+    var gymId = ViewData["GymId"];
 }
 
 <div class="shadow-none p-5 mb-5 bg-body-tertiary rounded bg-white">
@@ -76,7 +77,7 @@
                         @Html.DisplayFor(modelItel => item.EquipmentName)
                     </td>
                     <td>
-                        <a asp-action="EditGymEquipment" asp-route-id="@item.Id" class="btn btn-primary"><i class="fas fa-edit"></i> Edit</a>
+                        <a asp-action="EditGymEquipment" asp-route-id="@item.Id" asp-route-gymId="@gymId" class="btn btn-primary"><i class="fas fa-edit"></i> Edit</a>
                         <a asp-action="DeleteGymEquipment" asp-route-id="@item.Id" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
                     </td>           
                 </tr>

@@ -101,7 +101,7 @@ namespace GymManagement.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["GymId"] = id.Value;
             var gym = await _gymRepository.GetByIdAsync(id.Value);
             if (gym == null)
             {
@@ -129,7 +129,7 @@ namespace GymManagement.Controllers
                 }
             }
 
-            var gymEquipment = await _gymRepository.GetGymEquipmentByGymIdAsync(id.Value);
+            //var gymEquipment = await _gymRepository.GetGymEquipmentByGymIdAsync(id.Value);
 
             var gymEquipmentDetails = _gymRepository.GetGymEquipmentsByGymId(id.Value);
 
@@ -177,8 +177,15 @@ namespace GymManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(GymViewModel model)
+        public async Task<IActionResult> Edit(int? id, GymViewModel model)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["GymId"] = id.Value;
+
             if (ModelState.IsValid)
             {
                 try
@@ -443,12 +450,18 @@ namespace GymManagement.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> EditGymEquipment(int? id)
+        public async Task<IActionResult> EditGymEquipment(int? id, int? gymId)
         {
             if (id == null)
             {
                 return NotFound();
             }
+            if (gymId == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["GymId"] = gymId.Value;
 
             var gymEquipment = await _gymRepository.GetGymEquipmentByIdAsync(id.Value);
 
@@ -469,12 +482,18 @@ namespace GymManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditGymEquipment(int id, GymEquipmentViewModel model)
+        public async Task<IActionResult> EditGymEquipment(int id, int? gymId, GymEquipmentViewModel model)
         {
             if (id != model.Id)
             {
                 return BadRequest();
             }
+            if (gymId == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["GymId"] = gymId.Value;
 
             if (ModelState.IsValid)
             {
