@@ -81,7 +81,7 @@
                                 </ul>
                             </li>
                         }
-                        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+                        @if (this.User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item ">
                                 <a class="nav-link text-light" asp-area="" asp-controller="Posts" asp-action="Index">Forum</a>
