@@ -127,7 +127,7 @@ namespace GymManagement.Controllers
                 post.Message = model.Message;
                 await _postRepository.UpdatePostAsync(post);                
             }
-            return View(model);
+            return RedirectToAction($"Discussion", new { id = model.PostId });
         }
 
         public async Task<IActionResult> DeleteReply(int id) 
