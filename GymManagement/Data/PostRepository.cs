@@ -26,8 +26,10 @@ namespace GymManagement.Data
             return _context.Discussions
                 .Where(d => d.Id == id)
                 .Include(d => d.OriginalPost)
+                .ThenInclude(op => op.User)
                 .Include(d => d.OriginalPost.User)
                 .Include(d => d.Replies)
+                .ThenInclude(r => r.User)
                 .FirstOrDefault();
         }
 
