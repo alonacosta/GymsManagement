@@ -52,6 +52,9 @@
                                 <a class="btn btn-warning btn-sm" asp-action="UpdatePost" asp-route-id="@item.Id">Update post</a>
                                 <a class="btn btn-danger btn-sm" asp-action="DeleteReply" asp-route-id="@item.Id">Delete reply</a>
                             }
+                            @if (this.User.IsInRole("Admin")) {
+                                <a class="btn btn-danger btn-sm" asp-action="DeleteReply" asp-route-id="@item.Id">Delete reply</a>
+                            }
                         </p>
                     </div>
                 </div>
