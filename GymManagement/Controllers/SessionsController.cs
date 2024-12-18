@@ -4,6 +4,7 @@
     using GymManagement.Data.Entities;
     using GymManagement.Helpers;
     using GymManagement.Models;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Vereyon.Web;
@@ -50,13 +51,15 @@
             }
 
             return View(session);
-        }       
+        }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(SessionViewModel model)
         {
@@ -79,6 +82,7 @@
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -98,6 +102,7 @@
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Edit(SessionViewModel model)
         {
@@ -134,6 +139,7 @@
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -151,6 +157,7 @@
             return View(session);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)

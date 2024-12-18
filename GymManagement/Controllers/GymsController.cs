@@ -62,6 +62,7 @@ namespace GymManagement.Controllers
         }
 
         //[Authorize]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             var model = new GymViewModel
@@ -72,6 +73,7 @@ namespace GymManagement.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(GymViewModel model)
         {
@@ -95,6 +97,7 @@ namespace GymManagement.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -148,27 +151,7 @@ namespace GymManagement.Controllers
                 gymEquipmentsList.Add(equipmentItem);
             }
 
-            model.GymEquipmentDetails = gymEquipmentsList;
-
-            //if (gymEquipment != null)
-            //{
-            //    var equipment = await _equipmentsRepository.GetEquipmentByGymEquipmentIdAsync(gymEquipment.Id);
-
-            //    if (equipment != null)
-            //    {
-            //        model.GymEquipment = new GymEquipmentViewModel
-            //        {
-            //            Id = gymEquipment.Id,
-            //            EquipmentName = gymEquipment.EquipmentName,
-            //            GymId = gymEquipment.GymId,
-            //            EquipmentId = gymEquipment.EquipmentId,
-            //        };
-            //    }
-            //}
-            //else
-            //{
-            //    model.GymEquipment = null;
-            //}
+            model.GymEquipmentDetails = gymEquipmentsList;            
 
             model.Countries = _countryRepository.GetComboCountries();
             model.Cities = model.Cities ?? _countryRepository.GetComboCities(model.CountryId ?? 0);
@@ -176,6 +159,7 @@ namespace GymManagement.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Edit(int? id, GymViewModel model)
         {
@@ -216,6 +200,7 @@ namespace GymManagement.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -233,6 +218,7 @@ namespace GymManagement.Controllers
         }
 
         // POST: Gyms/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -33,6 +33,12 @@ namespace GymManagement.Data
                 .FirstOrDefault();
         }
 
+        public async Task<Discussion> GetDiscussionByPost(int? id)
+        {
+            return await _context.Discussions
+                .Where(d => d.OriginalPost.Id == id)
+                .FirstOrDefaultAsync();
+        }
 
         public async Task PostReply(CreatePostViewModel model, User user)
         {

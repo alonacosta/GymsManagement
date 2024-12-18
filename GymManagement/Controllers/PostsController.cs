@@ -127,7 +127,14 @@ namespace GymManagement.Controllers
                 post.Message = model.Message;
                 await _postRepository.UpdatePostAsync(post);                
             }
-            return RedirectToAction($"Discussion", new { id = model.PostId });
+            //return RedirectToAction($"Discussion", new { id = model.PostId });
+            var discussion = await _postRepository.GetDiscussionByPost(model.PostId);
+            if (discussion == null)
+            {
+                var discussionId = await _postRepository.GetDiscussionIdByReplyAsync(model.PostId);
+                discussion = await _postRepository.GetByIdAsync((int)discussionId);
+            }
+            return RedirectToAction($"Discussion", new { id = discussion.Id });
         }
 
         public async Task<IActionResult> DeleteReply(int id) 

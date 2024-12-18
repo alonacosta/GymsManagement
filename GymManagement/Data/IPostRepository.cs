@@ -11,6 +11,8 @@ namespace GymManagement.Data
 
         Task PostReply(CreatePostViewModel model, User user);
 
+        Task<Discussion> GetDiscussionByPost(int? id);
+
         Task<Post> GetPostByIdAsync(int id);
 
         Task UpdatePostAsync(Post post);
